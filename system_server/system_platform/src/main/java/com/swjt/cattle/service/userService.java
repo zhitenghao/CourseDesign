@@ -1,10 +1,12 @@
 package com.swjt.cattle.service;
 
-import com.swjt.cattle.pojo.user;
+import com.swjt.cattle.pojo.User;
+import com.swjt.cattle.vo.UserVo;
 
 import java.util.List;
 
-public interface userService {
-    boolean add(user u);
-    List<user> queryAll();
+public interface UserService {
+    boolean add(User u);
+    List<User> queryAll();
+    boolean login(UserVo userVo);
 }

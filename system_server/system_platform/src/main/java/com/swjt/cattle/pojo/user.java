@@ -10,7 +10,8 @@ import java.io.Serializable;
 
 @Data
 @Entity
-public class user implements Serializable {
+@Table(name = "user")
+public class User implements Serializable {
 
     //id
     @Id
@@ -22,12 +23,4 @@ public class user implements Serializable {
     //密码
     private String userPwd;
 
-    @Override
-    public String toString() {
-        return "user{" +
-                "id=" + id +
-                ", userName='" + userName + '\'' +
-                ", userPwd='" + userPwd + '\'' +
-                '}';
-    }
 }

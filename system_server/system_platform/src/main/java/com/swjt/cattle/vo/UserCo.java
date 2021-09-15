@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @ApiModel(value = "user")
 @Data
-public class UserVo implements Serializable {
+public class UserCo implements Serializable {
 
     @ApiModelProperty(value = "id")
     private Integer id;
