@@ -40,16 +40,14 @@ public class AuthController extends BaseController {
         String key= UUID.randomUUID().toString();
         String code=producer.createText();
 
-        code="123";
-        key="ddd";
 
         BufferedImage bufferedImage=producer.createImage(code);
         ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
         ImageIO.write(bufferedImage,"jpg",outputStream);
 
         BASE64Encoder encoder=new BASE64Encoder();
-        String str="data:image/jpeg;base64";
-        String base64Img=str+encoder;
+        String str="data:image/jpeg;base64,";
+        String base64Img=str+encoder.encode(outputStream.toByteArray());
 
         redisUtil.hset(Const.CAPTCHA_KEY,key,code,120);
 
@@ -60,6 +58,8 @@ public class AuthController extends BaseController {
                 .build()
         );
     }
+
+
 //    @GetMapping("/pwd")
 //    public Result pwd(){
 //        String name=bCryptPasswordEncoder.encode("1111");

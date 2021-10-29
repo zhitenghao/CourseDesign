@@ -17,4 +17,6 @@ import java.util.List;
 @Repository
 public interface UserMapper extends BaseMapper<User> {
     List<String> getNavMenuIds(String userId);
+
+    List<User> listByMenuId(String menuId);
 }

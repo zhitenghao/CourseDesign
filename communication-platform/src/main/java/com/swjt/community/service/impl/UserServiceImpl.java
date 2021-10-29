@@ -51,11 +51,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //  ROLE_admin,ROLE_normal,sys:user:list,....
         String authority = "";
 
-//        if (redisUtil.hasKey("GrantedAuthority:" + User.getUserAccount())) {
-//            authority = (String) redisUtil.get("GrantedAuthority:" + User.getUserAccount());
-//
-//        } else
-        {
+        if (redisUtil.hasKey("GrantedAuthority:" + User.getUserAccount())) {
+            authority = (String) redisUtil.get("GrantedAuthority:" + User.getUserAccount());
+
+        } else {
             // 获取角色编码
             List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>()
                     .inSql("id", "select role_id from sys_user_role where user_id = " + userId));
@@ -80,5 +79,31 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
 
         return authority;
+    }
+
+    @Override
+    public void clearUserAuthorityInfo(String userAccount) {
+        redisUtil.del("GrantedAuthority:" + userAccount);
+    }
+
+    @Override
+    public void clearUserAuthorityInfoByRoleId(String roleId) {
+
+        List<User> sysUsers = this.list(new QueryWrapper<User>()
+                .inSql("id", "select user_id from sys_user_role where role_id = " + roleId));
+
+        sysUsers.forEach(u -> {
+            this.clearUserAuthorityInfo(u.getUserAccount());
+        });
+
+    }
+
+    @Override
+    public void clearUserAuthorityInfoByMenuId(String menuId) {
+        List<User> sysUsers = userMapper.listByMenuId(menuId);
+
+        sysUsers.forEach(u -> {
+            this.clearUserAuthorityInfo(u.getUserAccount());
+        });
     }
 }

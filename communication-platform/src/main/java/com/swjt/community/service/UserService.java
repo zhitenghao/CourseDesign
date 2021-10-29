@@ -17,4 +17,10 @@ public interface UserService extends IService<User> {
     User getUserByAccount(String userAccount);
 
     String getUserAuthorityInfo(String userId);
+
+    void clearUserAuthorityInfo(String userAccount);
+
+    void clearUserAuthorityInfoByRoleId(String roleid);
+
+    void clearUserAuthorityInfoByMenuId(String menuid);
 }

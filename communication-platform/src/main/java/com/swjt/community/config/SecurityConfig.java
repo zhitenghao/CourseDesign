@@ -64,7 +64,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/logout",
             "/captcha",
             "/favicon.ico",
-            "/swagger-ui",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/v2/**",
+            "/swagger-resources/**"
 
     };
     @Override
