@@ -1,27 +1,22 @@
-package com.swjt.community.entity;
+/**
+ * @Type com.swjt.community.common.Dto
+ * @DESC
+ * @Author Create By DaiRui
+ * @TIME 2021/10/29  15:51
+ * @VERSION Version 1.0
+ **/
 
-import java.time.LocalDateTime;
+package com.swjt.community.common.Dto;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author DaiRui
- * @since 2021-10-27
- */
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ApiModel(value="User对象", description="")
-public class User extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
-
+public class UserDto implements Serializable {
 
     @ApiModelProperty(value = "用户昵称")
     private String userName;
@@ -41,8 +36,6 @@ public class User extends BaseEntity {
     @ApiModelProperty(value = "用户住址")
     private String userAddress;
 
-    @ApiModelProperty(value = "用户账户状态（0：冻结，1：正常）")
-    private Integer userStatus;
 
     @ApiModelProperty(value = "用户学院")
     private String userCollege;
@@ -52,12 +45,6 @@ public class User extends BaseEntity {
 
     @ApiModelProperty(value = "用户出生日期")
     private LocalDateTime userBirthday;
-
-    @ApiModelProperty(value = "用户年龄")
-    private Integer userAge;
-
-    @ApiModelProperty(value = "用户头像")
-    private Integer userAvatar;
 
 
 }

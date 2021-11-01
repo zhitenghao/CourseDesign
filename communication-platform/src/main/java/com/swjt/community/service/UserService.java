@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -23,4 +25,6 @@ public interface UserService extends IService<User> {
     void clearUserAuthorityInfoByRoleId(String roleid);
 
     void clearUserAuthorityInfoByMenuId(String menuid);
+
+    List<User> userList();
 }

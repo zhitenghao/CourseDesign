@@ -24,9 +24,9 @@ public class BaseEntity implements Serializable {
     public  String id;
 
     //添加时间
-    private LocalDateTime add_time;
+    private LocalDateTime addTime;
     //更新时间
-    private LocalDateTime update_time;
+    private LocalDateTime updateTime;
 
 
 }

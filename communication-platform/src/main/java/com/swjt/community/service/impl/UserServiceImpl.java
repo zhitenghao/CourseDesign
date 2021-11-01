@@ -1,5 +1,6 @@
 package com.swjt.community.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.entity.SysMenu;
 import com.swjt.community.entity.SysRole;
@@ -105,5 +106,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         sysUsers.forEach(u -> {
             this.clearUserAuthorityInfo(u.getUserAccount());
         });
+    }
+
+    @Override
+    public List<User> userList() {
+        return list(new QueryWrapper<User>().eq("user_status","1"));
     }
 }
