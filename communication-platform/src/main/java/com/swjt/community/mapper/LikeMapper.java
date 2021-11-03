@@ -2,6 +2,7 @@ package com.swjt.community.mapper;
 
 import com.swjt.community.entity.Like;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
@@ -11,6 +12,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author DaiRui
  * @since 2021-10-27
  */
-public interface LikeMapper extends BaseMapper<Like> {
 
+@Repository
+public interface LikeMapper extends BaseMapper<Like> {
+    String deleteByArticleAndUser(String articleId,String userId);
 }

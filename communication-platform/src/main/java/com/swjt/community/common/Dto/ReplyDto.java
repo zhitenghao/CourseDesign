@@ -1,24 +1,20 @@
-package com.swjt.community.entity;
+/**
+ * @Type com.swjt.community.common.Dto
+ * @DESC
+ * @Author Create By DaiRui
+ * @TIME 2021/11/3  21:53
+ * @VERSION Version 1.0
+ **/
 
-import io.swagger.annotations.ApiModel;
+package com.swjt.community.common.Dto;
+
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author DaiRui
- * @since 2021-10-27
- */
+import java.io.Serializable;
+
 @Data
-@EqualsAndHashCode(callSuper = true)
-@ApiModel(value="Reply对象", description="")
-public class Reply extends BaseEntity {
-
-    private static final long serialVersionUID = 1L;
+public class ReplyDto implements Serializable {
 
     @ApiModelProperty(value = "回复评论内容")
     private String replyContent;
@@ -31,6 +27,4 @@ public class Reply extends BaseEntity {
 
     @ApiModelProperty(value = "被回复人编号(user_id外键)")
     private String replyedUser;
-
-
 }

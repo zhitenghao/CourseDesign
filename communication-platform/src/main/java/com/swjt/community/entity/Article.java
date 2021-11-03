@@ -30,11 +30,15 @@ public class Article extends BaseEntity {
     @ApiModelProperty(value = "帖子文字内容")
     private String articleContent;
 
-    @ApiModelProperty(value = "帖子分类（具体参考category表）")
-    private String articleType;
 
     @ApiModelProperty(value = "帖子收藏数(初始为0，依次累加)")
     private Integer articleCollection;
 
+    @ApiModelProperty(value = "帖子状态(0 冻结，1 正常)")
+    private Integer articleStatus;
+
+
+    @ApiModelProperty(value = "帖子是否有视频(0 无，1 有)")
+    private Integer isVideo;
 
 }

@@ -36,7 +36,7 @@ public class CategoryController extends BaseController {
     @PreAuthorize("hasRole('normal')")
     @GetMapping("/list")
     public Result list(){
-        return Result.succ(categoryService.list());
+        return Result.succ(categoryService.listByOrder());
     }
 
     @PreAuthorize("hasRole('admin')")
@@ -53,4 +53,27 @@ public class CategoryController extends BaseController {
                 .map()
         );
     }
+    @PreAuthorize("hasRole('admin')")
+    @GetMapping("/deleteCategory/{id}")
+    public Result deleteCategory(@PathVariable String id){
+        categoryService.removeById(id);
+        return Result.succ(
+                MapUtil.builder()
+                .put("id",id)
+                .map()
+        );
+    }
+
+    @PostMapping("/updateCategory")
+    public Result updateUser(@RequestBody Category category){
+        category.setUpdateTime(LocalDateTime.now());
+        categoryService.updateById(category);
+        return Result.succ("修改信息成功！");
+    }
+
+    @GetMapping("/categoryInfo/{id}")
+    public Result categoryInfo(@PathVariable String id){
+        return Result.succ(categoryService.getById(id));
+    }
+
 }

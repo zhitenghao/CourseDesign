@@ -18,4 +18,8 @@ public class CategoryDto implements Serializable {
 
     @ApiModelProperty(value = "分类名称")
     private String categoryName;
+
+    @ApiModelProperty(value = "分类排序")
+    private Integer orderId;
+
 }

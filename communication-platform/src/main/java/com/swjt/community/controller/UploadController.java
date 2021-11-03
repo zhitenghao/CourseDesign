@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
+
 
 @RestController
 @Api("文件传输")
@@ -30,7 +30,7 @@ public class UploadController {
     @Autowired
     private UploadService uploadServiceImpl;
 
-    @ApiOperation(value = "文件上传,返回的id是存储成功后图片的id")
+    @ApiOperation(value = "文件上传,返回的id是存储成功后图片/视频的id")
     @CrossOrigin
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     public Result upload(@RequestParam(value = "file") MultipartFile file, HttpServletRequest request) {
@@ -64,7 +64,7 @@ public class UploadController {
     @CrossOrigin
     @RequestMapping(value = "/downloadVideo/{id}", method = RequestMethod.GET)
     public Result downloadVideo(@PathVariable(value = "id") String id, HttpServletRequest request) {
-        byte[] bytes=uploadServiceImpl.downloadPhoto(id, request);
+        byte[] bytes=uploadServiceImpl.downloadVideo(id, request);
         BASE64Encoder encoder=new BASE64Encoder();
         String str="data:image/jpeg;base64,";
         String base64Img=str+encoder.encode(bytes);

@@ -68,9 +68,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/v2/**",
             "/swagger-resources/**",
-            "/user/deleteUser/{userAccount}",
+            "/user/addUser",
             "/category/list",
-            "/category/addCategory"
+            "/category/addCategory",
+            "/upload",
+            "/downloadPhoto/{id}",
+            "/downloadVideo/{id}"
 
     };
     @Override

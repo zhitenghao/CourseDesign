@@ -58,7 +58,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         } else {
             // 获取角色编码
             List<SysRole> roles = sysRoleService.list(new QueryWrapper<SysRole>()
-                    .inSql("id", "select role_id from sys_user_role where user_id = " + userId));
+                    .inSql("id", "select role_id from sys_user_role where user_id = '" + userId + "'"));
 
             if (roles.size() > 0) {
                 String roleCodes = roles.stream().map(r -> "ROLE_" + r.getCode()).collect(Collectors.joining(","));
@@ -91,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public void clearUserAuthorityInfoByRoleId(String roleId) {
 
         List<User> sysUsers = this.list(new QueryWrapper<User>()
-                .inSql("id", "select user_id from sys_user_role where role_id = " + roleId));
+                .inSql("id", "select user_id from sys_user_role where role_id = '" + roleId + "'"));
 
         sysUsers.forEach(u -> {
             this.clearUserAuthorityInfo(u.getUserAccount());

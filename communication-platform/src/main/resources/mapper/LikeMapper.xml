@@ -2,4 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.swjt.community.mapper.LikeMapper">
 
+    <delete id="deleteByArticleAndUser" parameterType="java.lang.String">
+        delete from `like` where user_id=#{userId} and article=#{articleId}
+    </delete>
+
 </mapper>

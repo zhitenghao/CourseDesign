@@ -2,6 +2,7 @@ package com.swjt.community.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.swjt.community.common.Dto.PassDto;
 import com.swjt.community.common.Dto.UserDto;
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 
@@ -111,7 +113,7 @@ public class UserController extends BaseController {
         }
         return Result.succ(
                 MapUtil.builder()
-                        .put("msg","删除成功")
+                        .put("msg","冻结成功！")
                         .put("用户账号",userAccounts.toString().concat(","))
                         .map()
         );
@@ -128,4 +130,49 @@ public class UserController extends BaseController {
         return Result.succ("修改信息成功！");
     }
 
+    @GetMapping("/userInfo")
+    public Result userInfo(Principal principal) {
+
+        User sysUser = userService.getUserByAccount(principal.getName());
+        return Result.succ(sysUser);
+
+//        return Result.succ(MapUtil.builder()
+//                .put("account", sysUser.getUserAccount())
+//                .put("name", sysUser.getUserName())
+//                .put("avatar", sysUser.getUserAvatar())
+//                .put("address", sysUser.getUserAddress())
+//                .put("sex", sysUser.getUserSex())
+//                .put("birthday", sysUser.getUserBirthday())
+//                .map()
+//        );
+    }
+    @PostMapping("/repass")
+    @PreAuthorize("hasAuthority('sys:user:repass')")
+    public Result repass(@RequestBody String userId) {
+
+        User sysUser = userService.getById(userId);
+
+        sysUser.setUserPwd(passwordEncoder.encode(Const.DEFULT_PASSWORD));
+        sysUser.setUpdateTime(LocalDateTime.now());
+
+        userService.updateById(sysUser);
+        return Result.succ("重置密码成功");
+    }
+
+    @PostMapping("/updatePass")
+    public Result updatePass(@Validated @RequestBody PassDto passDto, Principal principal) {
+
+        User sysUser = userService.getUserByAccount(principal.getName());
+
+        boolean matches = passwordEncoder.matches(passDto.getCurrentPass(), sysUser.getUserPwd());
+        if (!matches) {
+            return Result.fail("旧密码不正确");
+        }
+
+        sysUser.setUserPwd(passwordEncoder.encode(passDto.getPassword()));
+        sysUser.setUpdateTime(LocalDateTime.now());
+
+        userService.updateById(sysUser);
+        return Result.succ("修改密码成功！");
+    }
 }

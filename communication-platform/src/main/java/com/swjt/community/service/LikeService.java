@@ -13,4 +13,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface LikeService extends IService<Like> {
 
+    boolean deleteByArticleAndUser(String articleId,String userId);
+
 }
