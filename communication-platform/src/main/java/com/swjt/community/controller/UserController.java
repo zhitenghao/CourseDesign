@@ -6,7 +6,9 @@ import com.swjt.community.common.Dto.PassDto;
 import com.swjt.community.common.Dto.UserDto;
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
+import com.swjt.community.entity.SysUserRole;
 import com.swjt.community.entity.User;
+import com.swjt.community.service.SysUserRoleService;
 import com.swjt.community.service.UserService;
 import com.swjt.community.utils.BeanUtils;
 import io.swagger.annotations.Api;
@@ -38,6 +40,9 @@ public class UserController extends BaseController {
 
     @Autowired
     BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
+    SysUserRoleService sysUserRoleService;
 
 
     @PreAuthorize("hasRole('admin')")
@@ -83,6 +88,10 @@ public class UserController extends BaseController {
         String password = passwordEncoder.encode(user.getUserPwd());
         user.setUserPwd(password);
         userService.save(user);
+        SysUserRole sysUserRole = new SysUserRole();
+        sysUserRole.setUserId(user.getId());
+        sysUserRole.setRoleId("3");
+        sysUserRoleService.save(sysUserRole);
         return Result.succ(
                 MapUtil.builder()
                 .put("msg","添加用户成功")
