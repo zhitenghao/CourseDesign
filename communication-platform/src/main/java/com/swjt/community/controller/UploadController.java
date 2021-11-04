@@ -66,7 +66,7 @@ public class UploadController {
     public Result downloadVideo(@PathVariable(value = "id") String id, HttpServletRequest request) {
         byte[] bytes=uploadServiceImpl.downloadVideo(id, request);
         BASE64Encoder encoder=new BASE64Encoder();
-        String str="data:image/jpeg;base64,";
+        String str="data:video/mp4;base64,";
         String base64Img=str+encoder.encode(bytes);
         return Result.succ(
                 MapUtil.builder()

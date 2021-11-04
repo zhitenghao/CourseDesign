@@ -73,7 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/category/addCategory",
             "/upload",
             "/downloadPhoto/{id}",
-            "/downloadVideo/{id}"
+            "/downloadVideo/{id}",
+            "/article/articleInfo/{id}"
 
     };
     @Override

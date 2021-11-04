@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -78,10 +79,16 @@ public class ArticleController extends BaseController {
                 .map()
         );
     }
-    @PreAuthorize("hasRole('normal')")
+//    @PreAuthorize("hasRole('normal')")
     @GetMapping("/articleInfo/{id}")
     public Result articleInfo(@PathVariable String id){
-        return Result.succ(articleService.getById(id));
+        return Result.succ(articleService.ArticleInfoById(id));
     }
+
+//    @GetMapping("/listByDate")
+//    public Result articleListByDate(){
+//        List<Article> list = articleService.list();
+//
+//    }
 
 }

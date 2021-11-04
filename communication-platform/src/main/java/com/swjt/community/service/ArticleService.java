@@ -1,5 +1,6 @@
 package com.swjt.community.service;
 
+import com.swjt.community.common.Dto.ReAritcleDto;
 import com.swjt.community.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -13,6 +14,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface ArticleService extends IService<Article> {
 
-
+    ReAritcleDto ArticleInfoById(String id);
 
 }
