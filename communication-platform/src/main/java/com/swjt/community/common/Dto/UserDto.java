@@ -46,5 +46,8 @@ public class UserDto implements Serializable {
     @ApiModelProperty(value = "用户出生日期")
     private LocalDateTime userBirthday;
 
+    @ApiModelProperty(value = "用户头像")
+    private String userAvatar;
+
 
 }
