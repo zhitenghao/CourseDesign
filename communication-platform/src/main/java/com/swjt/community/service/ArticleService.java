@@ -4,6 +4,8 @@ import com.swjt.community.common.Dto.ReAritcleDto;
 import com.swjt.community.entity.Article;
 import com.baomidou.mybatisplus.extension.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,5 +17,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface ArticleService extends IService<Article> {
 
     ReAritcleDto ArticleInfoById(String id);
+
+    List<Article>  listByDate();
 
 }

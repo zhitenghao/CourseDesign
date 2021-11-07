@@ -8,6 +8,7 @@
 
 package com.swjt.community.common.Dto;
 
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -16,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
+@ApiModel("帖子详细内容")
 public class ReAritcleDto implements Serializable {
 
     @ApiModelProperty(value = "帖子文字内容")

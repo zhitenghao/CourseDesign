@@ -2,6 +2,10 @@ package com.swjt.community.mapper;
 
 import com.swjt.community.entity.Article;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 /**
  * <p>
@@ -11,6 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @author DaiRui
  * @since 2021-10-27
  */
+@Repository
 public interface ArticleMapper extends BaseMapper<Article> {
-
+    List<Article> listByDate();
 }

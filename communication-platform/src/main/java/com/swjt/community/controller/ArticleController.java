@@ -2,6 +2,7 @@ package com.swjt.community.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.swjt.community.common.Dto.ReAritcleDto;
 import com.swjt.community.common.Dto.ArticleDto;
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
@@ -79,16 +80,24 @@ public class ArticleController extends BaseController {
                 .map()
         );
     }
-//    @PreAuthorize("hasRole('normal')")
+    @PreAuthorize("hasRole('normal')")
     @GetMapping("/articleInfo/{id}")
     public Result articleInfo(@PathVariable String id){
+        Article article = articleService.getById(id);
+        article.setArticleBnum(article.getArticleBnum()+1);
+        articleService.updateById(article);
         return Result.succ(articleService.ArticleInfoById(id));
     }
 
-//    @GetMapping("/listByDate")
-//    public Result articleListByDate(){
-//        List<Article> list = articleService.list();
-//
-//    }
+    @GetMapping("/listByDate")
+    public Result articleListByDate(){
+        List<Article> list = articleService.listByDate();
+        ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
+        for (Article article:list) {
+            ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            reArticleDtos.add(reArticleDto);
+        }
+        return Result.succ(reArticleDtos);
+    }
 
 }

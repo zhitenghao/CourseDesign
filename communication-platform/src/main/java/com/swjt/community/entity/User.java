@@ -57,7 +57,13 @@ public class User extends BaseEntity {
     private Integer userAge;
 
     @ApiModelProperty(value = "用户头像")
-    private Integer userAvatar;
+    private String userAvatar;
+
+    @ApiModelProperty(value = "被多少用户关注(初始为0)")
+    private Integer userConcerned;
+
+    @ApiModelProperty(value = "关注了多少用户(初始为0)")
+    private Integer userConcern;
 
 
 }

@@ -36,6 +36,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     CommentService commentService;
+
+    @Autowired
+    ArticleMapper articleMapper;
     @Override
     public ReAritcleDto ArticleInfoById(String id) {
         ReAritcleDto reAritcleDto = new ReAritcleDto();
@@ -67,9 +70,15 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         reAritcleDto.setBNum(article.getArticleBnum());
         reAritcleDto.setCollectionNum(article.getArticleCollection());
         reAritcleDto.setLikeNum(article.getArticleLike());
+        reAritcleDto.setAddTime(article.getAddTime());
         article.setArticleBnum(article.getArticleBnum()+1);
         //浏览次数加一
-        save(article);
+//        updateById(article);
         return  reAritcleDto;
+    }
+
+    @Override
+    public List<Article> listByDate() {
+        return articleMapper.listByDate();
     }
 }
