@@ -20,6 +20,9 @@ import java.util.List;
 @ApiModel("帖子详细内容")
 public class ReAritcleDto implements Serializable {
 
+    @ApiModelProperty(value = "帖子id")
+    private String id;
+
     @ApiModelProperty(value = "帖子文字内容")
     private String articleContent;
 

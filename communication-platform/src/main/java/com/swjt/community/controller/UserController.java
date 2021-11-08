@@ -134,12 +134,12 @@ public class UserController extends BaseController {
         User userByAccount = userService.getUserByAccount(userDto.getUserAccount());
         BeanUtils.copyProperties(userDto,user);
         if(user.getUserBirthday()!= null) {
-            int age=user.getAddTime().getYear()-user.getUserBirthday().getYear();
-            if(user.getUserBirthday().getMonthValue()>user.getAddTime().getMonthValue()){
+            int age=LocalDateTime.now().getYear()-user.getUserBirthday().getYear();
+            if(user.getUserBirthday().getMonthValue()>LocalDateTime.now().getMonthValue()){
                 age--;
             }
-            else if(user.getUserBirthday().getMonthValue()==user.getAddTime().getMonthValue()){
-                if(user.getUserBirthday().getDayOfMonth()>user.getAddTime().getDayOfMonth()){
+            else if(user.getUserBirthday().getMonthValue()==LocalDateTime.now().getMonthValue()){
+                if(user.getUserBirthday().getDayOfMonth()>LocalDateTime.now().getDayOfMonth()){
                     age--;
                 }
             }

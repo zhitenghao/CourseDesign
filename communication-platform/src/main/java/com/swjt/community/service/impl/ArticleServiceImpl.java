@@ -72,6 +72,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         reAritcleDto.setLikeNum(article.getArticleLike());
         reAritcleDto.setAddTime(article.getAddTime());
         article.setArticleBnum(article.getArticleBnum()+1);
+        reAritcleDto.setId(id);
         //浏览次数加一
 //        updateById(article);
         return  reAritcleDto;
