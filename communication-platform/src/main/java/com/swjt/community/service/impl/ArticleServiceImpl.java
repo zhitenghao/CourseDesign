@@ -39,6 +39,10 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
 
     @Autowired
     ArticleMapper articleMapper;
+
+    @Autowired
+    LoveService likeService;
+
     @Override
     public ReAritcleDto ArticleInfoById(String id) {
         ReAritcleDto reAritcleDto = new ReAritcleDto();

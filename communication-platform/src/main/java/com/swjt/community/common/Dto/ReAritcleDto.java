@@ -50,4 +50,8 @@ public class ReAritcleDto implements Serializable {
     @ApiModelProperty(value = "帖子被收藏次数")
     private Integer collectionNum;
 
+    @ApiModelProperty(value = "帖子是否被自己点赞")
+    private boolean isLike;
+
+
 }

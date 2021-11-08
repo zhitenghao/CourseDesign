@@ -2,6 +2,7 @@ package com.swjt.community.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.Dto.ReAritcleDto;
 import com.swjt.community.common.Dto.ArticleDto;
 import com.swjt.community.common.lang.Const;
@@ -46,6 +47,9 @@ public class ArticleController extends BaseController {
 
     @Autowired
     ArticleCategoryService articleCategoryService;
+
+    @Autowired
+    LoveService likeService;
 
     @PreAuthorize("hasRole('normal')")
     @PostMapping("/add")
@@ -99,11 +103,23 @@ public class ArticleController extends BaseController {
     }
 
     @GetMapping("/listByDate")
-    public Result articleListByDate(){
+    public Result articleListByDate(Principal principal){
         List<Article> list = articleService.listByDate();
+        User user = new User();
+        if(principal!=null){
+            user = userService.getUserByAccount(principal.getName());
+        }
         ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
         for (Article article:list) {
             ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            if(user!=null){
+                Love one = likeService.getOne(new QueryWrapper<Love>().eq("user_id", user.getId()).eq("article_id", article.getId()));
+                if(one!=null){
+                    reArticleDto.setLike(true);
+                }else{
+                    reArticleDto.setLike(false);
+                }
+            }
             reArticleDtos.add(reArticleDto);
         }
         return Result.succ(reArticleDtos);
