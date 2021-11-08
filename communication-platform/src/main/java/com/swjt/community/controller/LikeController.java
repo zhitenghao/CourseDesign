@@ -42,6 +42,9 @@ public class LikeController extends BaseController {
     public Result add(@PathVariable String articleId, Principal principal){
         User userByAccount = userService.getUserByAccount(principal.getName());
         Like like = new Like();
+        if(userByAccount==null){
+            return Result.fail("点赞失败!");
+        }
         like.setUserId(userByAccount.getId());
         like.setArticleId(articleId);
         likeService.save(like);
@@ -55,6 +58,9 @@ public class LikeController extends BaseController {
     @GetMapping("/delete/{articleId}")
     public Result delete(@PathVariable String articleId, Principal principal){
         User user = userService.getUserByAccount(principal.getName());
+        if(user==null){
+            return Result.fail("取消点赞失败！");
+        }
         likeService.deleteByArticleAndUser(articleId,user.getId());
         return Result.succ("成功取消点赞！");
     }

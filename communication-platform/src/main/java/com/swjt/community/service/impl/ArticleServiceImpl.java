@@ -82,4 +82,14 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     public List<Article> listByDate() {
         return articleMapper.listByDate();
     }
+
+    @Override
+    public List<Article> listByCategory(String categoryId) {
+        return articleMapper.listByCategory(categoryId);
+    }
+
+    @Override
+    public List<Article> listMySelf(String userId) {
+        return articleMapper.selectList(new QueryWrapper<Article>().eq("user_id",userId));
+    }
 }

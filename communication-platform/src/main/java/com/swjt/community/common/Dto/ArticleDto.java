@@ -22,6 +22,10 @@ public class ArticleDto implements Serializable {
     @ApiModelProperty(value = "帖子文字内容")
     private String articleContent;
 
+    @ApiModelProperty(value = "帖子分类id")
+    private String articleCategory;
+
+
     @ApiModelProperty(value = "帖子是否有视频")
     private Integer isVideo;
 

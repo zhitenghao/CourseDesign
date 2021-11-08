@@ -20,4 +20,7 @@ public interface ArticleService extends IService<Article> {
 
     List<Article>  listByDate();
 
+    List<Article>  listByCategory(String categoryId);
+
+    List<Article>  listMySelf(String userId);
 }

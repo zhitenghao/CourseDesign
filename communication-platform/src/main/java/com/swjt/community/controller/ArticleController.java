@@ -6,15 +6,10 @@ import com.swjt.community.common.Dto.ReAritcleDto;
 import com.swjt.community.common.Dto.ArticleDto;
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
-import com.swjt.community.entity.Article;
-import com.swjt.community.entity.Photo;
-import com.swjt.community.entity.User;
-import com.swjt.community.entity.Video;
-import com.swjt.community.service.ArticleService;
-import com.swjt.community.service.PhotoService;
-import com.swjt.community.service.UserService;
-import com.swjt.community.service.VideoService;
+import com.swjt.community.entity.*;
+import com.swjt.community.service.*;
 import com.swjt.community.utils.BeanUtils;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -35,6 +30,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/article")
+@ApiOperation("帖子接口")
 public class ArticleController extends BaseController {
     @Autowired
     ArticleService articleService;
@@ -48,6 +44,9 @@ public class ArticleController extends BaseController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    ArticleCategoryService articleCategoryService;
+
     @PreAuthorize("hasRole('normal')")
     @PostMapping("/add")
     public Result addArticle(@RequestBody ArticleDto articleDto, Principal principal){
@@ -58,6 +57,7 @@ public class ArticleController extends BaseController {
         article.setArticleBnum(0);
         article.setUserId(user.getId());
         article.setArticleCollection(0);
+        article.setArticleLike(0);
         article.setArticleStatus(Const.STATUS_ON);
         articleService.save(article);
         if(article.getIsVideo() == 1){
@@ -73,6 +73,15 @@ public class ArticleController extends BaseController {
                 photo.setPhotoUrl(Url);
                 photoService.save(photo);
             }
+        }
+        if(articleDto.getArticleCategory()!=null){
+            ArticleCategory articleCategory = new ArticleCategory();
+            articleCategory.setCategoryId(articleDto.getArticleCategory());
+            articleCategory.setArticleId(article.getId());
+            articleCategoryService.save(articleCategory);
+        }
+        else{
+            return Result.fail("没有输入正确分类");
         }
         return Result.succ(
                 MapUtil.builder()
@@ -100,4 +109,26 @@ public class ArticleController extends BaseController {
         return Result.succ(reArticleDtos);
     }
 
+    @GetMapping("/listByCategory/{categoryId}")
+    public Result articleListByCategory(@PathVariable String categoryId){
+        List<Article> list = articleService.listByCategory(categoryId);
+        ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
+        for (Article article:list) {
+            ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            reArticleDtos.add(reArticleDto);
+        }
+        return Result.succ(reArticleDtos);
+    }
+
+    @GetMapping("/listMyself")
+    public Result listMyself(Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        List<Article> list = articleService.listMySelf(userByAccount.getId());
+        ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
+        for (Article article:list) {
+            ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            reArticleDtos.add(reArticleDto);
+        }
+        return Result.succ(reArticleDtos);
+    }
 }

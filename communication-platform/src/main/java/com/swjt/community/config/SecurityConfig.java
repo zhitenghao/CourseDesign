@@ -70,12 +70,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             "/swagger-resources/**",
             "/user/addUser",
             "/category/list",
-            "/category/addCategory",
             "/upload",
             "/downloadPhoto/{id}",
             "/downloadVideo/{id}",
             "/article/articleInfo/{id}",
-            "/article/listByDate"
+            "/article/listByDate",
+            "/article/listByCategory/{categoryId}",
+            "/article/add"
 
     };
     @Override

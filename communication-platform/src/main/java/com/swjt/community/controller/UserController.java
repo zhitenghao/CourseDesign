@@ -12,6 +12,7 @@ import com.swjt.community.service.SysUserRoleService;
 import com.swjt.community.service.UserService;
 import com.swjt.community.utils.BeanUtils;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,7 +33,7 @@ import java.time.LocalDateTime;
  */
 @RestController
 @RequestMapping("/user")
-@Api("用户接口")
+@ApiOperation("用户接口")
 public class UserController extends BaseController {
 
     @Autowired

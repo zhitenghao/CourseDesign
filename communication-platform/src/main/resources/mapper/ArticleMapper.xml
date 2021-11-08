@@ -4,4 +4,9 @@
     <select id="listByDate" resultType="com.swjt.community.entity.Article">
         select * from article order by add_time desc
     </select>
+
+    <select id="listByCategory" parameterType="java.lang.String" resultType="com.swjt.community.entity.Article">
+    select * from article where id in (select article_id from article_category where category_id = #{categoryId} ) order by add_time desc
+    </select>
+
 </mapper>
