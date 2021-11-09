@@ -54,7 +54,7 @@ public class ReAritcleDto implements Serializable {
     private boolean isLike;
 
     @ApiModelProperty(value = "帖子评论数")
-    private Integer articleComment;
+    private Integer CommentNum;
 
     @ApiModelProperty(value = "帖子是否被自己收藏")
     private boolean isCollection;
