@@ -152,11 +152,41 @@ public class ArticleController extends BaseController {
             @ApiImplicitParam(name = "categoryId",value = "某个分类的id",required = true)
     )
     @ApiOperation(value="根据帖子分类返回帖子列表")
-    public Result articleListByCategory(@PathVariable String categoryId){
+    public Result articleListByCategory(@PathVariable String categoryId,Principal principal){
         List<Article> list = articleService.listByCategory(categoryId);
+        User user = new User();
+        if(principal!=null){
+            user = userService.getUserByAccount(principal.getName());
+        }
         ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
         for (Article article:list) {
             ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            if(user!=null){
+                Love one = likeService.getOne(new QueryWrapper<Love>().eq("user_id", user.getId()).eq("article_id", article.getId()));
+                if(one!=null){
+                    reArticleDto.setLike(true);
+                }else{
+                    reArticleDto.setLike(false);
+                }
+                Collection collection=collectionService.getOne(new QueryWrapper<Collection>().eq("user_id", user.getId()).eq("article_id", article.getId()));
+                if(collection!=null){
+                    reArticleDto.setCollection(true);
+                }else{
+                    reArticleDto.setCollection(false);
+                }
+                Concern concern=concernService.getOne(new QueryWrapper<Concern>().eq("user_id", user.getId()).eq("usered_id", reArticleDto.getReUserDto().getId()));
+                if(concern!=null){
+                    reArticleDto.setConcern(true);
+                }else{
+                    reArticleDto.setConcern(false);
+                }
+                if(user.getId().equals(article.getUserId())){
+                    reArticleDto.setMyself(true);
+                }
+                else{
+                    reArticleDto.setMyself(false);
+                }
+            }
             reArticleDtos.add(reArticleDto);
         }
         return Result.succ(reArticleDtos);
@@ -170,6 +200,33 @@ public class ArticleController extends BaseController {
         ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
         for (Article article:list) {
             ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            if(userByAccount!=null){
+                Love one = likeService.getOne(new QueryWrapper<Love>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(one!=null){
+                    reArticleDto.setLike(true);
+                }else{
+                    reArticleDto.setLike(false);
+                }
+                Collection collection=collectionService.getOne(new QueryWrapper<Collection>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(collection!=null){
+                    reArticleDto.setCollection(true);
+                }else{
+                    reArticleDto.setCollection(false);
+                }
+                Concern concern=concernService.getOne(new QueryWrapper<Concern>().eq("user_id", userByAccount.getId()).eq("usered_id", reArticleDto.getReUserDto().getId()));
+                if(concern!=null){
+                    reArticleDto.setConcern(true);
+                }else{
+                    reArticleDto.setConcern(false);
+                }
+                if(userByAccount.getId().equals(article.getUserId())){
+                    reArticleDto.setMyself(true);
+                }
+                else{
+                    reArticleDto.setMyself(false);
+                }
+            }
+            reArticleDtos.add(reArticleDto);
             reArticleDtos.add(reArticleDto);
         }
         return Result.succ(reArticleDtos);
