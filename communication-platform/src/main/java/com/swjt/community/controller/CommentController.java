@@ -3,6 +3,7 @@ package com.swjt.community.controller;
 
 import cn.hutool.core.map.MapUtil;
 import com.swjt.community.common.Dto.CommentDto;
+import com.swjt.community.common.Dto.ReUserDto;
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.Article;
@@ -45,6 +46,8 @@ public class CommentController extends BaseController {
             return Result.fail("评论失败！");
         }
         Comment comment = new Comment();
+        ReUserDto reUserDto = new ReUserDto();
+        BeanUtils.copyPropertiesIgnoreNullValue(userByAccount,reUserDto);
         BeanUtils.copyProperties(commentDto,comment);
         comment.setUserId(userByAccount.getId());
         comment.setAddTime(LocalDateTime.now());
@@ -64,6 +67,10 @@ public class CommentController extends BaseController {
         return Result.succ(
                 MapUtil.builder()
                 .put("id",comment.getId())
+                        .put("commentContent",comment.getCommentContent())
+                        .put("commentTime",comment.getAddTime())
+                        .put("commentUser",reUserDto)
+                        .put("replyList",null)
                         .map()
         );
     }
