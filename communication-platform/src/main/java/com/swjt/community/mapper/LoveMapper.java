@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface LoveMapper extends BaseMapper<Love> {
-    String deleteByArticleAndUser(String articleId,String userId);
+    void deleteByArticleAndUser(String articleId,String userId);
 }
