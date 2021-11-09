@@ -40,7 +40,7 @@ public class ConcernController extends BaseController {
         concernService.save(concern);
         User byId = userService.getById(id);
         byId.setUserConcerned(byId.getUserConcerned()+1);
-        userByAccount.setUserConcern(byId.getUserConcern()+1);
+        userByAccount.setUserConcern(userByAccount.getUserConcern()+1);
         userService.updateById(userByAccount);
         userService.updateById(byId);
         return Result.succ("关注成功！");
@@ -52,7 +52,7 @@ public class ConcernController extends BaseController {
         User byId = userService.getById(id);
         Concern concern = concernService.getOne(new QueryWrapper<Concern>().eq("user_id", userByAccount.getId()).eq("usered_id", byId.getId()));
         byId.setUserConcerned(byId.getUserConcerned()-1);
-        userByAccount.setUserConcern(byId.getUserConcern()-1);
+        userByAccount.setUserConcern(userByAccount.getUserConcern()-1);
         userService.updateById(userByAccount);
         userService.updateById(byId);
         concernService.removeById(concern.getId());
