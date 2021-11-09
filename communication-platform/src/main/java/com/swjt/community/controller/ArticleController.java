@@ -135,6 +135,12 @@ public class ArticleController extends BaseController {
                 }else{
                     reArticleDto.setConcern(false);
                 }
+                if(user.getId().equals(article.getUserId())){
+                    reArticleDto.setMyself(true);
+                }
+                else{
+                    reArticleDto.setMyself(false);
+                }
             }
             reArticleDtos.add(reArticleDto);
         }

@@ -62,5 +62,8 @@ public class ReAritcleDto implements Serializable {
     @ApiModelProperty(value = "up主是否被关注")
     private boolean isConcern;
 
+    @ApiModelProperty(value = "up主是否是自己")
+    private boolean isMyself;
+
 
 }
