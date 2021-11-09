@@ -72,8 +72,7 @@ public class CollectionController extends BaseController {
     public Result delete(@PathVariable String id,Principal principal){
         try{
             User userByAccount = userService.getUserByAccount(principal.getName());
-            Collection collection = collectionService.getById(id);
-            Article article = articleService.getById(collection.getArticleId());
+            Article article = articleService.getById(id);
             article.setArticleCollection(article.getArticleCollection()-1);
             articleService.updateById(article);
             collectionService.remove(new QueryWrapper<Collection>().eq("user_id",userByAccount.getId()).eq("article_id",article.getId()));
