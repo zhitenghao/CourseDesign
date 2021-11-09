@@ -3,6 +3,7 @@ package com.swjt.community.controller;
 
 import cn.hutool.core.map.MapUtil;
 import com.swjt.community.common.Dto.CommentDto;
+import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.Article;
 import com.swjt.community.entity.Comment;
@@ -47,6 +48,7 @@ public class CommentController extends BaseController {
         BeanUtils.copyProperties(commentDto,comment);
         comment.setUserId(userByAccount.getId());
         comment.setAddTime(LocalDateTime.now());
+        comment.setCommentStatus(Const.STATUS_ON);
         Article article = articleService.getById(comment.getArticleId());
         article.setArticleComment(article.getArticleComment()+1);
         articleService.updateById(article);
@@ -55,12 +57,14 @@ public class CommentController extends BaseController {
         message.setPrincipleId(userByAccount.getId());
         message.setObjectId(article.getUserId());
         message.setObjectRead(0);
+        message.setAddTime(LocalDateTime.now());
         message.setPrincipleRead(0);
         message.setProcessType(2);
         messageService.save(message);
         return Result.succ(
                 MapUtil.builder()
                 .put("id",comment.getId())
+                        .map()
         );
     }
     @PreAuthorize("hasRole('normal')")
