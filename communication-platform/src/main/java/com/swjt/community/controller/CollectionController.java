@@ -38,7 +38,7 @@ public class CollectionController extends BaseController {
     UserService userService;
 
 
-    @PostMapping("/add/{articleId}")
+    @GetMapping("/add/{articleId}")
     public Result add(@PathVariable String articleId, Principal principal){
         User userByAccount = userService.getUserByAccount(principal.getName());
         Article byId = articleService.getById(articleId);
@@ -65,8 +65,8 @@ public class CollectionController extends BaseController {
         );
     }
 
-    @PostMapping("/delete")
-    public Result delete(@RequestBody String id,Principal principal){
+    @GetMapping("/delete/{id}")
+    public Result delete(@PathVariable String id,Principal principal){
         try{
             User userByAccount = userService.getUserByAccount(principal.getName());
             Collection collection = collectionService.getById(id);
