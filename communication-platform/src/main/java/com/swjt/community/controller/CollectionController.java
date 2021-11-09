@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -57,7 +58,9 @@ public class CollectionController extends BaseController {
         message.setObjectRead(0);
         message.setPrincipleRead(0);
         message.setProcessType(1);
+        message.setAddTime(LocalDateTime.now());
         messageService.save(message);
+        articleService.updateById(byId);
         return Result.succ(MapUtil.builder()
                 .put("msg","收藏成功！")
                 .put("id",collection.getId())
@@ -73,7 +76,7 @@ public class CollectionController extends BaseController {
             Article article = articleService.getById(collection.getArticleId());
             article.setArticleCollection(article.getArticleCollection()-1);
             articleService.updateById(article);
-            collectionService.removeById(id);
+            collectionService.remove(new QueryWrapper<Collection>().eq("user_id",userByAccount.getId()).eq("article_id",article.getId()));
             messageService.remove(new QueryWrapper<Message>().eq("principle_id",userByAccount.getId()).eq("object_id",article.getUserId()));
         }catch (NullPointerException nullPointerException){
             log.error("没有找到收藏帖子的id");
