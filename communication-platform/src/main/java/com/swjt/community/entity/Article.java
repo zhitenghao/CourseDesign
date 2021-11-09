@@ -34,6 +34,9 @@ public class Article extends BaseEntity {
     @ApiModelProperty(value = "帖子被赞数")
     private Integer articleLike;
 
+    @ApiModelProperty(value = "帖子评论数")
+    private Integer articleComment;
+
     @ApiModelProperty(value = "帖子收藏数(初始为0，依次累加)")
     private Integer articleCollection;
 

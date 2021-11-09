@@ -19,8 +19,6 @@ public class CommentDto implements Serializable {
     @ApiModelProperty(value = "所属帖子（外键）")
     private String articleId;
 
-    @ApiModelProperty(value = "评论用户（外键）")
-    private String userId;
 
     @ApiModelProperty(value = "评论内容")
     private String commentContent;

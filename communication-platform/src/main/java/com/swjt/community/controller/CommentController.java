@@ -4,7 +4,10 @@ package com.swjt.community.controller;
 import cn.hutool.core.map.MapUtil;
 import com.swjt.community.common.Dto.CommentDto;
 import com.swjt.community.common.lang.Result;
+import com.swjt.community.entity.Article;
 import com.swjt.community.entity.Comment;
+import com.swjt.community.entity.Message;
+import com.swjt.community.entity.User;
 import com.swjt.community.service.CommentService;
 import com.swjt.community.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 
@@ -34,11 +38,26 @@ public class CommentController extends BaseController {
 
     @PreAuthorize("hasRole('normal')")
     @PostMapping("/add")
-    public Result add(@RequestBody CommentDto commentDto){
+    public Result add(@RequestBody CommentDto commentDto, Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        if(userByAccount==null){
+            return Result.fail("评论失败！");
+        }
         Comment comment = new Comment();
         BeanUtils.copyProperties(commentDto,comment);
+        comment.setUserId(userByAccount.getId());
         comment.setAddTime(LocalDateTime.now());
+        Article article = articleService.getById(comment.getArticleId());
+        article.setArticleComment(article.getArticleComment()+1);
+        articleService.updateById(article);
         commentService.save(comment);
+        Message message = new Message();
+        message.setPrincipleId(userByAccount.getId());
+        message.setObjectId(article.getUserId());
+        message.setObjectRead(0);
+        message.setPrincipleRead(0);
+        message.setProcessType(2);
+        messageService.save(message);
         return Result.succ(
                 MapUtil.builder()
                 .put("id",comment.getId())
