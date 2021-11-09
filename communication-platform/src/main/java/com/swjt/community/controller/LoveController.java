@@ -2,8 +2,11 @@ package com.swjt.community.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.lang.Result;
+import com.swjt.community.entity.Article;
 import com.swjt.community.entity.Love;
+import com.swjt.community.entity.Message;
 import com.swjt.community.entity.User;
 import com.swjt.community.service.LoveService;
 import com.swjt.community.service.UserService;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.swjt.community.controller.BaseController;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 
 /**
  * <p>
@@ -44,9 +48,21 @@ public class LoveController extends BaseController {
         if(userByAccount==null){
             return Result.fail("点赞失败!");
         }
+        Article article = articleService.getById(articleId);
+        article.setArticleLike(article.getArticleLike()+1);
+        articleService.updateById(article);
         like.setUserId(userByAccount.getId());
         like.setArticleId(articleId);
         likeService.save(like);
+        Message message = new Message();
+        message.setPrincipleId(userByAccount.getId());
+        message.setObjectId(article.getUserId());
+        message.setObjectRead(0);
+        message.setPrincipleRead(0);
+        message.setAddTime(LocalDateTime.now());
+        //主体点赞了客体
+        message.setProcessType(4);
+        messageService.save(message);
         return Result.succ(
                 MapUtil.builder()
                         .put("id",like.getId())
@@ -61,7 +77,11 @@ public class LoveController extends BaseController {
         if(user==null){
             return Result.fail("取消点赞失败！");
         }
+        Article article = articleService.getById(articleId);
+        article.setArticleLike(article.getArticleLike()-1);
+        articleService.updateById(article);
         likeService.deleteByArticleAndUser(articleId,user.getId());
+        messageService.remove(new QueryWrapper<Message>().eq("principle_id",user.getId()).eq("object_id",article.getUserId()));
         return Result.succ("成功取消点赞！");
     }
 
