@@ -8,11 +8,8 @@ import com.swjt.community.entity.User;
 import com.swjt.community.service.ConcernService;
 import com.swjt.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.swjt.community.controller.BaseController;
 
 import java.security.Principal;
@@ -34,8 +31,8 @@ public class ConcernController extends BaseController {
     @Autowired
     ConcernService concernService;
 
-    @PostMapping("/add")
-    public Result add(@RequestBody String id, Principal principal){
+    @GetMapping("/add/{id}")
+    public Result add(@PathVariable String id, Principal principal){
         User userByAccount = userService.getUserByAccount(principal.getName());
         Concern concern = new Concern();
         concern.setUserId(userByAccount.getId());
@@ -49,8 +46,8 @@ public class ConcernController extends BaseController {
         return Result.succ("关注成功！");
     }
 
-    @PostMapping("/delete")
-    public Result delete(@RequestBody String id, Principal principal){
+    @GetMapping("/delete/{id}")
+    public Result delete(@PathVariable String id, Principal principal){
         User userByAccount = userService.getUserByAccount(principal.getName());
         User byId = userService.getById(id);
         Concern concern = concernService.getOne(new QueryWrapper<Concern>().eq("user_id", userByAccount.getId()).eq("usered_id", byId.getId()));
