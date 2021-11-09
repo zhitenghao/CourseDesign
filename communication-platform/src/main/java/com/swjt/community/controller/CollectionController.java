@@ -13,11 +13,7 @@ import com.swjt.community.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -42,8 +38,8 @@ public class CollectionController extends BaseController {
     UserService userService;
 
 
-    @PostMapping("/add")
-    public Result add(@RequestBody String articleId, Principal principal){
+    @PostMapping("/add/{articleId}")
+    public Result add(@PathVariable String articleId, Principal principal){
         User userByAccount = userService.getUserByAccount(principal.getName());
         Article byId = articleService.getById(articleId);
         User byId1 = userService.getById(byId.getUserId());
