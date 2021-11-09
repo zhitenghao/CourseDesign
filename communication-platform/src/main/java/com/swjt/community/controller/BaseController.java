@@ -12,6 +12,7 @@ package com.swjt.community.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.swjt.community.service.ArticleService;
 import com.swjt.community.service.MessageService;
+import com.swjt.community.service.UserService;
 import com.swjt.community.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.ServletRequestUtils;
@@ -31,6 +32,9 @@ public class BaseController {
 
     @Autowired
     ArticleService articleService;
+
+    @Autowired
+    UserService userService;
 
 
     /**

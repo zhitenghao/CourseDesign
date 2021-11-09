@@ -10,7 +10,7 @@ import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.*;
 import com.swjt.community.service.*;
 import com.swjt.community.utils.BeanUtils;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +31,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/article")
-@ApiOperation("帖子接口")
+@Api(value = "帖子接口" ,tags = "帖子接口")
 public class ArticleController extends BaseController {
     @Autowired
     ArticleService articleService;
@@ -53,6 +53,7 @@ public class ArticleController extends BaseController {
 
     @PreAuthorize("hasRole('normal')")
     @PostMapping("/add")
+    @ApiOperation(value="添加帖子")
     public Result addArticle(@RequestBody ArticleDto articleDto, Principal principal){
         Article article = new Article();
         BeanUtils.copyProperties(articleDto,article);
@@ -95,6 +96,7 @@ public class ArticleController extends BaseController {
     }
     @PreAuthorize("hasRole('normal')")
     @GetMapping("/articleInfo/{id}")
+    @ApiOperation(value="帖子详细信息")
     public Result articleInfo(@PathVariable String id){
         Article article = articleService.getById(id);
         article.setArticleBnum(article.getArticleBnum()+1);
@@ -103,6 +105,7 @@ public class ArticleController extends BaseController {
     }
 
     @GetMapping("/listByDate")
+    @ApiOperation(value="根据时间先后返回帖子列表")
     public Result articleListByDate(Principal principal){
         List<Article> list = articleService.listByDate();
         User user = new User();
@@ -126,6 +129,10 @@ public class ArticleController extends BaseController {
     }
 
     @GetMapping("/listByCategory/{categoryId}")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "categoryId",value = "某个分类的id",required = true)
+    )
+    @ApiOperation(value="根据帖子分类返回帖子列表")
     public Result articleListByCategory(@PathVariable String categoryId){
         List<Article> list = articleService.listByCategory(categoryId);
         ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
@@ -137,6 +144,7 @@ public class ArticleController extends BaseController {
     }
 
     @GetMapping("/listMyself")
+    @ApiOperation(value="返回用户自己的帖子")
     public Result listMyself(Principal principal){
         User userByAccount = userService.getUserByAccount(principal.getName());
         List<Article> list = articleService.listMySelf(userByAccount.getId());
