@@ -227,7 +227,6 @@ public class ArticleController extends BaseController {
                 }
             }
             reArticleDtos.add(reArticleDto);
-            reArticleDtos.add(reArticleDto);
         }
         return Result.succ(reArticleDtos);
     }
