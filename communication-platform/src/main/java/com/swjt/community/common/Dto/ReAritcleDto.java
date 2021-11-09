@@ -56,5 +56,11 @@ public class ReAritcleDto implements Serializable {
     @ApiModelProperty(value = "帖子评论数")
     private Integer articleComment;
 
+    @ApiModelProperty(value = "帖子是否被自己收藏")
+    private boolean isCollection;
+
+    @ApiModelProperty(value = "up主是否被关注")
+    private boolean isConcern;
+
 
 }

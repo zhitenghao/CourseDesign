@@ -33,8 +33,6 @@ import java.util.List;
 @RequestMapping("/article")
 @Api(value = "帖子接口" ,tags = "帖子接口")
 public class ArticleController extends BaseController {
-    @Autowired
-    ArticleService articleService;
 
     @Autowired
     VideoService videoService;
@@ -43,10 +41,13 @@ public class ArticleController extends BaseController {
     PhotoService photoService;
 
     @Autowired
-    UserService userService;
+    ArticleCategoryService articleCategoryService;
 
     @Autowired
-    ArticleCategoryService articleCategoryService;
+    CollectionService collectionService;
+
+    @Autowired
+    ConcernService concernService;
 
     @Autowired
     LoveService likeService;
@@ -121,6 +122,18 @@ public class ArticleController extends BaseController {
                     reArticleDto.setLike(true);
                 }else{
                     reArticleDto.setLike(false);
+                }
+                Collection collection=collectionService.getOne(new QueryWrapper<Collection>().eq("user_id", user.getId()).eq("article_id", article.getId()));
+                if(collection!=null){
+                    reArticleDto.setCollection(true);
+                }else{
+                    reArticleDto.setCollection(false);
+                }
+                Concern concern=concernService.getOne(new QueryWrapper<Concern>().eq("user_id", user.getId()).eq("usered_id", reArticleDto.getReUserDto().getId()));
+                if(concern!=null){
+                    reArticleDto.setConcern(true);
+                }else{
+                    reArticleDto.setConcern(false);
                 }
             }
             reArticleDtos.add(reArticleDto);
