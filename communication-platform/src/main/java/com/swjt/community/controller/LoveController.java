@@ -50,6 +50,7 @@ public class LoveController extends BaseController {
         return Result.succ(
                 MapUtil.builder()
                         .put("id",like.getId())
+                .map()
         );
     }
 
