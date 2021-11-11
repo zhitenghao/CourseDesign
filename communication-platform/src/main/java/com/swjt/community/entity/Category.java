@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @ApiModel(value="Category对象", description="")
 public class Category extends BaseEntity {
-
+    
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "分类名称")
@@ -27,5 +27,7 @@ public class Category extends BaseEntity {
     @ApiModelProperty(value = "分类顺序")
     private Integer orderId;
 
+    @ApiModelProperty(value = "分类路径")
+    private String path;
 
 }
