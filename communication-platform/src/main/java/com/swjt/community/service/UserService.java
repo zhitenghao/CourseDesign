@@ -1,6 +1,8 @@
 package com.swjt.community.service;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.swjt.community.common.Dto.ExtendReUserDto;
 import com.swjt.community.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -27,4 +29,9 @@ public interface UserService extends IService<User> {
     void clearUserAuthorityInfoByMenuId(String menuid);
 
     List<User> userList();
+
+    Page<ExtendReUserDto> concernUserList(String id, Page page);
+
+    Page<ExtendReUserDto> fansUserList(String id, Page page);
+
 }

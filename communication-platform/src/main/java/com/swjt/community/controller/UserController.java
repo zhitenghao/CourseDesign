@@ -2,12 +2,14 @@ package com.swjt.community.controller;
 
 
 import cn.hutool.core.map.MapUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.Dto.PassDto;
 import com.swjt.community.common.Dto.UserDto;
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.SysUserRole;
 import com.swjt.community.entity.User;
+import com.swjt.community.mapper.UserMapper;
 import com.swjt.community.service.SysUserRoleService;
 import com.swjt.community.service.UserService;
 import com.swjt.community.utils.BeanUtils;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 /**
@@ -44,6 +47,9 @@ public class UserController extends BaseController {
 
     @Autowired
     SysUserRoleService sysUserRoleService;
+
+    @Autowired
+    UserMapper userMapper;
 
 
     @PreAuthorize("hasRole('admin')")
@@ -196,5 +202,14 @@ public class UserController extends BaseController {
 
         userService.updateById(sysUser);
         return Result.succ("修改密码成功！");
+    }
+
+    @GetMapping("/concernUserList")
+    public Result concernUserList(String userId) {
+        return Result.succ(userService.concernUserList(userId,getPage()));
+    }
+    @GetMapping("/fansUserList")
+    public Result fansUserList(String userId){
+        return Result.succ(userService.fansUserList(userId,getPage()));
     }
 }

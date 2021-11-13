@@ -24,4 +24,25 @@
         WHERE
             rm.menu_id = #{menuId}
     </select>
+
+
+    <select id="concernUserList" resultType="com.swjt.community.entity.User">
+
+        SELECT DISTINCT
+        a.*
+        FROM
+        user a,concern b
+        WHERE
+            b.user_id= #{id} and b.usered_id=a.id and a.user_status='1'
+    </select>
+
+    <select id="fansUserList" resultType="com.swjt.community.entity.User">
+
+        SELECT DISTINCT
+        a.*
+        FROM
+        user a,concern b
+        WHERE
+            b.usered_id= #{id} and b.user_id=a.id and a.user_status='1'
+    </select>
 </mapper>

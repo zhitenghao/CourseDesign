@@ -2,18 +2,25 @@ package com.swjt.community.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.swjt.community.common.Dto.ExtendReUserDto;
+import com.swjt.community.entity.Concern;
 import com.swjt.community.entity.SysMenu;
 import com.swjt.community.entity.SysRole;
 import com.swjt.community.entity.User;
+import com.swjt.community.mapper.ConcernMapper;
 import com.swjt.community.mapper.UserMapper;
 import com.swjt.community.service.SysMenuService;
 import com.swjt.community.service.SysRoleService;
 import com.swjt.community.service.UserService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.swjt.community.utils.BeanUtils;
 import com.swjt.community.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,6 +40,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private ConcernMapper concernMapper;
 
     @Autowired
     private SysRoleService sysRoleService;
@@ -111,5 +121,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public List<User> userList() {
         return list(new QueryWrapper<User>().eq("user_status","1"));
+    }
+
+    @Override
+    public Page<ExtendReUserDto> concernUserList(String id, Page page) {
+        Page<User> userPage = userMapper.concernUserList(id, page);
+        List<User> records = userPage.getRecords();
+        Page<ExtendReUserDto> extendReUserDtoPage = new Page<ExtendReUserDto>();
+        BeanUtils.copyPropertiesIgnoreNullValue(userPage,extendReUserDtoPage);
+        List<ExtendReUserDto> extendReUserDtos = new ArrayList<ExtendReUserDto>();
+        for(User user:records){
+            ExtendReUserDto extendReUserDto = new ExtendReUserDto();
+            BeanUtils.copyPropertiesIgnoreNullValue(user,extendReUserDto);
+            extendReUserDto.setConcerned(true);
+            extendReUserDtos.add(extendReUserDto);
+        }
+        extendReUserDtoPage.setRecords(extendReUserDtos);
+        return extendReUserDtoPage;
+    }
+
+    @Override
+    public Page<ExtendReUserDto> fansUserList(String id, Page page) {
+        Page<User> userPage = userMapper.fansUserList(id, page);
+        List<User> records = userPage.getRecords();
+        Page<ExtendReUserDto> extendReUserDtoPage = new Page<ExtendReUserDto>();
+        BeanUtils.copyPropertiesIgnoreNullValue(userPage,extendReUserDtoPage);
+        List<ExtendReUserDto> extendReUserDtos = new ArrayList<ExtendReUserDto>();
+        for(User user:records){
+            ExtendReUserDto extendReUserDto = new ExtendReUserDto();
+            BeanUtils.copyPropertiesIgnoreNullValue(user,extendReUserDto);
+            if(concernMapper.selectOne(new QueryWrapper<Concern>().eq("user_id",id).eq("usered_id",extendReUserDto.getId()))!=null){
+                extendReUserDto.setConcerned(true);
+            }
+            else extendReUserDto.setConcerned(false);
+            extendReUserDtos.add(extendReUserDto);
+        }
+        extendReUserDtoPage.setRecords(extendReUserDtos);
+        return extendReUserDtoPage;
     }
 }

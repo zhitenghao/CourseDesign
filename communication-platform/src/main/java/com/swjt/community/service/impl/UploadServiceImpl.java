@@ -25,10 +25,10 @@ public class UploadServiceImpl implements UploadService {
     private static String FILE_DIR_LINUX_PHOTO = "/home/community/photo";
 
     //照片存储位置
-    private static String FILE_DIR_WINDOWS_PHOTO = "e:/community/photo";
+    private static String FILE_DIR_WINDOWS_PHOTO = "d:/community/photo";
 
     //视频存储位置
-    private static String FILE_DIR_WINDOWS_VIDEO = "e:/community/video";
+    private static String FILE_DIR_WINDOWS_VIDEO = "d:/community/video";
 
 
 
