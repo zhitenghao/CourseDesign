@@ -43,6 +43,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Autowired
     LoveService likeService;
 
+    @Autowired
+    CollectionService collectionService;
+
     @Override
     public ReAritcleDto ArticleInfoById(String id) {
         ReAritcleDto reAritcleDto = new ReAritcleDto();
@@ -96,5 +99,16 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Override
     public List<Article> listMySelf(String userId) {
         return articleMapper.selectList(new QueryWrapper<Article>().eq("user_id",userId));
+    }
+
+    @Override
+    public List<Article> listConcernByUserId(String userId) {
+        ArrayList<Article> articles = new ArrayList<>();
+        List<Collection> collections = collectionService.list(new QueryWrapper<Collection>().eq("user_id", userId));
+        for(Collection collection:collections){
+            Article article = getById(collection.getArticleId());
+            articles.add(article);
+        }
+        return articles;
     }
 }

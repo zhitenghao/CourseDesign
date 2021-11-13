@@ -2,6 +2,7 @@ package com.swjt.community.mapper;
 
 import com.swjt.community.entity.Collection;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
