@@ -1,12 +1,12 @@
 <template>
   <div class="sidebar-right">
-    <div id="hotSpot" style="margin-top: 150px;">
+    <div class="hotSpot" style="margin-top: 150px;">
       <h2 style="color:#E6A23C;">全站十大</h2>
     </div>
-    <div id="content">
+    <div class="content">
       <h2>内容</h2>
     </div>
-    <div id="classification">
+    <div class="classification">
       <el-row class="tac">
         <el-menu default-active="2" class="menu-right"
                  background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
@@ -23,7 +23,12 @@
               <el-menu-item index="1-5">计算机与人工智能学院</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item :index="item.id" v-for="(item,key) in menuList" :key="key">
+          <el-menu-item @click="allArticles">
+            <template slot="title">
+              <span>全部内容</span>
+            </template>
+          </el-menu-item>
+          <el-menu-item :index="item.id" v-for="(item,key) in menuList" :key="key" @click="selectCategory(item.path)">
             <template slot="title">
               <!--                  <svg-icon slot="prefix" icon-class="system"/>-->
               {{ item.categoryName }}
@@ -36,6 +41,7 @@
 </template>
 
 <script>
+
 export default {
   name: "index",
   data(){
@@ -47,30 +53,36 @@ export default {
     this.getMenus()
   },
   methods:{
+    //获取分类菜单
     getMenus () {
       this.getRequest('/auth/category/list').then(res => {
         this.menuList = res.data.data
-        console.log(this.menuList)
+        console.log('菜单栏',this.menuList)
       })
-      // this.getRequest('/article/listByCategory/'+item.id).then(res => {
-      //
-      // })
     },
+    //根据分类跳转子路由
+    selectCategory(path){
+      this.$router.replace('/'+path).catch(err=>err)
+    },
+    //返回首页全部帖子
+    allArticles(){
+      this.$router.push('/')
+    }
   }
 }
 </script>
 
 <style scoped>
-#content {
+.content {
   padding: 0;
   margin: 0;
   height: 250px;
   width: 100%;
   background-color: #FFFFFF;
 }
-.content {
-  /* background-color: white; */
-  width: 50%;
-  opacity: 50;
-}
+/*.content {*/
+/*  !* background-color: white; *!*/
+/*  width: 50%;*/
+/*  opacity: 50;*/
+/*}*/
 </style>

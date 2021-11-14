@@ -8,9 +8,9 @@
             <span style="float: left; margin: 15px 10px;">
               <b>{{item.reUserDto.userName}}</b>
             </span>
-            <div class="activity"> <!-- 设置关注此用户的数量 -->
-              <el-button type="warning" @click="addAttention" style="margin-left: 420px" size="small" round plain>+ 关注</el-button>
-              <el-button type="text" v-if="false" @click="cancelAttention" style="margin-left: 420px" size="small" round plain>已关注</el-button>
+            <div class="concern" v-if="!item.myself"> <!-- 设置关注此用户 -->
+              <el-button type="warning" v-if="item.concern" @click="cancelAttention(item)" style="margin-left: 420px" size="small" round plain>已关注</el-button>
+              <el-button type="warning" v-else @click="addAttention(item)" style="margin-left: 420px" size="small" round plain>+ 关注</el-button>
             </div>
           </div>
           <div class="postContent">
@@ -23,14 +23,14 @@
               <el-image class="imageOrVideos" v-for="oneImageOrVideoUrl in item.urls.slice(0, 9)" :key="oneImageOrVideoUrl" :src="oneImageOrVideoUrl" lazy></el-image>
             </div>
             <div class="commentAndLike">
-              <el-badge :value="12" class="activity"> <!-- 设置收藏该帖子的数量 -->
-                <el-button type="text" style="margin-left: 125px" @click="addCollect(item)">收藏</el-button>
-                <el-button type="text" v-if="false" style="margin-left: 125px" @click="cancelCollect(item)">已收藏</el-button>
+              <el-badge :value="item.collectionNum" class="activity"> <!-- 设置收藏该帖子的数量 -->
+                <el-button type="text" v-if="item.collection" style="margin-left: 125px" @click="cancelCollect(item)">已收藏</el-button>
+                <el-button type="text" v-else style="margin-left: 125px" @click="addCollect(item)">收藏</el-button>
               </el-badge>
-              <el-badge :value="12" class="activity"> <!-- 设置该帖子的评论数量 -->
+              <el-badge :value="item.commentNum" class="activity"> <!-- 设置该帖子的评论数量 -->
                 <el-button type="text" style="margin-left: 130px" @click="switchComment(item)">评论</el-button> <!-- 点击评论按钮，该按钮设置了commentAndShowFlag的值，该值用来控制是否展开用户评论div和该帖子的评论内容， -->
               </el-badge>
-              <el-badge :value="12" class="activity"> <!-- 设置该帖子的点赞数量 -->
+              <el-badge :value="item.likeNum" class="activity"> <!-- 设置该帖子的点赞数量 -->
                 <el-button type="text" v-if="item.like" style="margin-left: 125px" @click="unlike(item)">已点赞</el-button>
                 <el-button type="text" v-else style="margin-left: 125px" @click="like(item)">点赞</el-button>
               </el-badge>
@@ -109,8 +109,7 @@ export default {
 
       articles: [],//所有帖子的集合
       commentAndShowFlag: false,
-      //inputComment:'', // 输入用户对于该帖子的评论
-      commentForm:{ //评论提交表单
+      commentForm:{ //评论表单
         articleId: '',
         commentContent: '',
         userId: ''
@@ -123,6 +122,7 @@ export default {
   methods:{
     getArticle() {
       this.getRequest('/auth/article/listMyself').then(res => {
+        console.log(res)
         this.articles = res.data.data
         //console.log(this.articles);
         //给articles循环每项插入属性commentAndShowFlag
@@ -132,52 +132,83 @@ export default {
         console.log(this.articles)
       })
     },
+    // 添加关注
+    addAttention (item) {
+      //所有该用户的“关注”全变为“已关注”
+      for(let i = 0;i < this.articles.length;i++){
+        if(this.articles[i].reUserDto.id === item.reUserDto.id){
+          this.articles[i].concern = !this.articles[i].concern
+        }
+      }
+      this.getRequest('/auth/concern/add/'+item.reUserDto.id+'').then(res => {
+      })
+    },
+    //取消关注
+    cancelAttention(item){
+      //所有该用户的“已关注”全变为“关注”
+      for(let i = 0;i < this.articles.length;i++){
+        if(this.articles[i].reUserDto.id === item.reUserDto.id){
+          this.articles[i].concern = !this.articles[i].concern
+        }
+      }
+      this.getRequest('/auth/concern/delete/'+item.reUserDto.id+'').then(res => {
+      })
+    },
     // 添加收藏
-    addCollect () {
+    addCollect (item) {
+      item.collection = !item.collection
+      this.getRequest('/auth/collection/add/'+item.id).then(res => {
+        //console.log(res)
+      })
+      item.collectionNum++
     },
     // 取消收藏
-    cancelCollect () {
+    cancelCollect (item) {
+      item.collection = !item.collection
+      this.getRequest('/auth/collection/delete/'+item.id).then(res => {
+        //console.log(res)
+      })
+      item.collectionNum--
     },
     // 打开/关闭评论
     switchComment (item) {
       // 点击评论按钮，修改commentAndShowFlag的值来显示评论区域
       item.commentAndShowFlag = !item.commentAndShowFlag;
     },
+    // 提交用户评论
+    submitComment (item) {
+      this.commentForm.articleId = item.id
+      // this.commentForm.userI
+      this.postRequest('/auth/comment/add/',this.commentForm).then(res => {
+        //res返回评论在前端评论中显示
+        item.reCommentDtos.push(res.data.data)
+      })
+      this.$message.success('评论成功！')
+      this.commentForm.commentContent = ''
+      item.commentNum++
+    },
     // 点赞
     like (item) {
       item.like = !item.like
-      //console.log(item.id)
       this.getRequest('/auth/love/add/'+item.id+'').then(res => {
         //console.log(res)
       })
+      //点击后点赞数加一，前端修改即时呈现
+      item.likeNum++
     },
     //取消点赞
     unlike (item) {
       item.like = !item.like
       this.getRequest('/auth/love/delete/'+item.id+'').then(res => {
       })
-    },
-    // 添加关注
-    addAttention () {
-
-    },
-    //取消关注
-    cancelAttention(){
-
+      //点击后点赞数减一
+      item.likeNum--
     },
 
 
 
-    // 提交用户评论
-    submitComment (item) {
-      this.commentForm.articleId = item.id
-      // this.commentForm.commentContent = this.inputComment
-      // this.commentForm.userI
-      this.postRequest('/auth/comment/add/',this.commentForm).then(res => {
-        //console.log(res)
-      })
-      //怎么立刻显示出来？
-    },
+
+
     // 从后端获取帖子数量赋值给count
     load () {
       // this.count += 2
@@ -195,10 +226,14 @@ export default {
 ul{
   list-style: none;
 }
-.activity {
+.concern{
   margin-top: 13px;
   margin-right: 30px;
-  /*border: 1px solid #e52121;*/
+  float: right;
+}
+.activity {
+  margin-top: 13px;
+  margin-right: 30px;  /*border: 1px solid #e52121;*/
 }
 .onePostContainer{
   border-radius: 15px;

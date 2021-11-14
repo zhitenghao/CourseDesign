@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div class="register">
     <el-form :rules="rules" ref="registerForm" :model="registerForm" class="registerContainer">
       <h1 class="registerTitle">注册</h1>
-      <div class="register" style="text-align: center">已有帐号？
+      <div class="backToLogin" style="text-align: center">已有帐号？
         <el-button type="text" @click="returnLogin">登录</el-button>
       </div>
       <el-form-item prop="username">
@@ -67,7 +67,7 @@ export default {
   },
   methods: {
     returnLogin () {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/login' })
     },
     register(){
       this.$refs.registerForm.validate(valid => {
@@ -93,15 +93,23 @@ export default {
 </script>
 
 <style>
+.register{
+  overflow: auto;
+  height: 100%;
+  background-image:url("../assets/backgroundImg.png");
+  background-size: 100% 100%;
+  background-attachment:fixed;
+  background-repeat: no-repeat;
+}
 .registerContainer {
-  border-radius: 15px;
-  background-clip: padding-box;
-  margin: 80px auto;
   width: 350px;
-  padding: 15px 35px 15px 35px;
-  background: rgba(255,255,255,0.9);
+  margin: 80px auto;
   border: 1px solid #eaeaea;
+  border-radius: 15px;
+  padding: 15px 35px 15px 35px;
   box-shadow: 0 0 25px #cac6c6;
+  background: rgba(255,255,255,0.9);
+  /*background-clip: padding-box;*/
 }
 .registerTitle {
   margin: 20px auto 15px auto;

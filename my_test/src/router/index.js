@@ -7,7 +7,7 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/login',
     name: 'Login',
     component: Login
   },
@@ -17,24 +17,72 @@ const routes = [
     component: Register
   },
   {
-    path: '/index',
-    name: 'Index',
-    component: () => import('../views/Homepage.vue')
+    path: '/',
+    name: 'Home',
+    redirect: 'index',
+    component: () => import('../views/Homepage.vue'),
+    children: [
+      {
+        path: 'index',
+        name: 'Index',
+        component: () => import('../components/Articles/shouye.vue')
+      },
+      {
+        path: 'siliuji',
+        name: 'Siliuji',
+        component: () => import('../components/Articles/siliuji.vue')
+      },
+      {
+        path: 'kaoyan',
+        name: 'Kaoyan',
+        component: () => import('../components/Articles/kaoyan.vue')
+      },
+      {
+        path: 'kaogong',
+        name: 'Kaogong',
+        component: () => import('../components/Articles/kaogong.vue')
+      },
+      {
+        path: 'jiaozi',
+        name: 'Jiaozi',
+        component: () => import('../components/Articles/jiaozi.vue')
+      },
+      {
+        path: 'else',
+        name: 'Qita',
+        component: () => import('../components/Articles/qita.vue')
+      },
+    ]
   },
   {
     path: '/personal',
-    name: 'PersonalIndex',
-    component: () => import('../views/MyPage.vue')
+    name: 'MyPage',
+    redirect: '/personal/index',
+    component: () => import('../views/MyPage.vue'),
+    children: [
+      {
+        path: 'index',
+        name: 'index',
+        component: () => import('../components/Personal/index.vue')
+      },
+      {
+        path: 'fans',
+        name: 'fans',
+         component: () => import('../components/Personal/MyConcerns.vue')
+      },
+    ]
   },
+
+
   {
     path: '/test',
     name: 'Test',
-    component: () => import('../views/test.vue')
+    component: () => import('../views/testA.vue')
   },
   {
     path: '/test2',
     name: 'Test2',
-    component: () => import('../views/test2.vue')
+    component: () => import('../views/test.vue')
   },
 ]
 
