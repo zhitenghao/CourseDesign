@@ -1,6 +1,7 @@
 package com.swjt.community.controller;
 
 
+import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.Concern;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.swjt.community.controller.BaseController;
 
 import java.security.Principal;
+import java.util.Map;
 
 /**
  * <p>
@@ -38,12 +40,21 @@ public class ConcernController extends BaseController {
         concern.setUserId(userByAccount.getId());
         concern.setUseredId(id);
         concernService.save(concern);
+        int flag=1;
+        if(concernService.getOne(new QueryWrapper<Concern>().eq("user_id",id).eq("usered_id",userByAccount.getId()))!=null){
+            flag=2;
+        }
         User byId = userService.getById(id);
         byId.setUserConcerned(byId.getUserConcerned()+1);
         userByAccount.setUserConcern(userByAccount.getUserConcern()+1);
         userService.updateById(userByAccount);
         userService.updateById(byId);
-        return Result.succ("关注成功！");
+        return Result.succ(
+                MapUtil.builder()
+                .put("id",concern.getId())
+                .put("isConcerned",flag)
+                .map()
+        );
     }
 
     @GetMapping("/delete/{id}")
