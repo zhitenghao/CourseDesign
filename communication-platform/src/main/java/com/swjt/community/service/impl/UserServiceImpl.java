@@ -133,7 +133,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for(User user:records){
             ExtendReUserDto extendReUserDto = new ExtendReUserDto();
             BeanUtils.copyPropertiesIgnoreNullValue(user,extendReUserDto);
-            extendReUserDto.setConcerned(true);
+            if(concernMapper.selectOne(new QueryWrapper<Concern>().eq("user_id",extendReUserDto.getId()).eq("usered_id",id))!=null){
+                extendReUserDto.setIsConcerned(2);
+            }
+            else extendReUserDto.setIsConcerned(1);
             extendReUserDtos.add(extendReUserDto);
         }
         extendReUserDtoPage.setRecords(extendReUserDtos);
@@ -151,9 +154,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             ExtendReUserDto extendReUserDto = new ExtendReUserDto();
             BeanUtils.copyPropertiesIgnoreNullValue(user,extendReUserDto);
             if(concernMapper.selectOne(new QueryWrapper<Concern>().eq("user_id",id).eq("usered_id",extendReUserDto.getId()))!=null){
-                extendReUserDto.setConcerned(true);
+                extendReUserDto.setIsConcerned(2);
             }
-            else extendReUserDto.setConcerned(false);
+            else extendReUserDto.setIsConcerned(0);
             extendReUserDtos.add(extendReUserDto);
         }
         extendReUserDtoPage.setRecords(extendReUserDtos);
