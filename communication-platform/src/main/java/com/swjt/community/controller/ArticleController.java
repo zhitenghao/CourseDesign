@@ -275,7 +275,7 @@ public class ArticleController extends BaseController {
 
     @GetMapping("/listConcernByUserId")
     @ApiImplicitParams(
-            @ApiImplicitParam(name = "userId",value = "用户id",required = true)
+            @ApiImplicitParam(name = "userId",value = "用户id(为空表示查自己的，不为空就传别人的id)",required = false)
     )
     @ApiOperation(value="返回某个用户收藏的帖子")
     public Result listConcernByUserId(String userId,Principal principal){

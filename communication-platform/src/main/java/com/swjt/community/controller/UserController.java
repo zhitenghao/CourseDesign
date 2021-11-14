@@ -3,6 +3,7 @@ package com.swjt.community.controller;
 
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.sun.javafx.tk.PrintPipeline;
 import com.swjt.community.common.Dto.PassDto;
 import com.swjt.community.common.Dto.UserDto;
 import com.swjt.community.common.lang.Const;
@@ -164,16 +165,22 @@ public class UserController extends BaseController {
         User sysUser = userService.getUserByAccount(principal.getName());
         return Result.succ(sysUser);
 
-//        return Result.succ(MapUtil.builder()
-//                .put("account", sysUser.getUserAccount())
-//                .put("name", sysUser.getUserName())
-//                .put("avatar", sysUser.getUserAvatar())
-//                .put("address", sysUser.getUserAddress())
-//                .put("sex", sysUser.getUserSex())
-//                .put("birthday", sysUser.getUserBirthday())
-//                .map()
-//        );
     }
+    @GetMapping("/userInfoById/{userId}")
+    public Result userInfoById(@PathVariable String userId){
+        User user = userService.getById(userId);
+        return  Result.succ(
+                MapUtil.builder()
+                .put("id",userId)
+                .put("userName",user.getUserName())
+                .put("userAvatar",user.getUserAvatar())
+                .put("userConcern",user.getUserConcern())
+                .put("userConcerned",user.getUserConcerned())
+                .put("userDescription",user.getUserDescription())
+                .map()
+        );
+    }
+
     @PostMapping("/repass")
     @PreAuthorize("hasAuthority('sys:user:repass')")
     public Result repass(@RequestBody String userId) {
@@ -208,8 +215,19 @@ public class UserController extends BaseController {
     public Result concernUserList(String userId) {
         return Result.succ(userService.concernUserList(userId,getPage()));
     }
+
+    @GetMapping("/myConcernUserList")
+    public Result myConcernUserList(Principal principal) {
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        return Result.succ(userService.concernUserList(userByAccount.getId(),getPage()));
+    }
     @GetMapping("/fansUserList")
     public Result fansUserList(String userId){
         return Result.succ(userService.fansUserList(userId,getPage()));
+    }
+    @GetMapping("/myFansUserList")
+    public Result myFansUserList(Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        return Result.succ(userService.fansUserList(userByAccount.getId(),getPage()));
     }
 }
