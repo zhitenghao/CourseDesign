@@ -44,6 +44,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     LoveService likeService;
 
     @Autowired
+    ConcernService concernService;
+
+    @Autowired
     CollectionService collectionService;
 
     @Override
@@ -108,6 +111,28 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         for(Collection collection:collections){
             Article article = getById(collection.getArticleId());
             articles.add(article);
+        }
+        return articles;
+    }
+
+    @Override
+    public List<Article> listLikeByUserId(String userId) {
+        ArrayList<Article> articles = new ArrayList<>();
+        List<Love> loves = likeService.list(new QueryWrapper<Love>().eq("user_id", userId));
+        for(Love love:loves){
+            Article article = getById(love.getArticleId());
+            articles.add(article);
+        }
+        return articles;
+    }
+
+    @Override
+    public List<Article> listArticleConcernUserByUserId(String userId) {
+        ArrayList<Article> articles = new ArrayList<>();
+        List<Concern> concerns = concernService.list(new QueryWrapper<Concern>().eq("user_id", userId));
+        for(Concern concern:concerns){
+            List<Article> articles1 = listMySelf(concern.getUseredId());
+            articles.addAll(articles1);
         }
         return articles;
     }

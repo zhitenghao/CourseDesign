@@ -25,4 +25,8 @@ public interface ArticleService extends IService<Article> {
     List<Article>  listMySelf(String userId);
 
     List<Article> listConcernByUserId(String userId);
+
+    List<Article> listLikeByUserId(String userId);
+
+    List<Article> listArticleConcernUserByUserId(String userId);
 }

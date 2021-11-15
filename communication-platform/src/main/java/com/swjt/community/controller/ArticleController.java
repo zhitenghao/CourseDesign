@@ -317,4 +317,94 @@ public class ArticleController extends BaseController {
         }
         return Result.succ(reArticleDtos);
     }
+
+    @GetMapping("/listLikeByUserId")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "userId",value = "用户id(为空表示查自己的，不为空就传别人的id)",required = false)
+    )
+    @ApiOperation(value="返回某个用户点赞了的帖子")
+    public Result listLikeByUserId(String userId,Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        if(userId==null || "".equals(userId)){
+            userId=userByAccount.getId();
+        }
+        List<Article> list = articleService.listLikeByUserId(userId);
+        ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
+        for (Article article:list) {
+            ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            if(userByAccount!=null){
+                Love one = likeService.getOne(new QueryWrapper<Love>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(one!=null){
+                    reArticleDto.setLike(true);
+                }else{
+                    reArticleDto.setLike(false);
+                }
+                Collection collection=collectionService.getOne(new QueryWrapper<Collection>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(collection!=null){
+                    reArticleDto.setCollection(true);
+                }else{
+                    reArticleDto.setCollection(false);
+                }
+                Concern concern=concernService.getOne(new QueryWrapper<Concern>().eq("user_id", userByAccount.getId()).eq("usered_id", reArticleDto.getReUserDto().getId()));
+                if(concern!=null){
+                    reArticleDto.setConcern(true);
+                }else{
+                    reArticleDto.setConcern(false);
+                }
+                if(userByAccount.getId().equals(article.getUserId())){
+                    reArticleDto.setMyself(true);
+                }
+                else{
+                    reArticleDto.setMyself(false);
+                }
+            }
+            reArticleDtos.add(reArticleDto);
+        }
+        return Result.succ(reArticleDtos);
+    }
+
+    @GetMapping("/listArticleConcernUserByUserId")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "userId",value = "用户id(为空表示查自己的，不为空就传别人的id)",required = false)
+    )
+    @ApiOperation(value="返回某个用户关注的用户的帖子")
+    public Result listArticleConcernUserByUserId(String userId,Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        if(userId==null || "".equals(userId)){
+            userId=userByAccount.getId();
+        }
+        List<Article> list = articleService.listArticleConcernUserByUserId(userId);
+        ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
+        for (Article article:list) {
+            ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            if(userByAccount!=null){
+                Love one = likeService.getOne(new QueryWrapper<Love>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(one!=null){
+                    reArticleDto.setLike(true);
+                }else{
+                    reArticleDto.setLike(false);
+                }
+                Collection collection=collectionService.getOne(new QueryWrapper<Collection>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(collection!=null){
+                    reArticleDto.setCollection(true);
+                }else{
+                    reArticleDto.setCollection(false);
+                }
+                Concern concern=concernService.getOne(new QueryWrapper<Concern>().eq("user_id", userByAccount.getId()).eq("usered_id", reArticleDto.getReUserDto().getId()));
+                if(concern!=null){
+                    reArticleDto.setConcern(true);
+                }else{
+                    reArticleDto.setConcern(false);
+                }
+                if(userByAccount.getId().equals(article.getUserId())){
+                    reArticleDto.setMyself(true);
+                }
+                else{
+                    reArticleDto.setMyself(false);
+                }
+            }
+            reArticleDtos.add(reArticleDto);
+        }
+        return Result.succ(reArticleDtos);
+    }
 }

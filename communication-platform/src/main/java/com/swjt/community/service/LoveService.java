@@ -2,6 +2,7 @@ package com.swjt.community.service;
 
 import com.swjt.community.entity.Love;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Repository;
 
 /**
  * <p>
