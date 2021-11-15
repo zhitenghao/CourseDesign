@@ -1,64 +1,55 @@
 <template>
-  <div class="personal">
-    <el-container class="outcontainer">
-      <el-aside class="aside">
-        <div id="div1" style="border-bottom:solid;border-bottom-color: #D3D3D3">
-          <h1 style="font-size: 40px;">个人主页</h1>
+  <div class="myPage">
+    <el-container style="height: 100%">
+      <el-aside class="aside" width=240px>
+        <div class="head-aside">
+          <div class="avatar">
+            <el-avatar :src="this.form.userAvatar" :size="60"/>
+          </div>
+          <div class="username">
+            <h3>{{this.form.userName}}</h3>
+            <div style="font-size: 12px;color: #909399;">{{ this.form.userDescription }}</div>
+          </div>
         </div>
-        <el-menu class="menu" default-active="none" style="background-color:#FFFFF0">
-          <el-menu-item index="1">
-            <i class="el-icon-user"></i>
-            <span slot="title">我的主页</span>
-          </el-menu-item>
-          <el-menu-item index="2" @click="dialogFormVisible = true">
-            <i class="el-icon-edit-outline"></i>
-            <span slot="title">编辑资料</span>
-          </el-menu-item>
-          <el-menu-item index="3">
-            <i class="el-icon-picture-outline"></i>
-            <span slot="title">发帖</span>
-          </el-menu-item>
-          <el-menu-item index="4">
-            <i class="el-icon-chat-dot-square"></i>
-            <span slot="title">消息</span>
-          </el-menu-item>
-          <el-menu-item index="5">
-            <i class="el-icon-star-off"></i>
-            <span slot="title">收藏夹</span>
-          </el-menu-item>
-          <el-menu-item index="6">
-            <i class="el-icon-user"></i>
-            <span slot="title">关注</span>
-          </el-menu-item>
-          <el-menu-item index="7">
-            <i class="el-icon-user"></i>
-            <span slot="title">粉丝</span>
-          </el-menu-item>
-        </el-menu>
+        <div class="middle-aside">
+          <div class="concern" style="border-right: 3px solid #f5f6f7;cursor:pointer" @click="toFans">
+            <div style="padding-bottom: 10px">关注</div>
+            <strong style="font-size: 22px;color: #121212">{{ this.form.userConcern }}</strong>
+          </div>
+          <div class="concern" style="cursor:pointer" @click="toFans">
+            <div style="padding-bottom: 10px">粉丝</div>
+            <strong style="font-size: 22px;color: #121212">{{ this.form.userConcerned }}</strong>
+          </div>
+        </div>
+        <div class="menu-aside">
+          <el-menu class="menu" default-active="none">
+            <el-menu-item index="1" @click="toMyIndex">
+              <i class="el-icon-user"></i>
+              <span slot="title">我的主页</span>
+            </el-menu-item>
+            <el-menu-item index="2" @click="dialogFormVisible = true">
+              <i class="el-icon-edit-outline"></i>
+              <span slot="title">编辑资料</span>
+            </el-menu-item>
+            <el-menu-item index="3" @click="toFans">
+              <i class="el-icon-user"></i>
+              <span slot="title">关注/粉丝</span>
+            </el-menu-item>
+            <el-menu-item index="3" @click="toIndex">
+              <i class="el-icon-user"></i>
+              <span slot="title">返回首页</span>
+            </el-menu-item>
+            <el-menu-item index="5" @click="logout">
+              <i class="el-icon-user"></i>
+              <span slot="title">退出登录</span>
+            </el-menu-item>
+          </el-menu>
+        </div>
       </el-aside>
 
-      <el-container class="insidecontainer">
-        <el-header>
-          <div class="div2">
-            <div class="headimg">
-              <el-avatar :src="require('../assets/images/cat.jpg')" :size="80">
-              </el-avatar>
-            </div>
-            <div class="fans">
-              <h1>某某人</h1>
-              <span>粉丝</span>
-              <span>123</span>
-              &nbsp;
-              <span>关注</span>
-              <span>130</span>
-            </div>
-          </div>
-        </el-header>
-        <el-main>
-<!--          中间部分-->
-          <dairui/>
-        </el-main>
-      </el-container>
+      <el-main class="main">
+        <router-view/>
+      </el-main>
     </el-container>
 
     <!--用户信息编辑弹窗-->
@@ -82,10 +73,10 @@
             <el-radio :label=1>女</el-radio>
           </el-radio-group>
         </el-form-item>
-<!--        userSex传int值,form中是string-->
-<!--        <el-form-item label="年龄" :label-width="formLabelWidth">-->
-<!--          <el-input v-model="form.age" autocomplete="off"></el-input>-->
-<!--        </el-form-item>-->
+        <!--        userSex传int值,form中是string-->
+        <!--        <el-form-item label="年龄" :label-width="formLabelWidth">-->
+        <!--          <el-input v-model="form.age" autocomplete="off"></el-input>-->
+        <!--        </el-form-item>-->
         <el-form-item label="出生日期" :label-width="formLabelWidth">
           <div class="block">
             <el-date-picker
@@ -108,27 +99,27 @@
 </template>
 
 <script>
-import dairui from '@/views/dairui'
 
 export default {
+  name:"myPage",
   components: {
-    dairui
   },
   data(){
     return {
-      dialogFormVisible: false,
-      collegeData: '',
       form: {
         userAccount: '',
         userAddress: '',
         userBirthday: '',
         userCollege: '',
+        userConcern: 0,
+        userConcerned: 0,
         userDescription: '',
         userName: '',
         userPhone: '',
         userSex: 0,
         userAvatar:''
       },
+      collegeData: '',
       formLabelWidth: '120px',
       options: [
         {
@@ -178,30 +169,47 @@ export default {
         },{
           value:'其它'
         }
-      ]
+      ],
+      dialogFormVisible: false,
     }
   },
   created() {
     this.getUserInfo()
   },
   methods: {
-    errorHandler() {
-      return true
-    },
     //获取用户资料
     getUserInfo() {
       this.getRequest('/auth/user/userInfo').then(res => {
-        //console.log(res)
+        console.log(res.data.data)
         this.form.userAccount = res.data.data.userAccount
         this.form.userName = res.data.data.userName
         this.form.userDescription = res.data.data.userDescription
         this.form.userCollege = res.data.data.userCollege
+        this.form.userConcern = res.data.data.userConcern
+        this.form.userConcerned = res.data.data.userConcerned
         this.form.userSex = res.data.data.userSex
         this.form.userBirthday = res.data.data.userBirthday
         this.form.userAddress = res.data.data.userAddress
         this.collegeData = this.form.userCollege
+        this.form.userAvatar = res.data.data.userAvatar
+        this.form.userAvatar = "http://localhost:8081/downloadPhoto/" + this.form.userAvatar
       })
     },
+
+    toMyIndex(){
+      this.$router.replace('/personal')
+    },
+    toFans(){
+      this.$router.replace('/personal/fans')
+    },
+    toIndex(){
+      this.$router.replace('/')
+    },
+    logout(){
+      window.localStorage.removeItem('tokenStr')
+      this.$router.replace('/login')
+    },
+
     //修改学院事件
     changeCollege(){
       this.form.userCollege = this.collegeData
@@ -223,89 +231,59 @@ export default {
 </script>
 
 <style>
-.personal{
-  background-color: #FFFFF0;
-  margin: 0;
+.myPage{
+  width: 1200px;
   height: 100%;
-  width: 100%;
+  margin: 0 auto;
+  background-color: #FFFFFF;
 }
-.outcontainer{
-  background-color: #FFFFF0;
-  margin: 0;
+.main{
+  overflow-y: auto;
   height: 100%;
-  width: 100%;
-  /*display: inline-table;*/
+  padding: 0;
+}
+.main::-webkit-scrollbar{
+  display: none;
 }
 .aside{
-  overflow: hidden;
-  background-color: #FFFFF0;
-  width: 30%;
+  position: relative;
   height: 100%;
-  border: solid;
-  border-color:#D3D3D3;
+  border-right: 10px solid #f5f6f7;
 }
-
-.menu {
-  border-right:0!important;
+.head-aside{
+  height: 90px;
+  border-top: 1px solid #f5f6f7;
+  border-bottom: 10px solid #f5f6f7;
 }
-
-.insidecontainer{
-  background-size: 100%;
-  background-image: url(../assets/images/天鹅.jpg);
-  margin: 0px;
-  height: 100%;
-  width: 100%;
-}
-	
-el-header{
-  height: 35%;
-  margin: 0;;
-}
-	
-#div1{
-  height: 30%;
-  width: 100%;
-  padding:60px;
-}
-	
-.div2{
-  background-color: #FFFFFF;
-  height: 100px;
-  width: 65%;
-  margin: auto;
-  margin-top:25px;
-}
-	
-el-avatar{
-  margin: auto;
-}
-	
-.headimg {
-  width: 80px;
-  height: 80px;
+.avatar{
+  width: 60px;
+  height: 60px;
+  margin: 10px 0 0 10px;
   border-radius: 50%;
-  overflow: hidden;
-  margin-left: 10px;
-  margin-top: 10px;
   float: left;
 }
-	
-.fans{
-  background-color: #FFFFFF;
-  height: 100px;
-  width: 20%;
+.username{
   float: left;
-  margin-left: 10px;
-}
-
-
-el-avatar {
-  width: 80px;
   height: 80px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: auto;
-  margin-top: 100px;
+  width: 110px;
+  margin: 0 0 0 8px;
+}
+h3{
+  -webkit-margin-after: 12px;
+  -webkit-margin-before: 14px;
+}
+.middle-aside{
+  display: flex;
+  height: 100px;
+  border-bottom: 10px solid #f5f6f7;
+}
+.concern{
+  float: left;
+  width: 50%;
+  padding: 20px 0;
+  text-align: center;
+  font-size: 15px;
+  color:#8590a6;
 }
 	
 </style>

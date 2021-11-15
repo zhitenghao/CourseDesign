@@ -1,8 +1,8 @@
 <template>
-  <div class="loginContainer">
-    <el-form :rules="rules" ref="loginForm" :model="loginForm" >
+  <div class="login">
+    <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
       <h1 class="loginTitle">交大社区登录</h1>
-      <div class="register" style="text-align: center">还没有账号？
+      <div class="toRegister" style="text-align: center">还没有账号？
         <el-button type="text" @click.native.prevent="register">注册</el-button>
       </div>
       <el-form-item prop="username">
@@ -13,7 +13,6 @@
         密码
         <el-input type="password" auto-complete="false" v-model="loginForm.password" show-password></el-input>
       </el-form-item>
-
       <el-form-item prop="code">
         验证码
         <div class="code-img">
@@ -74,7 +73,7 @@ export default {
   methods: {
     updateCaptcha () { // 点击验证码图片会更换验证码图片，跨域请求后端接口有关文件 vue.config.js
       this.getRequest('/auth/captcha').then(res => {
-        // console.log(res)
+        console.log(res)
         this.captchaUrl = res.data.data.captcha
         this.loginForm.token = res.data.data.token
       })
@@ -122,33 +121,32 @@ export default {
 </script>
 
 <style>
+.login{
+  overflow: auto;
+  height: 100%;
+  background-image:url("../assets/backgroundImg.png");
+  background-size: 100% 100%;
+  background-attachment:fixed;
+  background-repeat: no-repeat;
+}
 .loginContainer {
-  border-radius: 15px;
-  background-clip: padding-box;
-  margin: 90px 100px 120px auto;
   width: 350px;
-  padding: 15px 35px 15px 35px;
-  background: rgba(255,255,255,0.9);
+  margin: 90px 100px 120px auto;
   border: 1px solid #eaeaea;
+  border-radius: 15px;
+  padding: 15px 35px 15px 35px;
   box-shadow: 0 0 25px #cac6c6;
+  background: rgba(255,255,255,0.9);
+  /*background-clip: padding-box;不起作用*/
+}
+.loginTitle {
+  text-align: center;
+  margin: 20px auto 15px auto;
 }
 
-.loginTitle {
-  margin: 20px auto 15px auto;
-  text-align: center;
-}
 .code-img img{
   width: 140px;
   vertical-align: middle;
   border-radius: 2px;
-}
-
-body {
-  overflow: auto;
-  background-image:url("../assets/backgroundImg.png");
-  background-repeat: no-repeat;
-  background-size: 100% 100%;
-  height: 100%;
-  background-attachment:fixed;
 }
 </style>

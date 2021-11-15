@@ -2,7 +2,7 @@
   <div class="sidebar-left">
     <div id="user-info">
       <div class="have-login">
-        <div class="circlePic" @click="toPersonalIndex">
+        <div class="circlePic" style="cursor:pointer" @click="toPersonalIndex">
           <el-avatar :src="require('../../assets/images/home/avatar.jpg')" :size="110"/>
         </div>
         <div class="divide-line">
@@ -17,10 +17,10 @@
         <el-col :span="24">
           <el-menu default-active="" router class="menu-left"
                    background-color="#545c64" text-color="#fff" active-text-color="#ffd04b">
-            <el-menu-item index="1"  @click="toIndex">
+            <el-menu-item index="1"  @click="toPersonalIndex">
               <template slot="title">
                 <i class="el-icon-house"></i>
-                <span>首页</span>
+                <span>个人中心</span>
               </template>
             </el-menu-item>
             <el-menu-item index="2">
@@ -54,11 +54,8 @@ export default {
     }
   },
   methods:{
-    toIndex(){
-      this.$router.push('/index')
-    },
     toPersonalIndex(){
-      this.$router.push('/personal')
+      this.$router.replace('/personal')
     }
   }
 }

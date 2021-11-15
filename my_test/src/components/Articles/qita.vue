@@ -60,7 +60,7 @@
                   </div>
                 </div>
               </div>
-              <div class="unfoldComments" v-if="item.commentNum >= 3" @click="unfoldComments">
+              <div class="unfoldComments" v-if="item.commentNum >= 4" @click="unfoldComments">
                 <span style="font-size: small;">{{ foldFlag? '点击展开更多评论' : '收起' }}</span>
               </div>
             </div>
@@ -73,13 +73,30 @@
 
 <script>
 export default {
-  name: 'index',
+  name: 'Post',
   data () {
     return {
+      //count: 0, // 循环数量
       headPortrait: 'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg', // 需要用户的头像接口
       textContentFlag: true, // 设置帖子是否有文字内容，如果有则设置为true，没有则设置为false
       imageOrVideoFlag: true, // 设置帖子是否有图片或视频内容，如果有则设置为true，没有则设置为false
       foldFlag: true,
+      imageOrVideosUrl: [ // 图片或视频的数组，调用帖子的图片或视频接口
+        'https://fuss10.elemecdn.com/a/3f/3302e58f9a181d2509f3dc0fa68b0jpeg.jpeg',
+        'https://fuss10.elemecdn.com/1/34/19aa98b1fcb2781c4fba33d850549jpeg.jpeg',
+        'https://fuss10.elemecdn.com/0/6f/e35ff375812e6b0020b6b4e8f9583jpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/9/bb/e27858e973f5d7d3904835f46abbdjpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/d/e6/c4d93a3805b3ce3f323f7974e6f78jpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/3/28/bbf893f792f03a54408b3b7a7ebf0jpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg',
+        // 'https://fuss10.elemecdn.com/2/11/6535bcfb26e4c79b48ddde44f4b6fjpeg.jpeg'
+      ],
+
 
 
       articles: [],//帖子的集合
@@ -91,87 +108,59 @@ export default {
       }
     }
   },
-  props:[
-    'categoryId'
-  ],
   created() {
     this.getArticle()
   },
   methods:{
-    //获取帖子
     getArticle() {
-      this.getRequest('/auth/article'+this.categoryId).then(res => {
+      this.getRequest('/auth/article/listByDate').then(res => {
         this.articles = res.data.data
+        //console.log(this.articles);
         //给articles循环每项插入属性commentAndShowFlag
         this.articles = this.articles.map(item => {
           return {...item,commentAndShowFlag: false}
         })
-        // console.log(this.articles)
-        // for(let i=0;i<this.articles.length;i++){
-        //   for(let j=0;j<this.articles[i].urls.length;j++){
-        //     this.articles[i].urls[j] = "http://localhost:8081/downloadPhoto/" + this.articles[i].urls[j]
-        //   }
-        // }
         console.log(this.articles)
       })
     },
-
     // 添加关注
     addAttention (item) {
-      this.getRequest('/auth/concern/add/'+item.reUserDto.id+'').then(res => {
-        if(res.data.code === 200){
-          //所有该用户的“关注”全变为“已关注”
-          for(let i = 0;i < this.articles.length;i++){
-            if(this.articles[i].reUserDto.id === item.reUserDto.id){
-              this.articles[i].concern = !this.articles[i].concern
-            }
-          }
-        }else{
-          this.message.error('关注失败')
+      //所有该用户的“关注”全变为“已关注”
+      for(let i = 0;i < this.articles.length;i++){
+        if(this.articles[i].reUserDto.id === item.reUserDto.id){
+          this.articles[i].concern = !this.articles[i].concern
         }
+      }
+      this.getRequest('/auth/concern/add/'+item.reUserDto.id+'').then(res => {
       })
     },
     //取消关注
     cancelAttention(item){
-      this.getRequest('/auth/concern/delete/'+item.reUserDto.id+'').then(res => {
-        if(res.data.code === 200){
-          //所有该用户的“已关注”全变为“关注”
-          for(let i = 0;i < this.articles.length;i++){
-            if(this.articles[i].reUserDto.id === item.reUserDto.id){
-              this.articles[i].concern = !this.articles[i].concern
-            }
-          }
-        }else{
-          this.message.error('取消关注失败')
+      //所有该用户的“已关注”全变为“关注”
+      for(let i = 0;i < this.articles.length;i++){
+        if(this.articles[i].reUserDto.id === item.reUserDto.id){
+          this.articles[i].concern = !this.articles[i].concern
         }
+      }
+      this.getRequest('/auth/concern/delete/'+item.reUserDto.id+'').then(res => {
       })
     },
-
     // 添加收藏
     addCollect (item) {
+      item.collection = !item.collection
       this.getRequest('/auth/collection/add/'+item.id).then(res => {
-        if(res.data.code === 200){
-          item.collection = !item.collection
-          item.collectionNum++
-        }else{
-          this.message.error('收藏失败')
-        }
         //console.log(res)
       })
+      item.collectionNum++
     },
     // 取消收藏
     cancelCollect (item) {
+      item.collection = !item.collection
       this.getRequest('/auth/collection/delete/'+item.id).then(res => {
-        if(res.data.code === 200){
-          item.collection = !item.collection
-          item.collectionNum--
-        }else{
-          this.message.error('收藏失败')
-        }
         //console.log(res)
       })
+      item.collectionNum--
     },
-
     // 打开/关闭评论
     switchComment (item) {
       // 点击评论按钮，修改commentAndShowFlag的值来显示评论区域
@@ -180,44 +169,33 @@ export default {
     // 提交用户评论
     submitComment (item) {
       this.commentForm.articleId = item.id
+      // this.commentForm.userI
       this.postRequest('/auth/comment/add/',this.commentForm).then(res => {
-        if(res.data.code === 200){
-          item.reCommentDtos.push(res.data.data) //res返回的评论在前端中即时刷新
-          this.$message.success('评论成功！')
-          this.commentForm.commentContent = ''
-          item.commentNum++
-        }else{
-          this.message.error('评论失败')
-        }
+        //res返回评论在前端评论中显示
+        item.reCommentDtos.push(res.data.data)
       })
+      this.$message.success('评论成功！')
+      this.commentForm.commentContent = ''
+      item.commentNum++
     },
-
     // 点赞
     like (item) {
+      item.like = !item.like
       this.getRequest('/auth/love/add/'+item.id+'').then(res => {
-        if(res.data.code === 200){
-          item.like = !item.like
-          //点击后点赞数加一，前端修改即时呈现
-          item.likeNum++
-        }else{
-          this.message.error('点赞失败')
-        }
         //console.log(res)
       })
-
+      //点击后点赞数加一，前端修改即时呈现
+      item.likeNum++
     },
     //取消点赞
     unlike (item) {
+      item.like = !item.like
       this.getRequest('/auth/love/delete/'+item.id+'').then(res => {
-        if(res.data.code === 200){
-          item.like = !item.like
-          //点击后点赞数减一
-          item.likeNum--
-        }else{
-          this.message.error('取消点赞失败')
-        }
       })
+      //点击后点赞数减一
+      item.likeNum--
     },
+
 
 
 
@@ -237,7 +215,6 @@ export default {
 <style scoped>
 ul{
   list-style: none;
-  padding-left: 0;
 }
 .concern{
   margin-top: 13px;
@@ -249,14 +226,14 @@ ul{
   margin-right: 30px;  /*border: 1px solid #e52121;*/
 }
 .onePostContainer{
-  width: 690px;
-  margin: 7px auto;
-  border: 1px solid #eaeaea;
   border-radius: 15px;
-  padding: 10px 10px 10px 10px;
-  box-shadow: 0 0 25px #cac6c6;
-  background: rgba(255,255,255,0.9);
   background-clip: padding-box;
+  margin: 7px auto;
+  padding: 10px 10px 10px 10px;
+  background: rgba(255,255,255,0.9);
+  border: 1px solid #eaeaea;
+  box-shadow: 0 0 25px #cac6c6;
+  width: 700px;
 }
 .header{
   height: 50px;
