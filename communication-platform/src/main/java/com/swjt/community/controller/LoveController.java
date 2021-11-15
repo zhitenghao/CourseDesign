@@ -58,7 +58,6 @@ public class LoveController extends BaseController {
         message.setPrincipleId(userByAccount.getId());
         message.setObjectId(article.getUserId());
         message.setObjectRead(0);
-        message.setPrincipleRead(0);
         message.setAddTime(LocalDateTime.now());
         //主体点赞了客体
         message.setProcessType(4);

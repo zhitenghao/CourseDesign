@@ -61,7 +61,6 @@ public class CommentController extends BaseController {
         message.setObjectId(article.getUserId());
         message.setObjectRead(0);
         message.setAddTime(LocalDateTime.now());
-        message.setPrincipleRead(0);
         message.setProcessType(2);
         messageService.save(message);
         return Result.succ(

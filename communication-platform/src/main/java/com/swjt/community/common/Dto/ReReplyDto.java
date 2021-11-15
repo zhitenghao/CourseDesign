@@ -29,6 +29,6 @@ public class ReReplyDto implements Serializable {
 
 
     @ApiModelProperty(value = "回复时间")
-    private LocalDateTime replyeTime;
+    private LocalDateTime replyTime;
 
 }

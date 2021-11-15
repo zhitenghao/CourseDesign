@@ -5,14 +5,17 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
+import com.swjt.community.common.Dto.ReUserDto;
 import com.swjt.community.common.Dto.ReplyDto;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.Reply;
+import com.swjt.community.entity.User;
 import com.swjt.community.service.ReplyService;
 import com.swjt.community.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.time.LocalDateTime;
 
 
@@ -32,14 +35,26 @@ public class ReplyController extends BaseController {
     ReplyService replyService;
 
     @PostMapping("/add")
-    public Result add(@RequestBody ReplyDto replyDto){
+    public Result add(@RequestBody ReplyDto replyDto, Principal principal){
+        ReUserDto reUserDto = new ReUserDto();
+        ReUserDto reUserDto1 = new ReUserDto();
+        User byId = userService.getById(replyDto.getReplyedUser());
+        BeanUtils.copyPropertiesIgnoreNullValue(byId,reUserDto1);
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        BeanUtils.copyPropertiesIgnoreNullValue(userByAccount,reUserDto);
         Reply reply = new Reply();
         BeanUtils.copyProperties(replyDto,reply);
+        reply.setReplyUser(userByAccount.getId());
         reply.setAddTime(LocalDateTime.now());
         replyService.save(reply);
         return Result.succ(
                 MapUtil.builder()
                 .put("id",reply.getId())
+                .put("replyContent",reply.getReplyContent())
+                .put("replyUser",reUserDto)
+                .put("replyedUser",reUserDto1)
+                .put("replyTime",reply.getAddTime())
+                .map()
         );
     }
 

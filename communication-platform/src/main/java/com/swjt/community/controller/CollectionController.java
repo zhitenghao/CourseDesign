@@ -56,7 +56,6 @@ public class CollectionController extends BaseController {
         message.setPrincipleId(userByAccount.getId());
         message.setObjectId(byId1.getId());
         message.setObjectRead(0);
-        message.setPrincipleRead(0);
         message.setProcessType(1);
         message.setAddTime(LocalDateTime.now());
         messageService.save(message);

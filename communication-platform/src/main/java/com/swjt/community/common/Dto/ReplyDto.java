@@ -22,9 +22,6 @@ public class ReplyDto implements Serializable {
     @ApiModelProperty(value = "评论编号（外键）")
     private String commentId;
 
-    @ApiModelProperty(value = "回复人编号（user_id外键）")
-    private String replyUser;
-
     @ApiModelProperty(value = "被回复人编号(user_id外键)")
     private String replyedUser;
 }

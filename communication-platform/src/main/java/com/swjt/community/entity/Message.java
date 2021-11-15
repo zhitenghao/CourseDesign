@@ -27,13 +27,10 @@ public class Message extends BaseEntity {
     @ApiModelProperty(value = "消息客体 (承受动作的用户id)")
     private String objectId;
 
-    @ApiModelProperty(value = "是否被主体阅读(0：未阅读，1：已阅读)")
-    private Integer principleRead;
-
     @ApiModelProperty(value = "是否被客体阅读(0：未阅读，1：已阅读)")
     private Integer objectRead;
 
-    @ApiModelProperty(value = "（0：.....关注了..，1:....收藏了...的帖子,2: ...评论..的帖子,3:...回复了..评论，4:...点赞了...的帖子）")
+    @ApiModelProperty(value = "（0：.....关注了我  1:....收藏了我的帖子（那个帖子，我也会返回）,2: ...评论我的帖子（评论内容和帖子都会返回），3:...回复了我的评论（回复内容和帖子都会返回），4:...点赞了我的帖子（帖子照样返回））")
     private Integer processType;
 
 

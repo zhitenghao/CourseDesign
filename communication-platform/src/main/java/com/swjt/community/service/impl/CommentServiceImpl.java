@@ -43,10 +43,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             ReUserDto reUserDto1 = new ReUserDto();
             ReUserDto reUserDto = new ReUserDto();
             if(reply.getUpdateTime()==null){
-                reReplyDto.setReplyeTime(reply.getAddTime());
+                reReplyDto.setReplyTime(reply.getAddTime());
             }
             else if(reply.getUpdateTime()!=null){
-                reReplyDto.setReplyeTime(reply.getUpdateTime());
+                reReplyDto.setReplyTime(reply.getUpdateTime());
             }
             BeanUtils.copyPropertiesIgnoreNullValue(userService.getById(reply.getReplyedUser()),reUserDto);
             reReplyDto.setReplyedUser(reUserDto);
