@@ -35,7 +35,7 @@
               <i class="el-icon-user"></i>
               <span slot="title">关注/粉丝</span>
             </el-menu-item>
-            <el-menu-item index="3" @click="toIndex">
+            <el-menu-item index="4" @click="toIndex">
               <i class="el-icon-user"></i>
               <span slot="title">返回首页</span>
             </el-menu-item>

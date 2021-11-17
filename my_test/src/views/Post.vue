@@ -43,7 +43,7 @@
                   <span style="font-size: small; position: relative;bottom: 11px; margin-left: 8px; margin-right: 3px; color: chocolate">用户的名称A: </span>
                 </div>
                 <div style="margin-left: 45px; position: relative;bottom: 7px;"> <!-- 用户的评论内容也要调用后端的接口 -->
-                  <span style="font-size: small;" @click="unfoldCommentsInput1">{{ oneComment }}</span>
+                  <span style="font-size: small;">{{ oneComment }}</span>
                   <br>
                   <!--难点在于 点击回复 只打开对于该评论的输入框，想法是：根据循环获得的评论的不同值，来控制是否打开输入框-->
                   <span style="font-size: small; color: #F56C6C">2021-10-13 14:21</span>

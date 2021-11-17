@@ -91,9 +91,6 @@ export default {
     }
   },
   methods: {
-    // releasePost() { // 控制 “发帖“ 按钮
-    //   this.releasePostFlag = !this.releasePostFlag
-    // },
     choosePicture() {
       this.releasePictureFlag = !this.releasePictureFlag
       this.releaseVideoFlag = false
@@ -131,9 +128,7 @@ export default {
 .releasePostContainer{
   position: relative;
   width: 700px;
-  /*top: 60px;*/
-  /*left: 420px;*/
-  /*margin: 0 0;*/
+  margin: 5px auto 0 65px;
   border: 1px solid #eaeaea;
   border-radius: 15px;
   padding: 10px 10px 10px 10px;

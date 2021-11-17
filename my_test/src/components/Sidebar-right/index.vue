@@ -16,11 +16,11 @@
               <span>学校院网</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1">土木工程学院</el-menu-item>
-              <el-menu-item index="1-2">机械工程学院</el-menu-item>
-              <el-menu-item index="1-3">电气工程学院</el-menu-item>
-              <el-menu-item index="1-4">信息科学与技术学院</el-menu-item>
-              <el-menu-item index="1-5">计算机与人工智能学院</el-menu-item>
+              <el-menu-item index="1-1" class="academy">土木工程学院</el-menu-item>
+              <el-menu-item index="1-2" class="academy">机械工程学院</el-menu-item>
+              <el-menu-item index="1-3" class="academy">电气工程学院</el-menu-item>
+              <el-menu-item index="1-4" class="academy">信息科学与技术学院</el-menu-item>
+              <el-menu-item index="1-5" class="academy">计算机与人工智能学院</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item @click="allArticles">
@@ -80,9 +80,7 @@ export default {
   width: 100%;
   background-color: #FFFFFF;
 }
-/*.content {*/
-/*  !* background-color: white; *!*/
-/*  width: 50%;*/
-/*  opacity: 50;*/
-/*}*/
+.academy{
+  padding-left: 32px !important;
+}
 </style>

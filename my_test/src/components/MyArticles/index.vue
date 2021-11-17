@@ -236,14 +236,14 @@ ul{
   margin-right: 30px;  /*border: 1px solid #e52121;*/
 }
 .onePostContainer{
-  border-radius: 15px;
+  width: 700px;
+  box-shadow: 0 0 25px #cac6c6;
   background-clip: padding-box;
   margin: 7px auto;
+  border: 1px solid #eaeaea;
+  border-radius: 15px;
   padding: 10px 10px 10px 10px;
   background: rgba(255,255,255,0.9);
-  border: 1px solid #eaeaea;
-  box-shadow: 0 0 25px #cac6c6;
-  width: 700px;
 }
 .header{
   height: 50px;

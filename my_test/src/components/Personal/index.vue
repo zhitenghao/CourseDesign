@@ -1,6 +1,6 @@
 <template>
   <div>
-    <publish-panel/>
+    <post-panel></post-panel>
     <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="我的帖子" name="first"><my-articles/></el-tab-pane>
       <el-tab-pane label="我的关注" name="second">2</el-tab-pane>
@@ -11,13 +11,13 @@
 </template>
 
 <script>
-import PublishPanel from '@/components/Personal/ReleasePost.vue'
+import PostPanel from '@/components/Personal/ReleasePost.vue'
 import MyArticles from '@/components/Articles/myarticles.vue'
 
 export default {
   name: "index",
   components:{
-    PublishPanel,
+    PostPanel,
     MyArticles,
   },
   data() {
@@ -36,9 +36,8 @@ export default {
 <style scoped>
 .tabs{
   height: 50px;
-  padding-left: 35px;
-  padding-right: 145px;
-  line-height: 50px;
+  padding: 15px 145px 0 35px;
+  /*line-height: 50px;*/
 }
 ::v-deep .el-tabs__header{
   margin: 0 0 8px;
