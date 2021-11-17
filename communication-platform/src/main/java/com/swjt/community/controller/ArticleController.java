@@ -61,6 +61,7 @@ public class ArticleController extends BaseController {
         article.setAddTime(LocalDateTime.now());
         User user=userService.getUserByAccount(principal.getName());
         article.setArticleBnum(0);
+        article.setArticleComment(0);
         article.setUserId(user.getId());
         article.setArticleCollection(0);
         article.setArticleLike(0);
