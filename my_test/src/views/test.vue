@@ -1,25 +1,30 @@
 <template>
+<!--  发帖组件原始版-->
   <el-form :model="form">
-    <el-form-item label="上传图片" :label-width="formLabelWidth">
-      <el-upload
-          ref="upload"
-          action="http://localhost:8081/upload"
-          accept="image/png,image/gif,image/jpg,image/jpeg"
-          list-type="picture-card"
-          :limit=limitNum
-          :auto-upload="false"
-          :on-exceed="handleExceed"
-          :before-upload="handleBeforeUpload"
-          :on-preview="handlePictureCardPreview"
-          :on-success="success"
-          :on-remove="handleRemove">
-        <i class="el-icon-plus"></i>
-      </el-upload>
+    <el-button class="el-button el-button--primary" @click="releasePictureFlag=!releasePictureFlag">发图片</el-button>
+    <div v-if="releasePictureFlag">
+      <el-form-item label="上传图片" :label-width="formLabelWidth">
+        <el-upload
+            ref="upload"
+            action="http://localhost:8081/upload"
+            accept="image/png,image/gif,image/jpg,image/jpeg"
+            list-type="picture-card"
+            :limit=limitNum
+            :auto-upload="false"
+            :on-exceed="handleExceed"
+            :before-upload="handleBeforeUpload"
+            :on-preview="handlePictureCardPreview"
+            :on-success="success"
+            :on-remove="handleRemove">
+          <i class="el-icon-plus"></i>
+        </el-upload>
 
-      <el-dialog :visible.sync="dialogVisible">
-        <img width="100%" :src="dialogImageUrl" alt="">
-      </el-dialog>
-    </el-form-item>
+        <el-dialog :visible.sync="dialogVisible">
+          <img width="100%" :src="dialogImageUrl" alt="">
+        </el-dialog>
+      </el-form-item>
+    </div>
+
     <el-form-item>
       <el-button size="small" type="primary" @click="uploadFile">立即上传</el-button>
       <el-button size="small">取消</el-button>
@@ -34,6 +39,7 @@ export default {
     return{
       dialogImageUrl: '',
       dialogVisible: false,
+      releasePictureFlag: true,
       formLabelWidth: '80px',
       limitNum: 3,
       form: {},
@@ -74,12 +80,13 @@ export default {
     uploadFile() {
       this.$refs.upload.submit()
       console.log('finished')
+      this.releasePictureFlag = false
     },
     success(res,file,fileList){
       //file的内容是回调信息
       console.log('ok',res,file)
-      this.articleUrls.push(res.data.id)
-      console.log('urls',this.articleUrls)
+      // this.articleUrls.push(res.data.id)
+      // console.log('urls',this.articleUrls)
     }
   }
 }

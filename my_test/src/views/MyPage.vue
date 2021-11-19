@@ -27,19 +27,23 @@
               <i class="el-icon-user"></i>
               <span slot="title">我的主页</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="dialogFormVisible = true">
-              <i class="el-icon-edit-outline"></i>
-              <span slot="title">编辑资料</span>
-            </el-menu-item>
-            <el-menu-item index="3" @click="toFans">
+            <el-menu-item index="2" @click="toFans">
               <i class="el-icon-user"></i>
               <span slot="title">关注/粉丝</span>
             </el-menu-item>
-            <el-menu-item index="4" @click="toIndex">
+            <el-menu-item index="3" @click="toFans">
+              <i class="el-icon-user"></i>
+              <span slot="title">消息中心</span>
+            </el-menu-item>
+            <el-menu-item index="4" @click="dialogFormVisible = true">
+              <i class="el-icon-edit-outline"></i>
+              <span slot="title">编辑资料</span>
+            </el-menu-item>
+            <el-menu-item index="5" @click="toIndex">
               <i class="el-icon-user"></i>
               <span slot="title">返回首页</span>
             </el-menu-item>
-            <el-menu-item index="5" @click="logout">
+            <el-menu-item index="6" @click="logout">
               <i class="el-icon-user"></i>
               <span slot="title">退出登录</span>
             </el-menu-item>
@@ -48,14 +52,14 @@
       </el-aside>
 
       <el-main class="main">
-        <router-view/>
+        <router-view></router-view>
       </el-main>
     </el-container>
 
     <!--用户信息编辑弹窗-->
     <el-dialog title="账号信息设置" :visible.sync="dialogFormVisible">
       <el-form :model="form">
-        <el-avatar lebel="circleAvatar" :src="require('../assets/images/home/avatar.jpg')" :size="80"/>
+        <el-avatar lebel="circleAvatar" :src="form.userAvatar" :size="80"/>
         <el-form-item label="昵称" :label-width="formLabelWidth">
           <el-input v-model="form.userName" autocomplete="off"></el-input>
         </el-form-item>
@@ -171,6 +175,7 @@ export default {
         }
       ],
       dialogFormVisible: false,
+      post: true
     }
   },
   created() {
@@ -198,6 +203,9 @@ export default {
 
     toMyIndex(){
       this.$router.replace('/personal')
+    },
+    toPost(){
+      this.$router.replace('/personal/index')
     },
     toFans(){
       this.$router.replace('/personal/fans')

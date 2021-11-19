@@ -80,9 +80,9 @@ const routes = [
     component: () => import('../views/test2.vue')
   },
   {
-    path: '/test2',
+    path: '/testb',
     name: 'Test2',
-    component: () => import('../views/test.vue')
+    component: () => import('../views/testB.vue')
   },
 ]
 

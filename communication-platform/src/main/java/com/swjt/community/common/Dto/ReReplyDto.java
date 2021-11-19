@@ -25,10 +25,17 @@ public class ReReplyDto implements Serializable {
     private ReUserDto replyUser;
 
     @ApiModelProperty(value = "被回复人")
-    private ReUserDto replyedUser;
+    private ReUserDto repliedUser;
 
 
     @ApiModelProperty(value = "回复时间")
     private LocalDateTime replyTime;
 
+    public void setReplyedUser(ReUserDto replyedUser){
+        this.repliedUser=replyedUser;
+    }
+
+    public ReUserDto getReplyedUser(){
+        return this.repliedUser;
+    }
 }

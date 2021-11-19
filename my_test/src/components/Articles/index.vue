@@ -4,22 +4,34 @@
       <li v-for="item in articles" :key="item.id" class="infinite-list-item">
         <div class="onePostContainer">
           <div class="header">
-            <el-avatar :size="55" :src="item.reUserDto.userAvatar" style="float: left"></el-avatar>
-            <span style="float: left; margin: 15px 10px;">
-              <b>{{item.reUserDto.userName}}</b>
-            </span>
-            <div class="concern" v-if="!item.myself"> <!-- 设置关注此用户 -->
-              <el-button type="warning" v-if="item.concern" @click="cancelAttention(item)" style="margin-left: 420px" size="small" round plain>已关注</el-button>
-              <el-button type="warning" v-else @click="addAttention(item)" style="margin-left: 420px" size="small" round plain>+ 关注</el-button>
+            <div class="cover">
+              <el-avatar :src="item.reUserDto.userAvatar" :size="55"></el-avatar>
+            </div>
+            <div class="top-bar">
+              <div class="title">
+                {{ item.reUserDto.userName }}
+              </div>
+              <div class="postTime">
+                {{ item.addTime }}
+              </div>
+              <div class="action">
+                <div v-if="!item.myself"> <!-- 设置关注此用户 -->
+                  <el-button type="warning" v-if="item.concern" @click="cancelAttention(item)" style="margin-left: 420px" size="small" round plain>已关注</el-button>
+                  <el-button type="warning" v-else @click="addAttention(item)" style="margin-left: 420px" size="small" round plain>+ 关注</el-button>
+                </div>
+                <div v-else>
+                  <el-button type="warning" @click="deleteArticle(item)" style="margin-left: 420px" size="small" round plain>删除该帖</el-button>
+                </div>
+              </div>
             </div>
           </div>
           <div class="postContent">
             <!-- 设置可自适应文本高度的文本域：从后端获取帖子内容以后，把内容放在<span>标签里，textContentFlag可以设置是否展示文字内容 -->
-            <div v-if="textContentFlag" style="width: 83%; margin: 0 57px">
+            <div style="width: 83%; margin: 0 57px">
               <span class="textContent">{{item.articleContent}}</span>
             </div>
             <!-- 设置图片或者视频展示区域 -->
-            <div v-if="imageOrVideoFlag" style="width: 83%; margin: 0 57px;">
+            <div style="width: 83%; margin: 0 57px;">
               <el-image class="imageOrVideos" v-for="oneImageOrVideoUrl in item.urls.slice(0, 9)" :key="oneImageOrVideoUrl" :src="oneImageOrVideoUrl" lazy></el-image>
             </div>
             <div class="commentAndLike">
@@ -39,8 +51,8 @@
           <!-- 评论部分 -->
           <div class="commentAndShow" v-if="item.commentsShow">
             <div class="commentArea">
-              <!-- 发表评论的输入框 -->
-              <el-input v-model="commentForm.commentContent" placeholder="请输入您的评论" style="width: 71%; padding-left: 60px"></el-input>
+              <!-- 帖子评论的输入框 -->
+              <el-input v-model="item.commentForm.commentContent" placeholder="请输入您的评论" style="width: 71%; padding-left: 60px" @keyup.enter.native="submitComment(item)"></el-input>
               <el-button type="primary" @click="submitComment(item)">确认</el-button>
             </div>
             <div class="showArea"> <!-- 展示用户们的评论 -->
@@ -54,10 +66,6 @@
                   <br>
                   <span style="font-size: 10px; color: #99a2aa">{{ comment.commentTime }}</span>
                   <span style="font-size: small; cursor: pointer; margin-left: 20px; color: #99a2aa" @click="switchReply(comment)">回复</span>
-                  <div class="commentArea" v-if="comment.replyShow1"> <!-- 发表评论的输入框 -->
-                    <el-input v-model="replyForm.replyContent" placeholder="请输入您的评论" style="width: 86%;"></el-input>
-                    <el-button type="primary" @click="submitReply(comment)">确认</el-button>
-                  </div>
                 </div>
                 <!-- 回复部分 -->
                 <div class="replyContainer">
@@ -69,11 +77,6 @@
                     <br>
                     <span style="font-size: 10px; color: #99a2aa">{{ reply.replyTime }}</span> <!-- 回复时间 -->
                     <span style="font-size: small; cursor: pointer; margin-left: 20px; color: #99a2aa" @click="switchReply2(reply)">回复</span>
-                    <div class="commentArea" v-if="reply.replyShow2"> <!-- 发表评论的输入框 -->
-                      <el-input v-model="replyForm.replyContent" placeholder="请输入您的评论" style="width: 86%;"></el-input>
-                      <el-button type="primary" @click="submitReply(reply)">确认</el-button>
-                    </div>
-                    </div>
                   </div>
                 </div>
               </div>
@@ -82,8 +85,28 @@
               </div>
             </div>
           </div>
+        </div>
       </li>
     </ul>
+
+    <!--评论回复弹窗-->
+    <el-dialog class="replyDialog" title="回复" :visible.sync="replyDialogFormVisible" @close="replyForm.replyContent = ''">
+      <el-form :model="replyForm">
+        <el-input v-model="replyForm.replyContent" placeholder="请输入您的评论" style="width: 86%;"></el-input>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitReply(commentInfo.id,commentInfo.commentUser.id)">确 定</el-button>
+      </div>
+    </el-dialog>
+    <!--回复回复弹窗-->
+    <el-dialog title="回复" :visible.sync="replyDialog2FormVisible" @close="replyForm.replyContent = ''">
+      <el-form :model="replyForm">
+        <el-input v-model="replyForm.replyContent" placeholder="请输入您的评论" style="width: 86%;"></el-input>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitReply(commentInfo.id,commentInfo.replyedUser.id)">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -92,22 +115,16 @@ export default {
   name: 'index',
   data () {
     return {
-      textContentFlag: true, // 设置帖子是否有文字内容，如果有则设置为true，没有则设置为false
-      imageOrVideoFlag: true, // 设置帖子是否有图片或视频内容，如果有则设置为true，没有则设置为false
-      foldFlag: true,
-
-
       articles: [],//帖子的集合
-      commentForm:{ //评论提交表单
-        articleId: '',
-        commentContent: '',
-        userId: ''
-      },
-      replyForm:{
+      replyDialogFormVisible: false,
+      replyDialog2FormVisible: false,
+      commentInfo: {},
+      replyForm:{ //回复表单
         commentId: '',
         replyContent: '',
-        userId: ''
-      }
+        repliedUser: ''
+      },
+      foldFlag: true,
     }
   },
   props:[
@@ -121,7 +138,7 @@ export default {
     getArticle() {
       this.getRequest('/auth/article'+this.categoryId).then(res => {
         this.articles = res.data.data
-        //给articles循环每项插入属性commentsShow，每项的所有评论插入replyShow1，每个评论的所有回复插入replyShow2
+        //给articles循环每项插入属性commentForm,commentsShow，每项的所有评论插入replyShow1，每个评论的所有回复插入replyShow2
         this.articles = this.articles.map(item => {
           item.reCommentDtos = item.reCommentDtos.map(item => {
             item.replyList = item.replyList.map(item => {
@@ -129,13 +146,16 @@ export default {
             })
             return {...item,replyShow1: false}
           })
-          return {...item,commentsShow: false}
+          return {...item,commentsShow: false,commentForm:{articleId: '',commentContent: '',userId: ''}}
         })
-        // console.log(this.articles)
+        console.log(this.articles)
         //所有图片需要在属性前加一段前缀再渲染到界面上
         for(let i=0;i<this.articles.length;i++){
           for(let j=0;j<this.articles[i].urls.length;j++){
             this.articles[i].urls[j] = "http://localhost:8081/downloadPhoto/" + this.articles[i].urls[j]
+          }
+          for(let j=0;j<this.articles[i].reCommentDtos.length;j++){
+            this.articles[i].reCommentDtos[j].commentUser.userAvatar = "http://localhost:8081/downloadPhoto/" + this.articles[i].reCommentDtos[j].commentUser.userAvatar
           }
           this.articles[i].reUserDto.userAvatar = "http://localhost:8081/downloadPhoto/" + this.articles[i].reUserDto.userAvatar
         }
@@ -206,31 +226,61 @@ export default {
     },
     // 提交用户评论
     submitComment (item) {
-      this.commentForm.articleId = item.id
-      this.postRequest('/auth/comment/add/',this.commentForm).then(res => {
-        if(res.data.code === 200){
-          item.reCommentDtos.push(res.data.data) //res返回的评论在前端中即时刷新
-          this.$message.success('评论成功！')
-          this.commentForm.commentContent = ''
-          item.commentNum++
-        }else{
-          this.message.error('评论失败')
-        }
-      })
+      item.commentForm.articleId = item.id
+      //评论不能为空
+      if(item.commentForm.commentContent !== ''){
+        this.postRequest('/auth/comment/add/',item.commentForm).then(res => {
+          if(res.data.code === 200){
+            this.$message.success('评论成功！')
+            // console.log('评论res',res.data.data)
+            //评论后给res先修改&添加属性，再传给前端刷新数据
+            res.data.data.commentUser.userAvatar = "http://localhost:8081/downloadPhoto/" + res.data.data.commentUser.userAvatar
+            this.$set(res.data.data,'replyShow1',false)
+            item.reCommentDtos.push(res.data.data) //res返回的评论在前端中即时刷新
+            item.commentForm.commentContent = '' //清空评论框
+            item.commentNum++
+          }else{
+            this.message.error('评论失败')
+          }
+        })
+      }else{
+        this.$message.error('请输入内容')
+      }
     },
-    // 打开/关闭评论的回复框
+    // 打开评论的回复框
     switchReply(comment){
-      comment.replyShow1 = !comment.replyShow1
+      this.replyDialogFormVisible = true
+      this.commentInfo = comment
+      //console.log('commentInfo',this.commentInfo)
     },
-    // 打开/关闭回复的回复框
+    // 打开回复的回复框
     switchReply2(reply){
-      reply.replyShow2 = !reply.replyShow2
+      this.replyDialog2FormVisible = true
+      this.commentInfo = reply
+      //console.log('replyInfo',this.commentInfo)
     },
-    // 提交回复
-    submitReply(comment){
-
+    // 提交评论的回复
+    submitReply(id,userId){
+      //需要评论的id，评论人的id=comment.commentUser.id
+      this.replyForm.commentId = id
+      this.replyForm.repliedUser = userId
+      if(this.replyForm.replyContent !== ''){
+        this.postRequest('/auth/reply/add/',this.replyForm).then(res => {
+          if(res.data.code === 200){
+            this.$message.success('回复成功！')
+            // console.log('评论res',res.data.data)
+            //评论后给res先修改&添加属性，再传给前端刷新数据
+            //this.$set(res.data.data,'replyShow1',false)
+            //item.reCommentDtos.push(res.data.data) //res返回的评论在前端中即时刷新
+            this.replyForm.replyContent = '' //清空回复框
+          }else{
+            this.message.error('评论失败')
+          }
+        })
+      }else{
+        this.$message.error('请输入内容')
+      }
     },
-
 
     // 点赞
     like (item) {
@@ -259,6 +309,14 @@ export default {
       })
     },
 
+    deleteArticle(item){
+      //删帖接口
+      //即时响应:从articles中去除
+      let index = this.articles.indexOf(item.id)
+      if(index !== -1){
+        this.articles.splice(index,1)
+      }
+    },
 
 
     // 从后端获取帖子数量赋值给count
@@ -279,11 +337,6 @@ ul{
   list-style: none;
   padding-left: 0;
 }
-.concern{
-  margin-top: 13px;
-  margin-right: 30px;
-  float: right;
-}
 .activity {
   margin-top: 13px;
   margin-right: 30px;  /*border: 1px solid #e52121;*/
@@ -293,25 +346,70 @@ ul{
   margin: 7px auto;
   border: 1px solid #eaeaea;
   border-radius: 15px;
-  padding: 10px 10px 10px 10px;
+  padding: 10px;
   box-shadow: 0 0 25px #cac6c6;
   background: rgba(255,255,255,0.9);
   background-clip: padding-box;
 }
 .header{
-  height: 50px;
+  position: relative;
+  height: 55px;
   width: 100%;
-  /*border: 1px solid #e52121;*/
+  text-align: left;
+  line-height: 55px;
 }
+.cover {
+  position: absolute;
+  overflow: visible;
+  float: left;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+}
+.top-bar {
+  float: left;
+  position: relative;
+  height: 55px;
+  width: 460px;
+  margin-top: 6px;
+  margin-left: 65px;
+  padding-right: 200px;
+  text-align: left;
+  line-height: 50px;
+}
+.title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  height: 25px;
+  max-width: 500px;
+  margin-bottom: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 25px;
+}
+.postTime {
+  max-width: 500px;
+  text-overflow: ellipsis;
+  text-align: left;
+  line-height: 20px;
+  font-size: 12px;
+  color: #909399;
+}
+.action {
+  position: absolute;
+  right: 50px;
+  top: 0;
+}
+
 .postContent{
-  /*border: #e52121 1px solid;*/
-  margin-top: 10px;
+  margin-top: 5px;
 }
 .textContent{
   font-size: 14px;
   line-height: 1.7em;
-  /*border: 1px solid #e52121;*/
+  margin-left: 7px;
 }
+
 .imageOrVideos{
   width: 185px;
   height: 185px;

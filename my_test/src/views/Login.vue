@@ -7,11 +7,11 @@
       </div>
       <el-form-item prop="username">
         用户名
-        <el-input type="text" auto-complete="false" v-model="loginForm.username"></el-input>
+        <el-input type="text" auto-complete="false" v-model="loginForm.username" @keyup.enter.native="submitLogin"></el-input>
       </el-form-item>
       <el-form-item prop="password">
         密码
-        <el-input type="password" auto-complete="false" v-model="loginForm.password" show-password></el-input>
+        <el-input type="password" auto-complete="false" v-model="loginForm.password" show-password @keyup.enter.native="submitLogin"></el-input>
       </el-form-item>
       <el-form-item prop="code">
         验证码

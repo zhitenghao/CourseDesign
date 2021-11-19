@@ -1,4 +1,5 @@
 <template>
+<!--  发帖组件测试-->
   <div class="releasePostContainer" v-if="releasePostFlag">
     <el-form class="releaseForm" v-model="postForm">
       <!-- 待发布帖子的分类-单选框-->
@@ -31,7 +32,7 @@
                 list-type="picture-card"
                 multiple
                 :limit="9"
-                :auto-upload="false"
+                :auto-upload="true"
                 :on-exceed="handleExceed"
                 :before-upload="handleBeforeUpload"
                 :on-preview="handlePictureCardPreview"
@@ -86,12 +87,11 @@ export default {
       dialogImageUrl: '',
       dialogVideoUrl: '',
       dialogVisible: false,
-
       postForm: { // 发帖表单
         articleCategory:'',//帖子分类
         articleContent:'',
         isVideo: 0,
-        urls: ["test.png"]
+        urls: []
       },
 
     }
@@ -138,6 +138,10 @@ export default {
     // },
     //on-remove移除文件时钩子
     handleRemove(file, fileList) {
+      let index = this.postForm.urls.indexOf(file.response.data.id)
+      if(index !== -1){
+        this.postForm.urls.splice(index,1)
+      }
       console.log('remove',file, fileList);
     },
     //上传图片成功的钩子,res接收上传接口的返回信息
@@ -147,15 +151,12 @@ export default {
     },
     // 提交帖子
     onsubmit() {
-      //console.log('submit!');
-      //提交图片
-      this.$refs.upload.submit()
-      console.log('1',this.postForm)
+      // this.$refs.upload.submit()
+      console.log('form',this.postForm)
       //提交表单
       this.postRequest('/auth/article/add',this.postForm).then(res => {
         console.log(res)
       })
-      console.log('2',this.postForm)
       // this.$message.success('您已成功提交');
       // this.$message.error('提交失败');
     },

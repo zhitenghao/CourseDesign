@@ -3,7 +3,7 @@
     <div id="user-info">
       <div class="have-login">
         <div class="circlePic" style="cursor:pointer" @click="toPersonalIndex">
-          <el-avatar :src="require('../../assets/images/home/avatar.jpg')" :size="110"/>
+          <el-avatar :src="userAvatar" :size="110"/>
         </div>
         <div class="divide-line">
           <el-divider class="divider" style="width: 200px;right: 24px;"></el-divider>
@@ -35,7 +35,7 @@
               <i class="el-icon-star-off"></i>
               <span slot="title">收藏夹</span>
             </el-menu-item>
-            <el-menu-item index="5">
+            <el-menu-item index="5" @click="toFans">
               <i class="el-icon-user"></i>
               <span slot="title">关注/粉丝</span>
             </el-menu-item>
@@ -51,11 +51,25 @@ export default {
   name: "Sidebar-left",
   data(){
     return{
+      userAvatar: ''
     }
   },
+  created() {
+    this.getUserAvatar()
+  },
   methods:{
+    //获取用户头像
+    getUserAvatar() {
+      this.getRequest('/auth/user/userInfo').then(res => {
+        //console.log('userinfo',res.data.data)
+        this.userAvatar = "http://localhost:8081/downloadPhoto/" + res.data.data.userAvatar
+      })
+    },
     toPersonalIndex(){
       this.$router.replace('/personal')
+    },
+    toFans(){
+      this.$router.replace('/personal/fans')
     }
   }
 }

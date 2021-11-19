@@ -3,9 +3,9 @@
     <post-panel></post-panel>
     <el-tabs class="tabs" v-model="activeName" @tab-click="handleClick">
       <el-tab-pane label="我的帖子" name="first"><my-articles/></el-tab-pane>
-      <el-tab-pane label="我的关注" name="second">2</el-tab-pane>
-      <el-tab-pane label="点赞" name="third">3</el-tab-pane>
-      <el-tab-pane label="收藏夹" name="fourth">4</el-tab-pane>
+      <el-tab-pane label="我的关注" name="second"><concern/></el-tab-pane>
+      <el-tab-pane label="点赞" name="third"><like/></el-tab-pane>
+      <el-tab-pane label="收藏夹" name="fourth"><collection/></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -13,10 +13,16 @@
 <script>
 import PostPanel from '@/components/Personal/ReleasePost.vue'
 import MyArticles from '@/components/Articles/myarticles.vue'
+import Concern from "@/components/Articles/concern";
+import Like from "@/components/Articles/like";
+import Collection from "@/components/Articles/collection";
 
 export default {
   name: "index",
   components:{
+    Collection,
+    Like,
+    Concern,
     PostPanel,
     MyArticles,
   },
