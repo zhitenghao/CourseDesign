@@ -44,6 +44,12 @@ public class ArticleController extends BaseController {
     ArticleCategoryService articleCategoryService;
 
     @Autowired
+    ReplyService replyService;
+
+    @Autowired
+    CommentService commentService;
+
+    @Autowired
     CollectionService collectionService;
 
     @Autowired
@@ -408,4 +414,28 @@ public class ArticleController extends BaseController {
         }
         return Result.succ(reArticleDtos);
     }
+    @DeleteMapping("/deleteArticle/{articleId}")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "articleId",value = "帖子id",required = true)
+    )
+    @ApiOperation(value="根据id删除帖子")
+    public Result deleteArticle(@PathVariable String articleId){
+        Article article = articleService.getById(articleId);
+        List<Comment> comments = commentService.list(new QueryWrapper<Comment>().eq("article_id", articleId));
+        for(Comment comment:comments)
+        {
+            replyService.remove(new QueryWrapper<Reply>().eq("comment_id", comment.getId()));
+        }
+        commentService.remove(new QueryWrapper<Comment>().eq("article_id", articleId));
+        likeService.remove(new QueryWrapper<Love>().eq("article_id", articleId));
+        collectionService.remove(new QueryWrapper<Collection>().eq("article_id", articleId));
+        if(article.getIsVideo()==1){
+            videoService.remove(new QueryWrapper<Video>().eq("article_id", articleId));
+        }
+        else photoService.remove(new QueryWrapper<Photo>().eq("article_id", articleId));
+        articleService.removeById(articleId);
+        articleCategoryService.remove(new QueryWrapper<ArticleCategory>().eq("article_id", articleId));
+        return Result.succ("删除帖子成功");
+    }
+
 }
