@@ -19,6 +19,9 @@ import java.util.List;
 @Data
 public class ReCommentDto implements Serializable {
 
+    @ApiModelProperty(value = "评论id")
+    private String commentId;
+
     @ApiModelProperty(value = "评论用户（外键）")
     private ReUserDto commentUser;
 

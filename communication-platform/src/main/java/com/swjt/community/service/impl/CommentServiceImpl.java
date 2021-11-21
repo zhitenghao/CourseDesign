@@ -66,6 +66,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         else if(comment.getUpdateTime()!=null){
             reCommentDto.setCommentTime(comment.getUpdateTime());
         }
+        reCommentDto.setCommentId(id);
         return reCommentDto;
     }
 }
