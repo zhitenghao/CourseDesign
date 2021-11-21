@@ -30,7 +30,16 @@ public class Reply extends BaseEntity {
     private String replyUser;
 
     @ApiModelProperty(value = "被回复人编号(user_id外键)")
-    private String replyedUser;
+    private String repliedUser;
+
+    public String getReplyedUser()
+    {
+        return this.repliedUser;
+    }
+
+    public void setReplyedUser(String replyedUser){
+        this.repliedUser=replyedUser;
+    }
 
 
 }

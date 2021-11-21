@@ -52,7 +52,7 @@ public class ReplyController extends BaseController {
                 .put("id",reply.getId())
                 .put("replyContent",reply.getReplyContent())
                 .put("replyUser",reUserDto)
-                .put("replyedUser",reUserDto1)
+                .put("repliedUser",reUserDto1)
                 .put("replyTime",reply.getAddTime())
                 .map()
         );
