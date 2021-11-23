@@ -23,21 +23,25 @@
                 <span>个人中心</span>
               </template>
             </el-menu-item>
+<!--            <el-menu-item index="2">-->
+<!--              <i class="el-icon-picture-outline"></i>-->
+<!--              <span slot="title">发帖</span>-->
+<!--            </el-menu-item>-->
             <el-menu-item index="2">
-              <i class="el-icon-picture-outline"></i>
-              <span slot="title">发帖</span>
-            </el-menu-item>
-            <el-menu-item index="3">
               <i class="el-icon-chat-dot-square"></i>
               <span slot="title">消息</span>
             </el-menu-item>
-            <el-menu-item index="4">
-              <i class="el-icon-star-off"></i>
-              <span slot="title">收藏夹</span>
-            </el-menu-item>
-            <el-menu-item index="5" @click="toFans">
+<!--            <el-menu-item index="4">-->
+<!--              <i class="el-icon-star-off"></i>-->
+<!--              <span slot="title">收藏夹</span>-->
+<!--            </el-menu-item>-->
+            <el-menu-item index="3" @click="toFans">
               <i class="el-icon-user"></i>
               <span slot="title">关注/粉丝</span>
+            </el-menu-item>
+            <el-menu-item index="4" @click="logout">
+              <i class="el-icon-user"></i>
+              <span slot="title">退出登录</span>
             </el-menu-item>
           </el-menu>
         </el-col>
@@ -70,7 +74,11 @@ export default {
     },
     toFans(){
       this.$router.replace('/personal/fans')
-    }
+    },
+    logout(){
+      window.localStorage.removeItem('tokenStr')
+      this.$router.replace('/login')
+    },
   }
 }
 </script>

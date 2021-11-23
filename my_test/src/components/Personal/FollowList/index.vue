@@ -67,7 +67,7 @@ export default {
         for (let i = 0; i < this.allConcerns.length; i++) {
           this.allConcerns[i].userAvatar = "http://localhost:8081/downloadPhoto/" + this.allConcerns[i].userAvatar
         }
-        console.log(this.allConcerns)
+        // console.log(this.allConcerns)
       })
     },
 
