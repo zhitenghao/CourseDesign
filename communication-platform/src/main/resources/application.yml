@@ -5,6 +5,11 @@ spring:
 #  jackson:
 #    time-zone: GMT+8
 #    date-format: java.text.SimpleDateFormat()
+#  http:
+#    servlet:
+#      multipart:
+#        maxFileSize : 50MB
+#        maxRequestSize : 50MB
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://47.113.217.206:3310/campus?useUnicode=true&useSSL=false&characterEncoding=utf8&serverTimezone=Asia/Shanghai
