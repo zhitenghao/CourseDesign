@@ -5,7 +5,7 @@
     <div v-if="releasePictureFlag">
       <el-form-item label="上传图片" :label-width="formLabelWidth">
         <el-upload
-            ref="upload"
+            ref="uploadPic"
             action="http://localhost:8081/upload"
             accept="image/png,image/gif,image/jpg,image/jpeg"
             list-type="picture-card"
@@ -78,7 +78,7 @@ export default {
       this.dialogVisible = true;
     },
     uploadFile() {
-      this.$refs.upload.submit()
+      this.$refs.uploadPic.submit()
       console.log('finished')
       this.releasePictureFlag = false
     },

@@ -77,12 +77,12 @@ const routes = [
   {
     path: '/test',
     name: 'Test',
-    component: () => import('../views/test2.vue')
+    component: () => import('../views/test.vue')
   },
   {
     path: '/testb',
     name: 'Test2',
-    component: () => import('../views/testB.vue')
+    component: () => import('../views/testA.vue')
   },
 ]
 
@@ -90,6 +90,17 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  //如果有token,访问登陆页面直接重定向到主页;访问其他页面均也放行
+  //如果没有token，且访问其他页面会重定向到登陆页面，访问登陆页面放行
+  if(window.localStorage.getItem('tokenStr')){
+    if (to.name === 'Login') next('/')
+    else next()
+  } else if(to.name !== 'Login')
+    next({name:'Login'})
+  else next()
 })
 
 export default router

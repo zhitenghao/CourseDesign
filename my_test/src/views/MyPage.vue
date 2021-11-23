@@ -3,12 +3,12 @@
     <el-container style="height: 100%">
       <el-aside class="aside" width=240px>
         <div class="head-aside">
-          <div class="avatar">
-            <el-avatar :src="this.form.userAvatar" :size="60"/>
+          <div class="avatar" style="cursor:pointer" @click="editAvatarDialogForm = true">
+            <el-avatar :src="form.userAvatar" :size="60" title="点击修改头像"/>
           </div>
           <div class="username">
-            <h3>{{this.form.userName}}</h3>
-            <div style="font-size: 12px;color: #909399;">{{ this.form.userDescription }}</div>
+            <h3>{{form.userName}}</h3>
+            <div style="font-size: 12px;color: #909399;">{{ form.userDescription }}</div>
           </div>
         </div>
         <div class="middle-aside">
@@ -35,15 +35,19 @@
               <i class="el-icon-user"></i>
               <span slot="title">消息中心</span>
             </el-menu-item>
-            <el-menu-item index="4" @click="dialogFormVisible = true">
+            <el-menu-item index="4" @click="editInfoDialogForm = true">
               <i class="el-icon-edit-outline"></i>
               <span slot="title">编辑资料</span>
             </el-menu-item>
-            <el-menu-item index="5" @click="toIndex">
+            <el-menu-item index="5">
+              <i class="el-icon-edit-outline"></i>
+              <span slot="title">修改密码</span>
+            </el-menu-item>
+            <el-menu-item index="6" @click="toIndex">
               <i class="el-icon-user"></i>
               <span slot="title">返回首页</span>
             </el-menu-item>
-            <el-menu-item index="6" @click="logout">
+            <el-menu-item index="7" @click="logout">
               <i class="el-icon-user"></i>
               <span slot="title">退出登录</span>
             </el-menu-item>
@@ -56,10 +60,20 @@
       </el-main>
     </el-container>
 
+    <!--用户头像编辑弹窗-->
+    <el-dialog title="编辑头像" :visible.sync="editAvatarDialogForm" >
+      <div class="editAvatar">
+        <el-avatar :src="form.userAvatar" shape="square" :size="300" style="width: 500px"/>
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="editAvatarDialogForm = false">取 消</el-button>
+        <el-button type="primary" @click="updateUser(form)">保存</el-button>
+      </div>
+    </el-dialog>
     <!--用户信息编辑弹窗-->
-    <el-dialog title="账号信息设置" :visible.sync="dialogFormVisible">
+    <el-dialog title="账号信息设置" :visible.sync="editInfoDialogForm">
       <el-form :model="form">
-        <el-avatar lebel="circleAvatar" :src="form.userAvatar" :size="80"/>
+        <el-avatar label="circleAvatar" :src="form.userAvatar" :size="80"/>
         <el-form-item label="昵称" :label-width="formLabelWidth">
           <el-input v-model="form.userName" autocomplete="off"></el-input>
         </el-form-item>
@@ -77,10 +91,6 @@
             <el-radio :label=1>女</el-radio>
           </el-radio-group>
         </el-form-item>
-        <!--        userSex传int值,form中是string-->
-        <!--        <el-form-item label="年龄" :label-width="formLabelWidth">-->
-        <!--          <el-input v-model="form.age" autocomplete="off"></el-input>-->
-        <!--        </el-form-item>-->
         <el-form-item label="出生日期" :label-width="formLabelWidth">
           <div class="block">
             <el-date-picker
@@ -95,7 +105,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button @click="editInfoDialogForm = false">取 消</el-button>
         <el-button type="primary" @click="updateUser(form)">确 定</el-button>
       </div>
     </el-dialog>
@@ -174,7 +184,8 @@ export default {
           value:'其它'
         }
       ],
-      dialogFormVisible: false,
+      editAvatarDialogForm: false,
+      editInfoDialogForm: false,
       post: true
     }
   },
@@ -218,6 +229,10 @@ export default {
       this.$router.replace('/login')
     },
 
+    //修改头像
+    editAvatar(){
+
+    },
     //修改学院事件
     changeCollege(){
       this.form.userCollege = this.collegeData
@@ -228,7 +243,7 @@ export default {
       console.log("form的数据", this.form)
       this.postRequest('/auth/user/updateUser',this.form).then(res=>{
         this.$message.success("提交成功")
-        this.dialogFormVisible=false
+        this.editInfoDialogForm=false
         this.getUserInfo()
       })
     },
@@ -270,6 +285,11 @@ export default {
   border-radius: 50%;
   float: left;
 }
+.editAvatar{
+  /*width: 300px;*/
+  /*height: 300px;*/
+  cursor: move;
+}
 .username{
   float: left;
   height: 80px;
@@ -293,5 +313,5 @@ h3{
   font-size: 15px;
   color:#8590a6;
 }
-	
+
 </style>

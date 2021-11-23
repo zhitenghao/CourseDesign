@@ -24,9 +24,9 @@
             <el-button class="el-button el-button--primary" @click="addVideo">发视频</el-button>
           </div>
           <div v-if="releasePictureFlag"> <!-- 上传图片的div -->
-            <el-form-item style="margin-top: 10px"> <!--待发布帖子的图片-->
+            <el-form-item label="图片上传" style="margin-top: 10px"> <!--待发布帖子的图片-->
               <el-upload
-                  ref="upload"
+                  ref="uploadPic"
                   action="http://localhost:8081/upload"
                   accept="image/png,image/gif,image/jpg,image/jpeg"
                   list-type="picture-card"
@@ -47,16 +47,23 @@
           </div>
 
           <div v-if="releaseVideoFlag"> <!-- 上传视频的div -->
-            <el-form-item style="margin-top: 10px"> <!-- 待发布帖子的视频 -->
+            <el-form-item label="视频上传" style="margin-top: 10px"> <!-- 待发布帖子的视频 -->
               <el-upload
-                  action="https://jsonplaceholder.typicode.com/posts/"
+                  ref="uploadVid"
+                  action="http://localhost:8081/upload"
                   list-type="picture-card"
-                  :on-preview="handleVideoCardPreview"
                   :limit="1"
-                  multiple
                   :auto-upload="false"
-                  :on-remove="handleRemove">
-                <i class="el-icon-plus"></i>
+                  :before-upload="beforeUploadVideo"
+                  :on-progress="uploadVideoProcess"
+                  :on-success="handleVideoSuccess"
+                  >
+                <video v-if="videoForm.Video === ''&& videoFlag === false" :src="videoForm.Video" controls="controls">
+                  您的浏览器不支持视频播放
+                </video>
+                <i v-else-if = "videoForm.Video === '' && videoFlag === false" class="el-icon-plus avatar-uploader-icon"></i>
+                <el-progress v-if="videoFlag === true" type="circle" :percentage="videoUploadPercent" style="margin-top:30px;">
+                </el-progress>
               </el-upload>
               <el-dialog :visible.sync="dialogVisible">
                 <img width="100%" :src="dialogVideoUrl" alt="">
@@ -64,6 +71,7 @@
             </el-form-item>
           </div>
         </el-form-item>
+
         <!--待发布帖子的发布或取消-->
         <el-form-item style="width: 100%;">
         <span style="font-size: small; color: chocolate; margin-left: 40px;">
@@ -87,6 +95,13 @@ export default {
       dialogImageUrl: '',
       dialogVideoUrl: '',
       dialogVisible: false,
+      videoFlag: false,
+      videoUploadPercent: 0,
+      videoForm:{
+        videoUploadId: '',
+        Video: '',
+      },
+
       postForm: { // 发帖表单
         articleCategory:'',//帖子分类
         articleContent:'',
@@ -148,12 +163,12 @@ export default {
     // },
     //on-remove移除文件时钩子
     handleRemove(file) {
+      console.log('remove',file)
       //在表单中删除该图片的url
       let index = this.postForm.urls.indexOf(file.response.data.id)
       if(index !== -1){
         this.postForm.urls.splice(index,1)
       }
-      //console.log('remove',file)
     },
     //上传图片成功的钩子
     handleSuccess(res){
@@ -166,6 +181,39 @@ export default {
         this.$message.error('添加图片失败');
       }
     },
+
+    //上传前检查格式和大小
+    beforeUploadVideo(file) {
+      const isLt10M = file.size / 1024 / 1024  < 10;
+      if (['video/mp4', 'video/ogg', 'video/flv','video/avi','video/wmv','video/rmvb'].indexOf(file.type) === -1) {
+        this.$message.error('请上传正确的视频格式');
+        return false;
+      }
+      if (!isLt10M) {
+        this.$message.error('上传视频大小不能超过10MB哦!');
+        return false;
+      }
+    },
+    //上传中进度显示
+    uploadVideoProcess(event, file, fileList){
+      this.videoFlag = true;
+      this.videoUploadPercent = Math.floor(event.percent)
+    },
+    //上传成功
+    handleVideoSuccess(res, file) {
+      this.videoFlag = false;
+      this.videoUploadPercent = 0;
+      if(res.data.code === 200){
+        this.videoForm.videoUploadId = res.data.uploadId;
+        this.videoForm.Video = res.data.uploadUrl;
+      }else{
+        this.$message.error('视频上传失败，请重新上传！');
+      }
+    },
+
+
+
+
     // 提交帖子
     onsubmit() {
       // this.$refs.upload.submit()

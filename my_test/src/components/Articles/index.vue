@@ -12,7 +12,8 @@
                 {{ item.reUserDto.userName }}
               </div>
               <div class="postTime">
-                {{ item.addTime }}
+                {{ item.addTime }}&nbsp&nbsp&nbsp&nbsp分类
+<!--                {{item.categoryName}}-->
               </div>
               <div class="action">
                 <div v-if="!item.myself"> <!-- 设置关注此用户 -->
@@ -72,11 +73,11 @@
                   <div class="reply" v-for="reply in comment.replyList" :key="reply.replyeTime">
                     <span style="font-size: small; color: chocolate">{{reply.replyUser.userName}}</span>
                     <span style="font-size: small"> :回复@ </span>
-                    <span style="font-size: small; color: chocolate">{{reply.replyedUser.userName}}:</span>
+                    <span style="font-size: small; color: chocolate">{{reply.repliedUser.userName}}:</span>
                     <span style="font-size: small"> {{reply.replyContent}}</span>
                     <br>
                     <span style="font-size: 10px; color: #99a2aa">{{ reply.replyTime }}</span> <!-- 回复时间 -->
-                    <span style="font-size: small; cursor: pointer; margin-left: 20px; color: #99a2aa" @click="switchReply2(reply)">回复</span>
+                    <span style="font-size: small; cursor: pointer; margin-left: 20px; color: #99a2aa" @click="switchReply2(reply,comment)">回复</span>
                   </div>
                 </div>
               </div>
@@ -95,7 +96,7 @@
         <el-input v-model="replyForm.replyContent" placeholder="请输入您的评论" style="width: 86%;"></el-input>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitReply(commentInfo.id,commentInfo.commentUser.id)">确 定</el-button>
+        <el-button type="primary" @click="submitReply(commentInfo.commentId,commentInfo.commentUser.id)">确 定</el-button>
       </div>
     </el-dialog>
     <!--回复回复弹窗-->
@@ -104,7 +105,7 @@
         <el-input v-model="replyForm.replyContent" placeholder="请输入您的评论" style="width: 86%;"></el-input>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitReply(commentInfo.id,commentInfo.replyedUser.id)">确 定</el-button>
+        <el-button type="primary" @click="submitReply(commentInfo.commentId,commentInfo.repliedUser.id)">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -138,17 +139,17 @@ export default {
     getArticle() {
       this.getRequest('/auth/article'+this.categoryId).then(res => {
         this.articles = res.data.data
-        //给articles循环每项插入属性commentForm,commentsShow，每项的所有评论插入replyShow1，每个评论的所有回复插入replyShow2
+        //给articles循环每项插入属性commentForm,commentsShow
         this.articles = this.articles.map(item => {
-          item.reCommentDtos = item.reCommentDtos.map(item => {
-            item.replyList = item.replyList.map(item => {
-              return {...item,replyShow2: false}
-            })
-            return {...item,replyShow1: false}
-          })
           return {...item,commentsShow: false,commentForm:{articleId: '',commentContent: '',userId: ''}}
+          // item.reCommentDtos = item.reCommentDtos.map(item => {
+          //   item.replyList = item.replyList.map(item => {
+          //     return {...item,replyShow2: false}
+          //   })
+          //   return {...item,replyShow1: false}
+          // })
         })
-        console.log(this.articles)
+        //console.log(this.articles)
         //所有图片需要在属性前加一段前缀再渲染到界面上
         for(let i=0;i<this.articles.length;i++){
           for(let j=0;j<this.articles[i].urls.length;j++){
@@ -174,7 +175,7 @@ export default {
             }
           }
         }else{
-          this.message.error('关注失败')
+          this.$message.error('关注失败')
         }
       })
     },
@@ -189,7 +190,7 @@ export default {
             }
           }
         }else{
-          this.message.error('取消关注失败')
+          this.$message.error('取消关注失败')
         }
       })
     },
@@ -201,7 +202,7 @@ export default {
           item.collection = !item.collection
           item.collectionNum++
         }else{
-          this.message.error('收藏失败')
+          this.$message.error('收藏失败')
         }
         //console.log(res)
       })
@@ -213,7 +214,7 @@ export default {
           item.collection = !item.collection
           item.collectionNum--
         }else{
-          this.message.error('收藏失败')
+          this.$message.error('收藏失败')
         }
         //console.log(res)
       })
@@ -240,7 +241,7 @@ export default {
             item.commentForm.commentContent = '' //清空评论框
             item.commentNum++
           }else{
-            this.message.error('评论失败')
+            this.$message.error('评论失败')
           }
         })
       }else{
@@ -254,10 +255,11 @@ export default {
       //console.log('commentInfo',this.commentInfo)
     },
     // 打开回复的回复框
-    switchReply2(reply){
+    switchReply2(reply,comment){
       this.replyDialog2FormVisible = true
       this.commentInfo = reply
-      //console.log('replyInfo',this.commentInfo)
+      this.commentInfo.commentId = comment.commentId
+      console.log('replyInfo',this.commentInfo)
     },
     // 提交评论的回复
     submitReply(id,userId){
@@ -265,16 +267,56 @@ export default {
       this.replyForm.commentId = id
       this.replyForm.repliedUser = userId
       if(this.replyForm.replyContent !== ''){
+        //console.log('form',this.replyForm)
         this.postRequest('/auth/reply/add/',this.replyForm).then(res => {
           if(res.data.code === 200){
             this.$message.success('回复成功！')
-            // console.log('评论res',res.data.data)
-            //评论后给res先修改&添加属性，再传给前端刷新数据
+            //console.log('评论res',res)
             //this.$set(res.data.data,'replyShow1',false)
-            //item.reCommentDtos.push(res.data.data) //res返回的评论在前端中即时刷新
+            //item.reCommentDtos.push(res.data.data) //res返回replyList对象添加到前端中即时刷新（找到对应的comment）
+            for(let i = 0; i < this.articles.length;i++) {
+              for (let j = 0; j < this.articles[i].reCommentDtos.length; j++) {
+                if(this.articles[i].reCommentDtos[j].commentId === id){
+                  console.log('comment',this.articles[i].reCommentDtos[j])
+                  this.articles[i].reCommentDtos[j].replyList.push(res.data.data)
+                }
+              }
+            }
             this.replyForm.replyContent = '' //清空回复框
+            this.replyDialogFormVisible = false
+            this.replyDialog2FormVisible = false
           }else{
-            this.message.error('评论失败')
+            this.$message.error('评论失败')
+          }
+        })
+      }else{
+        this.$message.error('请输入内容')
+      }
+    },
+    // 提交回复的回复
+    submitReply2(id,userId){
+      //需要评论的id，评论人的id=comment.commentUser.id
+      this.replyForm.commentId = id
+      this.replyForm.repliedUser = userId
+      if(this.replyForm.replyContent !== ''){
+        this.postRequest('/auth/reply/add/',this.replyForm).then(res => {
+          if(res.data.code === 200){
+            this.$message.success('回复成功！')
+            //console.log('评论res',res)
+            //this.$set(res.data.data,'replyShow1',false)
+            //item.reCommentDtos.push(res.data.data) //res返回replyList对象添加到前端中即时刷新（找到对应的comment）
+            for(let i = 0; i < this.articles.length;i++) {
+              for (let j = 0; j < this.articles[i].reCommentDtos.length; j++) {
+                if(this.articles[i].reCommentDtos[j].commentId === id){
+                  //console.log('comment',this.articles[i].reCommentDtos[j])
+                  this.articles[i].reCommentDtos[j].replyList.push(res.data.data)
+                }
+              }
+            }
+            this.replyForm.replyContent = '' //清空回复框
+            this.replyDialog2FormVisible = false
+          }else{
+            this.$message.error('评论失败')
           }
         })
       }else{
@@ -284,13 +326,13 @@ export default {
 
     // 点赞
     like (item) {
-      this.getRequest('/auth/love/add/'+item.id+'').then(res => {
+      this.getRequest('/auth/love/add/'+item.id).then(res => {
         if(res.data.code === 200){
           item.like = !item.like
           //点击后点赞数加一，前端修改即时呈现
           item.likeNum++
         }else{
-          this.message.error('点赞失败')
+          this.$message.error('点赞失败')
         }
         //console.log(res)
       })
@@ -298,24 +340,31 @@ export default {
     },
     //取消点赞
     unlike (item) {
-      this.getRequest('/auth/love/delete/'+item.id+'').then(res => {
+      this.getRequest('/auth/love/delete/'+item.id).then(res => {
         if(res.data.code === 200){
           item.like = !item.like
           //点击后点赞数减一
           item.likeNum--
         }else{
-          this.message.error('取消点赞失败')
+          this.$message.error('取消点赞失败')
         }
       })
     },
 
+    //删除帖子
     deleteArticle(item){
-      //删帖接口
-      //即时响应:从articles中去除
-      let index = this.articles.indexOf(item.id)
-      if(index !== -1){
-        this.articles.splice(index,1)
-      }
+      this.deleteRequest('/auth/article/deleteArticle/'+item.id).then(res => {
+        if(res.data.code === 200){
+          this.$message.success('删除成功')
+          //即时响应:从articles中去除
+          let index = this.articles.indexOf(item)
+          if(index !== -1){
+            this.articles.splice(index,1)
+          }
+        }else{
+          this.$message.error('删除失败')
+        }
+      })
     },
 
 
