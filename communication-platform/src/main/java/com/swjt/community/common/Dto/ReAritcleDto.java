@@ -8,6 +8,8 @@
 
 package com.swjt.community.common.Dto;
 
+import com.swjt.community.entity.ArticleCategory;
+import com.swjt.community.entity.Category;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -64,6 +66,9 @@ public class ReAritcleDto implements Serializable {
 
     @ApiModelProperty(value = "up主是否是自己")
     private boolean isMyself;
+
+    @ApiModelProperty(value = "帖子分类")
+    private Category category;
 
 
 }

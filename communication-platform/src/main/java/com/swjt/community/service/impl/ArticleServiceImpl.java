@@ -49,6 +49,12 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
     @Autowired
     CollectionService collectionService;
 
+    @Autowired
+    ArticleCategoryService articleCategoryService;
+
+    @Autowired
+    CategoryService categoryService;
+
     @Override
     public ReAritcleDto ArticleInfoById(String id) {
         ReAritcleDto reAritcleDto = new ReAritcleDto();
@@ -84,6 +90,9 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         reAritcleDto.setCommentNum(article.getArticleComment());
         article.setArticleBnum(article.getArticleBnum()+1);
         reAritcleDto.setId(id);
+        ArticleCategory articleCategory = articleCategoryService.getOne(new QueryWrapper<ArticleCategory>().eq("article_id", id));
+        Category category = categoryService.getById(articleCategory.getCategoryId());
+        reAritcleDto.setCategory(category);
         //浏览次数加一
 //        updateById(article);
         return  reAritcleDto;
