@@ -8,6 +8,7 @@
 
 package com.swjt.community.common.Dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -44,6 +45,7 @@ public class UserDto implements Serializable {
     private String userDescription;
 
     @ApiModelProperty(value = "用户出生日期")
+    @JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime userBirthday;
 
     @ApiModelProperty(value = "用户头像")

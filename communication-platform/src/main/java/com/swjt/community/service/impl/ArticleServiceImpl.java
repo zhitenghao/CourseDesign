@@ -88,6 +88,7 @@ public class ArticleServiceImpl extends ServiceImpl<ArticleMapper, Article> impl
         reAritcleDto.setLikeNum(article.getArticleLike());
         reAritcleDto.setAddTime(article.getAddTime());
         reAritcleDto.setCommentNum(article.getArticleComment());
+        reAritcleDto.setIsVideo(article.getIsVideo());
         article.setArticleBnum(article.getArticleBnum()+1);
         reAritcleDto.setId(id);
         ArticleCategory articleCategory = articleCategoryService.getOne(new QueryWrapper<ArticleCategory>().eq("article_id", id));
