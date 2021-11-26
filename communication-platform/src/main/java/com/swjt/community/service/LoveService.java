@@ -13,5 +13,5 @@ import org.springframework.stereotype.Repository;
  * @since 2021-11-08
  */
 public interface LoveService extends IService<Love> {
-    boolean deleteByArticleAndUser(String articleId,String userId);
+    Love findOneByArticleAndUser(String articleId,String userId);
 }

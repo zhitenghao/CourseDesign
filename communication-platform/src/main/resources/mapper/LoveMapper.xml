@@ -3,8 +3,8 @@
 <mapper namespace="com.swjt.community.mapper.LoveMapper">
 
 
-    <delete id="deleteByArticleAndUser"  parameterType="java.lang.String">
-        delete from love where user_id=#{userId} and article_id=#{articleId}
-    </delete>
+    <select id="findOneByArticleAndUser"  parameterType="java.lang.String"  resultType="com.swjt.community.entity.Love" >
+        select * from love where user_id=#{userId} and article_id=#{articleId}
+    </select>
 
 </mapper>

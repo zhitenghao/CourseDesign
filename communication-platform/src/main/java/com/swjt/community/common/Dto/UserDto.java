@@ -37,7 +37,6 @@ public class UserDto implements Serializable {
     @ApiModelProperty(value = "用户住址")
     private String userAddress;
 
-
     @ApiModelProperty(value = "用户学院")
     private String userCollege;
 

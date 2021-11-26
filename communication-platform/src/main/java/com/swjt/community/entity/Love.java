@@ -34,5 +34,8 @@ public class Love{
     @ApiModelProperty(value = "点赞帖子")
     private String articleId;
 
+    @ApiModelProperty(value = "消息id")
+    private String messageId;
+
 
 }

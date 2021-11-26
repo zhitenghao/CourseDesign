@@ -21,8 +21,8 @@ public class LoveServiceImpl extends ServiceImpl<LoveMapper, Love> implements Lo
     LoveMapper likeMapper;
 
     @Override
-    public boolean deleteByArticleAndUser(String articleId, String userId) {
-        likeMapper.deleteByArticleAndUser(articleId,userId);
-        return true;
+    public Love findOneByArticleAndUser(String articleId, String userId) {
+        return likeMapper.findOneByArticleAndUser(articleId,userId);
+
     }
 }

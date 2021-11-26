@@ -33,5 +33,7 @@ public class Comment extends BaseEntity {
     @ApiModelProperty(value = "评论状态")
     private Integer commentStatus;
 
+    @ApiModelProperty(value = "消息id")
+    private String messageId;
 
 }

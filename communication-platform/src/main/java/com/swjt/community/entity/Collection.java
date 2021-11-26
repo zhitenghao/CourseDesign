@@ -32,5 +32,8 @@ public class Collection{
     @ApiModelProperty(value = "用户收藏的帖子")
     private String articleId;
 
+    @ApiModelProperty(value = "消息id")
+    private String messageId;
+
 
 }

@@ -4,10 +4,7 @@ package com.swjt.community.controller;
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.lang.Result;
-import com.swjt.community.entity.Article;
-import com.swjt.community.entity.Collection;
-import com.swjt.community.entity.Message;
-import com.swjt.community.entity.User;
+import com.swjt.community.entity.*;
 import com.swjt.community.service.CollectionService;
 import com.swjt.community.service.UserService;
 import io.swagger.annotations.ApiOperation;
@@ -51,6 +48,7 @@ public class CollectionController extends BaseController {
         byId.setArticleCollection(byId.getArticleCollection()+1);
         collection.setUserId(userByAccount.getId());
         collection.setArticleId(articleId);
+        collection.setMessageId("");
         collectionService.save(collection);
         Message message = new Message();
         message.setPrincipleId(userByAccount.getId());
@@ -59,6 +57,12 @@ public class CollectionController extends BaseController {
         message.setProcessType(1);
         message.setAddTime(LocalDateTime.now());
         messageService.save(message);
+        MessageArticle messageArticle = new MessageArticle();
+        messageArticle.setArticleId(articleId);
+        messageArticle.setMessageId(message.getId());
+        messageArticleService.save(messageArticle);
+        collection.setMessageId(message.getId());
+        collectionService.updateById(collection);
         articleService.updateById(byId);
         return Result.succ(MapUtil.builder()
                 .put("msg","收藏成功！")
@@ -75,7 +79,9 @@ public class CollectionController extends BaseController {
             article.setArticleCollection(article.getArticleCollection()-1);
             articleService.updateById(article);
             collectionService.remove(new QueryWrapper<Collection>().eq("user_id",userByAccount.getId()).eq("article_id",article.getId()));
-            messageService.remove(new QueryWrapper<Message>().eq("principle_id",userByAccount.getId()).eq("object_id",article.getUserId()));
+            Message message = messageService.getOne(new QueryWrapper<Message>().eq("principle_id", userByAccount.getId()).eq("object_id", article.getUserId()));
+            messageService.removeById(message.getId());
+            messageArticleService.remove(new QueryWrapper<MessageArticle>().eq("article_id", id).eq("message_id", message.getId()));
         }catch (NullPointerException nullPointerException){
             log.error("没有找到收藏帖子的id");
             return Result.fail("取消收藏失败");

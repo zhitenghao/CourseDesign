@@ -11,6 +11,7 @@ package com.swjt.community.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.swjt.community.service.ArticleService;
+import com.swjt.community.service.MessageArticleService;
 import com.swjt.community.service.MessageService;
 import com.swjt.community.service.UserService;
 import com.swjt.community.utils.RedisUtil;
@@ -29,6 +30,9 @@ public class BaseController {
 
     @Autowired
     MessageService messageService;
+
+    @Autowired
+    MessageArticleService messageArticleService;
 
     @Autowired
     ArticleService articleService;

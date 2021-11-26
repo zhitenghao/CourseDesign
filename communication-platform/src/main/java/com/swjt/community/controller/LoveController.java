@@ -4,10 +4,7 @@ package com.swjt.community.controller;
 import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.lang.Result;
-import com.swjt.community.entity.Article;
-import com.swjt.community.entity.Love;
-import com.swjt.community.entity.Message;
-import com.swjt.community.entity.User;
+import com.swjt.community.entity.*;
 import com.swjt.community.service.LoveService;
 import com.swjt.community.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +50,7 @@ public class LoveController extends BaseController {
         articleService.updateById(article);
         like.setUserId(userByAccount.getId());
         like.setArticleId(articleId);
+        like.setMessageId("");
         likeService.save(like);
         Message message = new Message();
         message.setPrincipleId(userByAccount.getId());
@@ -62,6 +60,12 @@ public class LoveController extends BaseController {
         //主体点赞了客体
         message.setProcessType(4);
         messageService.save(message);
+        MessageArticle messageArticle = new MessageArticle();
+        messageArticle.setArticleId(articleId);
+        messageArticle.setMessageId(message.getId());
+        messageArticleService.save(messageArticle);
+        like.setMessageId(message.getId());
+        likeService.updateById(like);
         return Result.succ(
                 MapUtil.builder()
                         .put("id",like.getId())
@@ -79,8 +83,10 @@ public class LoveController extends BaseController {
         Article article = articleService.getById(articleId);
         article.setArticleLike(article.getArticleLike()-1);
         articleService.updateById(article);
-        likeService.deleteByArticleAndUser(articleId,user.getId());
-        messageService.remove(new QueryWrapper<Message>().eq("principle_id",user.getId()).eq("object_id",article.getUserId()));
+        Love love = likeService.findOneByArticleAndUser(articleId, user.getId());
+        messageService.removeById(love.getMessageId());
+        messageArticleService.remove(new QueryWrapper<MessageArticle>().eq("article_id", articleId).eq("message_id", love.getMessageId()));
+        likeService.removeById(love.getId());
         return Result.succ("成功取消点赞！");
     }
 
