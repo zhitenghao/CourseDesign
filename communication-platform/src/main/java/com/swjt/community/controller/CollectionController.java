@@ -78,17 +78,16 @@ public class CollectionController extends BaseController {
             Article article = articleService.getById(id);
             article.setArticleCollection(article.getArticleCollection()-1);
             articleService.updateById(article);
-            collectionService.remove(new QueryWrapper<Collection>().eq("user_id",userByAccount.getId()).eq("article_id",article.getId()));
-            Message message = messageService.getOne(new QueryWrapper<Message>().eq("principle_id", userByAccount.getId()).eq("object_id", article.getUserId()));
-            messageService.removeById(message.getId());
-            messageArticleService.remove(new QueryWrapper<MessageArticle>().eq("article_id", id).eq("message_id", message.getId()));
+            Collection collection = collectionService.getOne(new QueryWrapper<Collection>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+            messageService.removeById(collection.getMessageId());
+            messageArticleService.remove(new QueryWrapper<MessageArticle>().eq("article_id", id).eq("message_id", collection.getMessageId()));
+            collectionService.removeById(collection.getId());
         }catch (NullPointerException nullPointerException){
             log.error("没有找到收藏帖子的id");
             return Result.fail("取消收藏失败");
         }
         return Result.succ("取消收藏成功！");
     }
-
 
 
 }
