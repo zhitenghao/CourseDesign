@@ -5,6 +5,7 @@ import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.Concern;
+import com.swjt.community.entity.Message;
 import com.swjt.community.entity.User;
 import com.swjt.community.service.ConcernService;
 import com.swjt.community.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import com.swjt.community.controller.BaseController;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.Map;
 
 /**
@@ -49,6 +51,13 @@ public class ConcernController extends BaseController {
         userByAccount.setUserConcern(userByAccount.getUserConcern()+1);
         userService.updateById(userByAccount);
         userService.updateById(byId);
+        Message message = new Message();
+        message.setPrincipleId(userByAccount.getId());
+        message.setObjectId(id);
+        message.setObjectRead(0);
+        message.setAddTime(LocalDateTime.now());
+        message.setProcessType(0);
+        messageService.save(message);
         return Result.succ(
                 MapUtil.builder()
                 .put("id",concern.getId())
@@ -66,6 +75,7 @@ public class ConcernController extends BaseController {
         userByAccount.setUserConcern(userByAccount.getUserConcern()-1);
         userService.updateById(userByAccount);
         userService.updateById(byId);
+        messageService.remove(new QueryWrapper<Message>().eq("principle_id",userByAccount.getId()).eq("object_id",byId.getId()));
         concernService.removeById(concern.getId());
         return Result.succ("取消关注成功！");
     }

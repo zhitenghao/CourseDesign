@@ -3,6 +3,7 @@ package com.swjt.community.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.Dto.ReMessageArticleDto;
+import com.swjt.community.common.Dto.ReMessageDto;
 import com.swjt.community.common.Dto.ReUserDto;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.Message;
@@ -50,5 +51,44 @@ public class MessageController extends BaseController {
             reMessageArticleDtos.add(reMessageArticleDto);
         }
         return Result.succ(reMessageArticleDtos);
+    }
+
+    @PreAuthorize("hasRole('normal')")
+    @GetMapping("/collections")
+    public Result collectionMessage(Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        List<Message> messages = messageService.list(new QueryWrapper<Message>().eq("object_id", userByAccount.getId()).eq("process_type", 1));
+        ArrayList<ReMessageArticleDto> reMessageArticleDtos = new ArrayList<>();
+        for(Message message:messages){
+            ReMessageArticleDto reMessageArticleDto = new ReMessageArticleDto();
+            ReUserDto reUserDto = new ReUserDto();
+            reMessageArticleDto.setMessageId(message.getId());
+            BeanUtils.copyProperties(message,reMessageArticleDto);
+            User user = userService.getById(message.getPrincipleId());
+            BeanUtils.copyProperties(user,reUserDto);
+            reMessageArticleDto.setReUserDto(reUserDto);
+            reMessageArticleDto.setArticleId(messageArticleService.getOne(new QueryWrapper<MessageArticle>().eq("message_id",message.getId())).getArticleId());
+            reMessageArticleDtos.add(reMessageArticleDto);
+        }
+        return Result.succ(reMessageArticleDtos);
+    }
+
+    @PreAuthorize("hasRole('normal')")
+    @GetMapping("/concerns")
+    public Result concernMessage(Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        List<Message> messages = messageService.list(new QueryWrapper<Message>().eq("object_id", userByAccount.getId()).eq("process_type", 0));
+        ArrayList<ReMessageDto> reMessageDtos = new ArrayList<>();
+        for(Message message:messages){
+            ReMessageDto reMessageDto = new ReMessageDto();
+            ReUserDto reUserDto = new ReUserDto();
+            reMessageDto.setMessageId(message.getId());
+            BeanUtils.copyProperties(message,reMessageDto);
+            User user = userService.getById(message.getPrincipleId());
+            BeanUtils.copyProperties(user,reUserDto);
+            reMessageDto.setReUserDto(reUserDto);
+            reMessageDtos.add(reMessageDto);
+        }
+        return Result.succ(reMessageDtos);
     }
 }

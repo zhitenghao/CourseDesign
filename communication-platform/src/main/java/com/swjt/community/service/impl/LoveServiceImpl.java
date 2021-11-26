@@ -23,6 +23,5 @@ public class LoveServiceImpl extends ServiceImpl<LoveMapper, Love> implements Lo
     @Override
     public Love findOneByArticleAndUser(String articleId, String userId) {
         return likeMapper.findOneByArticleAndUser(articleId,userId);
-
     }
 }
