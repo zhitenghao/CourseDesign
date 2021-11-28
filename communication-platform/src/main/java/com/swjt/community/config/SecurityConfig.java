@@ -46,6 +46,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     JwtLogoutSuccessHandler jwtLogoutSuccessHandler;
+    
+    @Autowired
+    MyUsernamePasswordAuthenticationHandler myUsernamePasswordAuthenticationHandler;
 
 
     @Bean
@@ -84,8 +87,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
-
                 // 登录配置
+                .addFilterAt(myUsernamePasswordAuthenticationHandler,UsernamePasswordAuthenticationFilter.class)
                 .formLogin()
                 .successHandler(loginSuccessHandler)
                 .failureHandler(loginFailureHandler)
