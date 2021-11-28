@@ -2,6 +2,8 @@ package com.swjt.community.security;
 
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.utils.RsaUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -82,5 +84,11 @@ public class MyUsernamePasswordAuthenticationHandler extends AbstractAuthenticat
             this.setDetails(request, authRequest);
             return this.getAuthenticationManager().authenticate(authRequest);
         }
+    }
+
+    @Autowired
+    @Override
+    public void setAuthenticationManager(AuthenticationManager authenticationManager) {
+        super.setAuthenticationManager(authenticationManager);
     }
 }
