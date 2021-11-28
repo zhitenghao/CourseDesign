@@ -1,24 +1,21 @@
 package com.swjt.community.controller;
 
 
+import cn.hutool.core.map.MapUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.swjt.community.common.Dto.ReMessageArticleDto;
-import com.swjt.community.common.Dto.ReMessageDto;
-import com.swjt.community.common.Dto.ReMessageReplyDto;
-import com.swjt.community.common.Dto.ReUserDto;
+import com.swjt.community.common.Dto.*;
 import com.swjt.community.common.lang.Result;
 import com.swjt.community.entity.*;
 import com.swjt.community.service.CommentService;
 import com.swjt.community.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
 import com.swjt.community.controller.BaseController;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -93,6 +90,7 @@ public class MessageController extends BaseController {
         }
         return Result.succ(reMessageDtos);
     }
+
     @PreAuthorize("hasRole('normal')")
     @GetMapping("/replies")
     public Result replyMessage(Principal principal){
@@ -128,6 +126,47 @@ public class MessageController extends BaseController {
                 reMessageReplyDtos.add(reMessageReplyDto);
         }
         return Result.succ(reMessageReplyDtos);
+    }
+
+    @PreAuthorize("hasRole('normal')")
+    @PostMapping("/addReply")
+    public Result addReply(@RequestBody MessageReplyDto messageReplyDto, Principal principal){
+        User user = userService.getById(messageReplyDto.getRepliedUser());
+        User userByAccount = userService.getUserByAccount(principal.getName());
+
+        Reply reply = new Reply();
+        BeanUtils.copyProperties(messageReplyDto,reply);
+        reply.setReplyUser(userByAccount.getId());
+        reply.setAddTime(LocalDateTime.now());
+        if(messageReplyDto.getProcessType()==2){
+            reply.setCommentId(messageReplyDto.getComReId());
+        }
+        else if(messageReplyDto.getProcessType()==3){
+            Reply reply1 = replyService.getById(messageReplyDto.getComReId());
+            reply.setCommentId(reply1.getCommentId());
+        }
+        else{
+            return Result.fail("回复失败");
+        }
+        replyService.save(reply);
+
+
+        Message message = new Message();
+        message.setPrincipleId(userByAccount.getId());
+        message.setObjectId(user.getId());
+        message.setObjectRead(0);
+        message.setAddTime(LocalDateTime.now());
+        message.setProcessType(3);
+        messageService.save(message);
+        reply.setMessageId(message.getId());
+        replyService.updateById(reply);
+
+        MessageReply messageReply = new MessageReply();
+        messageReply.setMessageId(message.getId());
+        messageReply.setReplyId(reply.getId());
+        messageReplyService.save(messageReply);
+
+        return Result.succ("回复成功！");
     }
 
 }
