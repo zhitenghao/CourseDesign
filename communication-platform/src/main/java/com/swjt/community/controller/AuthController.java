@@ -40,9 +40,6 @@ public class AuthController extends BaseController {
         String key= UUID.randomUUID().toString();
         String code=producer.createText();
 
-        key="123";
-        code="123";
-
         BufferedImage bufferedImage=producer.createImage(code);
         ByteArrayOutputStream outputStream=new ByteArrayOutputStream();
         ImageIO.write(bufferedImage,"jpg",outputStream);
