@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author DaiRui
  * @since 2021-10-27
  */
+
 public interface CommentService extends IService<Comment> {
     ReCommentDto commentInfoById(String id);
 }

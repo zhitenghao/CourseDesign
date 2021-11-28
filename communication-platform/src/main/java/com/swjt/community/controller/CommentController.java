@@ -6,10 +6,7 @@ import com.swjt.community.common.Dto.CommentDto;
 import com.swjt.community.common.Dto.ReUserDto;
 import com.swjt.community.common.lang.Const;
 import com.swjt.community.common.lang.Result;
-import com.swjt.community.entity.Article;
-import com.swjt.community.entity.Comment;
-import com.swjt.community.entity.Message;
-import com.swjt.community.entity.User;
+import com.swjt.community.entity.*;
 import com.swjt.community.service.CommentService;
 import com.swjt.community.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +60,12 @@ public class CommentController extends BaseController {
         message.setAddTime(LocalDateTime.now());
         message.setProcessType(2);
         messageService.save(message);
+        MessageComment messageComment = new MessageComment();
+        messageComment.setCommentId(comment.getId());
+        messageComment.setMessageId(message.getId());
+        messageCommentService.save(messageComment);
+        comment.setMessageId(message.getId());
+        commentService.updateById(comment);
         return Result.succ(
                 MapUtil.builder()
                 .put("id",comment.getId())

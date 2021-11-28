@@ -18,7 +18,7 @@ import lombok.EqualsAndHashCode;
 @Data
 //@EqualsAndHashCode(callSuper = true)
 @ApiModel(value="MessageReply对象", description="")
-public class MessageReply extends BaseEntity {
+public class MessageReply {
 
     private static final long serialVersionUID = 1L;
 

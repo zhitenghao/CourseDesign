@@ -8,8 +8,11 @@ import com.baomidou.mybatisplus.core.conditions.segments.MergeSegments;
 import com.swjt.community.common.Dto.ReUserDto;
 import com.swjt.community.common.Dto.ReplyDto;
 import com.swjt.community.common.lang.Result;
+import com.swjt.community.entity.Message;
+import com.swjt.community.entity.MessageReply;
 import com.swjt.community.entity.Reply;
 import com.swjt.community.entity.User;
+import com.swjt.community.service.MessageReplyService;
 import com.swjt.community.service.ReplyService;
 import com.swjt.community.utils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +50,23 @@ public class ReplyController extends BaseController {
         reply.setReplyUser(userByAccount.getId());
         reply.setAddTime(LocalDateTime.now());
         replyService.save(reply);
+
+        Message message = new Message();
+        message.setPrincipleId(userByAccount.getId());
+        message.setObjectId(byId.getId());
+        message.setObjectRead(0);
+        message.setAddTime(LocalDateTime.now());
+        message.setProcessType(3);
+        messageService.save(message);
+
+        reply.setMessageId(message.getId());
+        replyService.updateById(reply);
+
+        MessageReply messageReply = new MessageReply();
+        messageReply.setMessageId(message.getId());
+        messageReply.setReplyId(reply.getId());
+        messageReplyService.save(messageReply);
+
         return Result.succ(
                 MapUtil.builder()
                 .put("id",reply.getId())

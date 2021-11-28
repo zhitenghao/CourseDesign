@@ -4,12 +4,13 @@ package com.swjt.community.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.swjt.community.common.Dto.ReMessageArticleDto;
 import com.swjt.community.common.Dto.ReMessageDto;
+import com.swjt.community.common.Dto.ReMessageReplyDto;
 import com.swjt.community.common.Dto.ReUserDto;
 import com.swjt.community.common.lang.Result;
-import com.swjt.community.entity.Message;
-import com.swjt.community.entity.MessageArticle;
-import com.swjt.community.entity.User;
+import com.swjt.community.entity.*;
+import com.swjt.community.service.CommentService;
 import com.swjt.community.utils.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,6 +33,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/message")
 public class MessageController extends BaseController {
+
 
     @PreAuthorize("hasRole('normal')")
     @GetMapping("/loves")
@@ -91,4 +93,41 @@ public class MessageController extends BaseController {
         }
         return Result.succ(reMessageDtos);
     }
+    @PreAuthorize("hasRole('normal')")
+    @GetMapping("/replies")
+    public Result replyMessage(Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        List<Message> messages = messageService.list(new QueryWrapper<Message>().eq("object_id", userByAccount.getId()).between("process_type",2 ,3));
+        ArrayList<ReMessageReplyDto> reMessageReplyDtos = new ArrayList<>();
+        for(Message message:messages){
+            ReMessageReplyDto reMessageReplyDto = new ReMessageReplyDto();
+            ReUserDto reUserDto = new ReUserDto();
+            reMessageReplyDto.setMessageId(message.getId());
+            BeanUtils.copyProperties(message,reMessageReplyDto);
+            User user = userService.getById(message.getPrincipleId());
+            BeanUtils.copyProperties(user,reUserDto);
+            reMessageReplyDto.setReUserDto(reUserDto);
+            if(message.getProcessType()==2){
+                MessageComment messageComment = messageCommentService.getOne(new QueryWrapper<MessageComment>().eq("message_id", message.getId()));
+                Comment comment = commentService.getById(messageComment.getCommentId());
+                reMessageReplyDto.setContent(comment.getCommentContent());
+                reMessageReplyDto.setArticleId(comment.getArticleId());
+                reMessageReplyDto.setComReId(comment.getId());
+            }
+            else if(message.getProcessType()==3){
+                MessageReply messageReply = messageReplyService.getOne(new QueryWrapper<MessageReply>().eq("message_id", message.getId()));
+                Reply reply = replyService.getById(messageReply.getReplyId());
+                Comment comment = commentService.getById(reply.getCommentId());
+                reMessageReplyDto.setArticleId(comment.getArticleId());
+                reMessageReplyDto.setContent(reply.getReplyContent());
+                reMessageReplyDto.setComReId(reply.getId());
+            }
+            else{
+                continue;
+            }
+                reMessageReplyDtos.add(reMessageReplyDto);
+        }
+        return Result.succ(reMessageReplyDtos);
+    }
+
 }
