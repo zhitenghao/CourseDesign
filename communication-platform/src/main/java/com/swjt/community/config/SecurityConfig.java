@@ -113,7 +113,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(jwtAuthenticationFilter())
                 .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(myUsernamePasswordAuthenticationHandler,UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(myAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class)
 
         ;
     }
@@ -129,9 +129,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    MyUsernamePasswordAuthenticationHandler myAuthenticationFilter() throws Exception {
+    MyUsernamePasswordAuthenticationHandler myAuthenticationFilter(){
         MyUsernamePasswordAuthenticationHandler filter = new MyUsernamePasswordAuthenticationHandler();
-        filter.setAuthenticationManager(authenticationManagerBean());
         filter.setAuthenticationSuccessHandler(loginSuccessHandler);
         filter.setAuthenticationFailureHandler(loginFailureHandler);
         return  filter;
