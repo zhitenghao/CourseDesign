@@ -77,7 +77,7 @@ public class MyUsernamePasswordAuthenticationHandler extends AbstractAuthenticat
             try {
                 password = RsaUtils.decryptByPrivateKey(Const.PRIVATE_KEY, password);
             } catch (Exception e) {
-                e.printStackTrace();
+                password="出错了！,重新输入吧，不可能进入的。";
             }
             UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(username, password);
             this.setDetails(request, authRequest);
