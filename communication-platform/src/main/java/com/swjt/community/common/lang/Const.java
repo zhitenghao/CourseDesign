@@ -17,7 +17,20 @@ public class Const {
 
     public static final String DEFULT_PASSWORD = "123456";
 //    public static final String DEFULT_AVATAR = "https://image-1300566513.cos.ap-guangzhou.myqcloud.com/upload/images/5a9f48118166308daba8b6da7e466aab.jpg";
+    public static String PUBLIC_KEY="";
 
-    public static String PRIVATE_KEY="MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAJmqaksoat1yK+EH5kVRWF2xDb2Op8dwBM99jwFqJB4xf0/NwOoTUIMpuWtWPyLaoB2mMDft9c8LHNqRkO6FtkFbhcq1FmBawN5mVHMRgxmA2XcDcv66G/tSRLG6mFzQT6JLqBpJIXW6r49nZHw4F5tn4ZdxRIz650eDma+KMcOjAgMBAAECgYBgcMbTMqOXJa+KRLXtbTcjXhp8jEqabaBnRKr6vU27sV7wi/Z2MfcGyqn3RqLLUiDJWuLKR0tNTPEn79HhEQQnlflAJy0X2me6ZxRP0ZS5uIEYigo91yBiUpiLVffT30ZZE/l9nPUbC3MZPfPkn2qjGp6B3AJwhFTfH3WM+XFVUQJBAOv/CZG+UxRSnNVlA379VvwbU+TLXeeN8aXFfJ5L4l/CLRYyqoSOcYN+j/BASmGNuy8P5XyxmqN29B/F8QGp3NkCQQCmsNvvnu/eqQfbt/fRFTpN9C+vaHlPZQ5augMsDPtbaIDwZ+1EIYpKNgqRl7V2K6dKDkufg8aDckViRFWCYsbbAkBN3gDSTfIrqnaFEqdspzqkRIAR5eg+Ft+8ysSrlm5DGla2FFGfG0DpGkF0DEJ+nb09cglOc2uKtB0ovq8e1WVBAkA1XKDL0OGRMiNl3zriIB2OHwG08YkENaGmwa2KSI2e8ZF1ZI+8I9CVeT9g5GQe9FKVjoX/BrxiEA7OKnoFR4HJAkAPbOfqOpmt4l+PqXhD0it+hKPTeLtk6LqNO/7HU+UI2CjHdhKES7UZT0lF4JcQ7kGtqGVlHCFST6ChNrfrsFC7";
-
+    public static String PRIVATE_KEY="MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAMlRb/tuFyDZF/Ob\n" +
+            "6DMTz8qulLcQ6FCkKoVWHut+kdXovHmGzHivzbqXMxtj4mw1292HmyWBSa4nJ20X\n" +
+            "t55zV1FtaSQ3saMwJmU8zPFkOAtiZifbiX4X/c4rHcvnShgqMP9Bt/KZuLMzSKsB\n" +
+            "dvjfeRUX2X/1zWdiZ1wlUDqEQpq9AgMBAAECgYAKI9z1GB14HRc0wQSYFgZgWhzJ\n" +
+            "f8OD1FED+EuEZxKnaJqdsGl6JrjBDj6XwZc1Bh118g+hevqgF/7HYutvwrWCIIv8\n" +
+            "MrBdpYfQjF/Hvc8k9Jc9J+G/3s1ioUO2egNRN77IH9+4S9frq9jmvs13bO1F4AAW\n" +
+            "4pzQkgXT9vAU4MeNTQJBAPFt19IECohXljJIN4gCTpH7YPHK14ClmYQQH5M82Fk7\n" +
+            "5rFuCa0wAm9a1VNJ8FcxdpVBF4JvaCBpnn0Aw7J8WosCQQDVd9388FfAlrt7uCJa\n" +
+            "3JIaduUST9kI8FRmCbzyHoaJ/0PxKd4ZuueJBcCb70i3ETFfd4jj/w8XTnlGR+DY\n" +
+            "GbDXAkEAwrmguBBwWlWim/2pZHbP3miNYZgERwvKDT1f6kbKDPcGc5dYEKrHW/88\n" +
+            "Tkg1pG4NwgZVKuwmZPYrUZFbRkuMTwJBAMY7INcxbZv3nbTfInAUIk0XGdQueBJX\n" +
+            "81gqNN72P+PIO5SpV4m3SimxQNLNm039VkccHu/yvFXdVrtQJlknSlMCQD/BQTMh\n" +
+            "Eo73kA9AiKkgJlH0b0WGuMK13BfK0fOYPp5SVyDXzVfnvtPtziNwKPlodDDtHtBt\n" +
+            "4w/hyv7hFOZH4f8=";
 }

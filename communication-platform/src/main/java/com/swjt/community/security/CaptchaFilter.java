@@ -40,8 +40,10 @@ public class CaptchaFilter extends OncePerRequestFilter{
             try{
                 validate(httpServletRequest);
             }
-            catch (Exception e){
+            catch (CaptchaException e){
                 loginFailureHandler.onAuthenticationFailure(httpServletRequest,httpServletResponse,e);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
         filterChain.doFilter(httpServletRequest,httpServletResponse);
@@ -52,12 +54,13 @@ public class CaptchaFilter extends OncePerRequestFilter{
         String key=httpServletRequest.getParameter("token");
 
         String password=httpServletRequest.getParameter("password");
+        password = password.trim();
+        password = password.replaceAll(" ","+");
+
         String password1 = RsaUtils.decryptByPrivateKey(Const.PRIVATE_KEY, password);
-        System.out.println(password1);
-        httpServletRequest.setAttribute("password",password1);
+
 
         String a=httpServletRequest.getParameter("password");
-        System.out.println(a);
 
 
         if(StringUtils.isBlank(code) || StringUtils.isBlank(key)){

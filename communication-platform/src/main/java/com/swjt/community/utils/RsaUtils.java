@@ -1,5 +1,6 @@
 package com.swjt.community.utils;
 
+import com.swjt.community.common.lang.Const;
 import org.apache.commons.codec.binary.Base64;
 import javax.crypto.Cipher;
 import java.io.ByteArrayOutputStream;
@@ -35,12 +36,13 @@ public class RsaUtils {
      */
     private static void test1(RsaKeyPair keyPair) throws Exception {
         System.out.println("***************** 公钥加密私钥解密开始 *****************");
-        String text1 = encryptByPublicKey(keyPair.getPublicKey(), RsaUtils.SRC);
-        String text2 = decryptByPrivateKey(keyPair.getPrivateKey(), text1);
-        System.out.println("加密前：" + RsaUtils.SRC);
-        System.out.println("加密后：" + text1);
+//        String text1 = encryptByPublicKey(keyPair.getPublicKey(), RsaUtils.SRC);
+        String value= "X3BakKGKN/TFDacRTHdNRgvEWci3Ld5PJUCnrPW4kQUySnjhsMBybWYDHuXsI5FkwLBcHrvWDQU/IXmjSReKgxqmLi4kKh4AvfkIG6C8nR4ngiX/j6RMFK7WwRF4bzwwg9PftLITeGU5axht79+0xja1vtOlYjlqIgt0d7XS7iA=";
+        value=value.trim();
+        value=value.replaceAll(" ","+");
+        String text2 = decryptByPrivateKey(Const.PRIVATE_KEY, value);
         System.out.println("解密后：" + text2);
-        if (RsaUtils.SRC.equals(text2)) {
+        if ("123".equals(text2)) {
             System.out.println("解密字符串和原始字符串一致，解密成功");
         } else {
             System.out.println("解密字符串和原始字符串不一致，解密失败");
