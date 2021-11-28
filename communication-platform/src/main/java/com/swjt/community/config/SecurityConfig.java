@@ -89,12 +89,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.cors().and().csrf().disable()
                 // 登录配置
-                .addFilterAt(myUsernamePasswordAuthenticationHandler,UsernamePasswordAuthenticationFilter.class)
-                .formLogin()
-                .successHandler(loginSuccessHandler)
-                .failureHandler(loginFailureHandler)
-
-                .and()
                 .logout()
                 .logoutSuccessHandler(jwtLogoutSuccessHandler)
 
@@ -119,6 +113,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilter(jwtAuthenticationFilter())
                 .addFilterBefore(captchaFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(myUsernamePasswordAuthenticationHandler,UsernamePasswordAuthenticationFilter.class)
 
         ;
     }
@@ -131,5 +126,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    @Bean
+    MyUsernamePasswordAuthenticationHandler myAuthenticationFilter() throws Exception {
+        MyUsernamePasswordAuthenticationHandler filter = new MyUsernamePasswordAuthenticationHandler();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        filter.setAuthenticationSuccessHandler(loginSuccessHandler);
+        filter.setAuthenticationFailureHandler(loginFailureHandler);
+        return  filter;
     }
 }
