@@ -26,6 +26,11 @@ export default {
       activeName: 'first'//刷新后默认选中的tab
     };
   },
+  provide(){
+    return {
+      reload:this.reload
+    }
+  },
   methods:{
     //刷新帖子组件
     reload () {

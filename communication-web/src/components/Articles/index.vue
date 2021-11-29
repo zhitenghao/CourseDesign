@@ -35,17 +35,19 @@
               <el-image class="images" v-if="item.isVideo === 0" v-for="oneImage in item.urls.slice(0, 9)" :key="oneImage" :src="oneImage"></el-image>
               <video class="video" v-else :src="item.urls[0]" controls="controls"></video>
             </div>
-            <div class="commentAndLike">
+            <div class="commentAndLike" style="margin-bottom: 2px">
               <el-badge :value="item.collectionNum" class="activity"> <!-- 设置收藏该帖子的数量 -->
-                <el-button type="text" v-if="item.collection" style="margin-left: 125px" @click="cancelCollect(item)">已收藏</el-button>
-                <el-button type="text" v-else style="margin-left: 125px" @click="addCollect(item)">收藏</el-button>
+                <el-button type="text" v-if="item.collection" style="margin-left: 125px" @click="cancelCollect(item)" class="el-icon-star-on"></el-button>
+                <el-button type="text" v-else style="margin-left: 125px" @click="addCollect(item)" class="el-icon-star-off"></el-button>
               </el-badge>
               <el-badge :value="item.commentNum" class="activity"> <!-- 设置该帖子的评论数量 -->
-                <el-button type="text" style="margin-left: 130px" @click="item.commentsShow = !item.commentsShow">评论</el-button> <!-- 点击评论按钮，该按钮设置了commentAndShowFlag的值，该值用来控制是否展开用户评论div和该帖子的评论内容， -->
+                <el-button type="text" style="margin-left: 130px" v-if="!item.commentsShow" @click="item.commentsShow = !item.commentsShow" class="el-icon-comment-off"></el-button> <!-- 点击评论按钮，该按钮设置了commentAndShowFlag的值，该值用来控制是否展开用户评论div和该帖子的评论内容， -->
+                <el-button type="text" style="margin-left: 130px" v-else @click="item.commentsShow = !item.commentsShow" class="el-icon-comment-on"></el-button>
               </el-badge>
               <el-badge :value="item.likeNum" class="activity"> <!-- 设置该帖子的点赞数量 -->
-                <el-button type="text" v-if="item.like" style="margin-left: 125px" @click="unlike(item)">已点赞</el-button>
-                <el-button type="text" v-else style="margin-left: 125px" @click="like(item)">点赞</el-button>
+<!--                <img :src="likeOff" width="20" height="20" alt="" >-->
+                <el-button type="text" v-if="item.like" style="margin-left: 125px" @click="unlike(item)" class="el-icon-like-on"></el-button>
+                <el-button type="text" v-else style="margin-left: 125px" @click="like(item)" class="el-icon-like-off"></el-button>
               </el-badge>
             </div>
           </div>
@@ -81,9 +83,9 @@
                   </div>
                 </div>
               </div>
-              <div class="unfoldComments" v-if="item.commentNum >= 3" @click="unfoldComments">
-                <span style="font-size: small;">{{ foldFlag? '点击展开更多评论' : '收起' }}</span>
-              </div>
+<!--              <div class="unfoldComments" v-if="item.commentNum >= 3" @click="unfoldComments">-->
+<!--                <span style="font-size: small;">{{ foldFlag? '点击展开更多评论' : '收起' }}</span>-->
+<!--              </div>-->
             </div>
           </div>
         </div>
@@ -457,6 +459,11 @@ ul{
   transition: all 0.6s;
   /*border: 1px solid #e52121;*/
 }
+.video{
+  object-fit: fill;
+  width:100%;
+  height:100%;
+}
 .commentAndLike{
   width: 100%;
   height: 40px;
@@ -493,4 +500,60 @@ ul{
   text-align: center;
   padding: 5px 0 5px 0;
 }
+
+.el-icon-like-off{
+  background: url(../../assets/images/home/like-off.png) center no-repeat;  /*使用自己的图片来替换*/
+  background-size: contain;
+  height: 20px;
+}
+.el-icon-like-off:before{
+  content: "like-off";                                    /*before属性中的content文本是用来占位的,必须有*/
+  visibility: hidden;                                /*使用visibility: hidden;来隐藏文字*/
+}
+.el-icon-like-on{
+  background: url(../../assets/images/home/like-on.png) center no-repeat;
+  background-size: contain;
+  height: 20px;
+}
+.el-icon-like-on:before{
+  content: "like-on";
+  visibility: hidden;
+}
+.el-icon-star-on{
+  background: url(../../assets/images/home/star-on.png) center no-repeat;
+  background-size: contain;
+  height: 20px;
+}
+.el-icon-star-on:before{
+  content: "like-on";
+  visibility: hidden;
+}
+.el-icon-star-off{
+  background: url(../../assets/images/home/star-off.png) center no-repeat;
+  background-size: contain;
+  height: 20px;
+}
+.el-icon-star-off:before{
+  content: "like-on";
+  visibility: hidden;
+}
+.el-icon-comment-off{
+  background: url(../../assets/images/home/comment-off.png) center no-repeat;
+  background-size: contain;
+  height: 20px;
+}
+.el-icon-comment-off:before{
+  content: "like-on";
+  visibility: hidden;
+}
+.el-icon-comment-on{
+  background: url(../../assets/images/home/comment-on.png) center no-repeat;
+  background-size: contain;
+  height: 20px;
+}
+.el-icon-comment-on:before{
+  content: "like-on";
+  visibility: hidden;
+}
+
 </style>

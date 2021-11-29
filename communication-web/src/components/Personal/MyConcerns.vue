@@ -56,10 +56,13 @@ export default {
       follows2: '/fansUserList?userId='+this.id,
     }
   },
-  mounted() {
-    console.log(this.id)
-    console.log(this.follows1)
+  created(){
+    this.$emit('getUserId')
   },
+  // mounted() {
+  //   console.log(this.id)
+  //   console.log(this.follows1)
+  // },
 }
 </script>
 

@@ -22,11 +22,11 @@
         <div class="middle-aside">
           <div class="concern" style="border-right: 3px solid #f5f6f7;cursor:pointer" @click="toFans">
             <div style="padding-bottom: 10px">关注</div>
-            <strong style="font-size: 22px;color: #121212">{{ this.form.userConcern }}</strong>
+            <strong style="font-size: 22px;color: #121212">{{ form.userConcern }}</strong>
           </div>
           <div class="concern" style="cursor:pointer" @click="toFans">
             <div style="padding-bottom: 10px">粉丝</div>
-            <strong style="font-size: 22px;color: #121212">{{ this.form.userConcerned }}</strong>
+            <strong style="font-size: 22px;color: #121212">{{ form.userConcerned }}</strong>
           </div>
         </div>
         <div class="menu-aside">
@@ -36,15 +36,15 @@
               <span slot="title">我的主页</span>
             </el-menu-item>
             <el-menu-item index="2" @click="toFans">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-connection"></i>
               <span slot="title">关注/粉丝</span>
             </el-menu-item>
             <el-menu-item index="3" @click="toMessages">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-chat-dot-square"></i>
               <span slot="title">消息中心</span>
             </el-menu-item>
             <el-menu-item index="4" @click="editInfoDialogForm = true">
-              <i class="el-icon-edit-outline"></i>
+              <i class="el-icon-s-tools"></i>
               <span slot="title">编辑资料</span>
             </el-menu-item>
             <el-menu-item index="5">
@@ -52,11 +52,11 @@
               <span slot="title">修改密码</span>
             </el-menu-item>
             <el-menu-item index="6" @click="toIndex">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-location"></i>
               <span slot="title">返回首页</span>
             </el-menu-item>
             <el-menu-item index="7" @click="logout">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-switch-button"></i>
               <span slot="title">退出登录</span>
             </el-menu-item>
           </el-menu>
@@ -64,7 +64,7 @@
       </el-aside>
 
       <el-main class="main">
-        <router-view v-if="isRouterAlive" :id="userId"></router-view>
+        <router-view v-if="isRouterAlive" :id="userId" @getUserId=""></router-view>
       </el-main>
     </el-container>
 
@@ -249,8 +249,9 @@ export default {
     },
     //刷新帖子组件
     reload () {
-      this.isRouterAlive = false
-      this.$nextTick(() => (this.isRouterAlive = true))
+      // console.log('reload')
+      // this.isRouterAlive = false
+      // this.$nextTick(() => (this.isRouterAlive = true))
     },
     //修改学院事件
     changeCollege(){
@@ -261,7 +262,7 @@ export default {
       this.form.userAvatar = this.avatarOriginUrl
       this.postRequest('/auth/user/updateUser',this.form).then(res=>{
         if(res.data.code === 200){
-          this.$message.success("提交成功")
+          this.$message.success("修改成功")
           this.editInfoDialogForm = false
           this.getUserInfo()
         }else{
@@ -288,7 +289,8 @@ export default {
     logout(){
       window.localStorage.removeItem('tokenStr')
       this.$router.replace('/login')
-    }
+    },
+
   }
 }
 

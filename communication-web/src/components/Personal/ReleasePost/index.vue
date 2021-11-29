@@ -56,7 +56,7 @@
                   :on-progress="uploadVideoProcess"
                   :on-success="handleVideoSuccess"
                   >
-                <video v-if = "postForm.urls.length !== 0 && videoFlag === false" :src="videoOriginUrl" controls="controls">
+                <video class="video" v-if = "postForm.urls.length !== 0 && videoFlag === false" :src="videoOriginUrl" controls="controls">
                   您的浏览器不支持视频播放
                 </video>
                 <i v-else-if = "postForm.urls.length === 0 && videoFlag === false" class="el-icon-upload"></i>
@@ -274,5 +274,16 @@ export default {
 }
 .releaseForm{
   /*border: 1px solid #e52121;*/
+}
+/deep/ .el-upload{
+  width: 100%;
+}
+/deep/ .el-upload--picture-card{
+  height: 260px;
+}
+.video{
+  object-fit: fill;
+  width:100%;
+  height:100%;
 }
 </style>

@@ -29,10 +29,10 @@
                   type="warning" size="small" round plain>
                 + 关注
               </el-button>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>取消关注</el-dropdown-item>
-                <el-dropdown-item>设置分组</el-dropdown-item>
-              </el-dropdown-menu>
+<!--              <el-dropdown-menu slot="dropdown">-->
+<!--                <el-dropdown-item>取消关注</el-dropdown-item>-->
+<!--                <el-dropdown-item>设置分组</el-dropdown-item>-->
+<!--              </el-dropdown-menu>-->
             </el-dropdown>
           </div>
         </div>
@@ -103,6 +103,7 @@ export default {
       this.getRequest('/auth/concern/add/'+item.id).then(res => {
         if(res.data.code === 200){
           item.isConcerned = res.data.data.isConcerned
+          //增加关注，关注框应+1
         }else{
           this.message.error('关注失败')
         }
@@ -113,6 +114,7 @@ export default {
       this.getRequest('/auth/concern/delete/'+item.id).then(res => {
         if(res.data.code === 200){
           item.isConcerned = 0
+          //取消关注，关注框应-1
         }else{
           this.message.error('取消关注失败')
         }

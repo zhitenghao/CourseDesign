@@ -28,15 +28,15 @@
               <span slot="title">ta的主页</span>
             </el-menu-item>
             <el-menu-item index="2" @click="toFans">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-connection"></i>
               <span slot="title">关注/粉丝</span>
             </el-menu-item>
             <el-menu-item index="3" @click="toIndex">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-location"></i>
               <span slot="title">返回首页</span>
             </el-menu-item>
             <el-menu-item index="4" @click="logout">
-              <i class="el-icon-user"></i>
+              <i class="el-icon-switch-button"></i>
               <span slot="title">退出登录</span>
             </el-menu-item>
           </el-menu>

@@ -48,7 +48,7 @@
         </el-form-item>
         <el-form-item prop="password">
           密码
-          <el-input type="text" auto-complete="false" v-model="registerForm.userPwd"></el-input>
+          <el-input type="password" auto-complete="false" v-model="registerForm.userPwd" show-password></el-input>
         </el-form-item>
         <el-form-item prop="gender" style="text-align: center">
           <el-radio v-model="registerForm.userSex" label="0" >男</el-radio>
