@@ -45,6 +45,13 @@ public class MessageController extends BaseController {
             BeanUtils.copyProperties(message,reMessageArticleDto);
             User user = userService.getById(message.getPrincipleId());
             BeanUtils.copyProperties(user,reUserDto);
+            if(reUserDto!=null){
+                if (reUserDto.getId().equals(userByAccount.getId())){
+                    reMessageArticleDto.setMyself(true);
+                }
+                else
+                    reMessageArticleDto.setMyself(false);
+            }
             reMessageArticleDto.setReUserDto(reUserDto);
             reMessageArticleDto.setArticleId(messageArticleService.getOne(new QueryWrapper<MessageArticle>().eq("message_id",message.getId())).getArticleId());
             reMessageArticleDtos.add(reMessageArticleDto);
@@ -65,6 +72,13 @@ public class MessageController extends BaseController {
             BeanUtils.copyProperties(message,reMessageArticleDto);
             User user = userService.getById(message.getPrincipleId());
             BeanUtils.copyProperties(user,reUserDto);
+            if(reUserDto!=null){
+                if (reUserDto.getId().equals(userByAccount.getId())){
+                    reMessageArticleDto.setMyself(true);
+                }
+                else
+                    reMessageArticleDto.setMyself(false);
+            }
             reMessageArticleDto.setReUserDto(reUserDto);
             reMessageArticleDto.setArticleId(messageArticleService.getOne(new QueryWrapper<MessageArticle>().eq("message_id",message.getId())).getArticleId());
             reMessageArticleDtos.add(reMessageArticleDto);
@@ -85,6 +99,13 @@ public class MessageController extends BaseController {
             BeanUtils.copyProperties(message,reMessageDto);
             User user = userService.getById(message.getPrincipleId());
             BeanUtils.copyProperties(user,reUserDto);
+            if(reUserDto!=null){
+                if (reUserDto.getId().equals(userByAccount.getId())){
+                    reMessageDto.setMyself(true);
+                }
+                else
+                    reMessageDto.setMyself(false);
+            }
             reMessageDto.setReUserDto(reUserDto);
             reMessageDtos.add(reMessageDto);
         }
@@ -105,6 +126,13 @@ public class MessageController extends BaseController {
             User user = userService.getById(message.getPrincipleId());
             BeanUtils.copyProperties(user,reUserDto);
             reMessageReplyDto.setReUserDto(reUserDto);
+            if(reUserDto!=null){
+                if (reUserDto.getId().equals(userByAccount.getId())){
+                    reMessageReplyDto.setMyself(true);
+                }
+                else
+                    reMessageReplyDto.setMyself(false);
+            }
             if(message.getProcessType()==2){
                 MessageComment messageComment = messageCommentService.getOne(new QueryWrapper<MessageComment>().eq("message_id", message.getId()));
                 Comment comment = commentService.getById(messageComment.getCommentId());

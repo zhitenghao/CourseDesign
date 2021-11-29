@@ -23,4 +23,7 @@ public class ExtendReUserDto extends ReUserDto implements Serializable {
     @ApiModelProperty(value = "0:未关注，1:已关注，2:互相关注")
     private Integer isConcerned;
 
+    @ApiModelProperty(value = "是否  是自己")
+    private boolean isMyself;
+
 }

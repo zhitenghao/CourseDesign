@@ -27,4 +27,7 @@ public class ReMessageDto {
 
     @ApiModelProperty(value = "是否被阅读(0：未阅读，1：已阅读)")
     private Integer objectRead;
+
+    @ApiModelProperty(value = "是否是 自己")
+    private boolean isMyself;
 }

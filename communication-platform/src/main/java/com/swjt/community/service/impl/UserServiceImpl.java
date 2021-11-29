@@ -124,7 +124,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Page<ExtendReUserDto> concernUserList(String id, Page page) {
+    public Page<ExtendReUserDto> concernUserList(String id, String myId,Page page) {
         Page<User> userPage = userMapper.concernUserList(id, page);
         List<User> records = userPage.getRecords();
         Page<ExtendReUserDto> extendReUserDtoPage = new Page<ExtendReUserDto>();
@@ -133,10 +133,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for(User user:records){
             ExtendReUserDto extendReUserDto = new ExtendReUserDto();
             BeanUtils.copyPropertiesIgnoreNullValue(user,extendReUserDto);
-            if(concernMapper.selectOne(new QueryWrapper<Concern>().eq("user_id",extendReUserDto.getId()).eq("usered_id",id))!=null){
-                extendReUserDto.setIsConcerned(2);
+            if (extendReUserDto.getId().equals(myId)){
+                extendReUserDto.setMyself(true);
             }
-            else extendReUserDto.setIsConcerned(1);
+            else {
+                extendReUserDto.setMyself(false);
+                if (concernMapper.selectOne(new QueryWrapper<Concern>().eq("user_id", myId).eq("usered_id", extendReUserDto.getId())) != null) {
+                    extendReUserDto.setIsConcerned(1);
+                    if (concernMapper.selectOne(new QueryWrapper<Concern>().eq("usered_id", myId).eq("user_id", extendReUserDto.getId())) != null){
+                        extendReUserDto.setIsConcerned(2);
+                    }
+                }
+                else extendReUserDto.setIsConcerned(0);
+            }
             extendReUserDtos.add(extendReUserDto);
         }
         extendReUserDtoPage.setRecords(extendReUserDtos);
@@ -144,7 +153,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     @Override
-    public Page<ExtendReUserDto> fansUserList(String id, Page page) {
+    public Page<ExtendReUserDto> fansUserList(String id, String myId,Page page) {
         Page<User> userPage = userMapper.fansUserList(id, page);
         List<User> records = userPage.getRecords();
         Page<ExtendReUserDto> extendReUserDtoPage = new Page<ExtendReUserDto>();
@@ -153,10 +162,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for(User user:records){
             ExtendReUserDto extendReUserDto = new ExtendReUserDto();
             BeanUtils.copyPropertiesIgnoreNullValue(user,extendReUserDto);
-            if(concernMapper.selectOne(new QueryWrapper<Concern>().eq("user_id",id).eq("usered_id",extendReUserDto.getId()))!=null){
-                extendReUserDto.setIsConcerned(2);
+            if (extendReUserDto.getId().equals(myId)){
+                extendReUserDto.setMyself(true);
             }
-            else extendReUserDto.setIsConcerned(0);
+            else {
+                extendReUserDto.setMyself(false);
+                if (concernMapper.selectOne(new QueryWrapper<Concern>().eq("user_id", myId).eq("usered_id", extendReUserDto.getId())) != null) {
+                    extendReUserDto.setIsConcerned(1);
+                    if (concernMapper.selectOne(new QueryWrapper<Concern>().eq("usered_id", myId).eq("user_id", extendReUserDto.getId())) != null){
+                        extendReUserDto.setIsConcerned(2);
+                    }
+                }
+                else extendReUserDto.setIsConcerned(0);
+            }
             extendReUserDtos.add(extendReUserDto);
         }
         extendReUserDtoPage.setRecords(extendReUserDtos);

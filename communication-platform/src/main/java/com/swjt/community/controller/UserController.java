@@ -212,22 +212,24 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("/concernUserList")
-    public Result concernUserList(String userId) {
-        return Result.succ(userService.concernUserList(userId,getPage()));
+    public Result concernUserList(String userId,Principal principal) {
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        return Result.succ(userService.concernUserList(userId,userByAccount.getId(),getPage()));
     }
 
     @GetMapping("/myConcernUserList")
     public Result myConcernUserList(Principal principal) {
         User userByAccount = userService.getUserByAccount(principal.getName());
-        return Result.succ(userService.concernUserList(userByAccount.getId(),getPage()));
+        return Result.succ(userService.concernUserList(userByAccount.getId(),userByAccount.getId(),getPage()));
     }
     @GetMapping("/fansUserList")
-    public Result fansUserList(String userId){
-        return Result.succ(userService.fansUserList(userId,getPage()));
+    public Result fansUserList(String userId,Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        return Result.succ(userService.fansUserList(userId,userByAccount.getId(),getPage()));
     }
     @GetMapping("/myFansUserList")
     public Result myFansUserList(Principal principal){
         User userByAccount = userService.getUserByAccount(principal.getName());
-        return Result.succ(userService.fansUserList(userByAccount.getId(),getPage()));
+        return Result.succ(userService.fansUserList(userByAccount.getId(),userByAccount.getId(),getPage()));
     }
 }

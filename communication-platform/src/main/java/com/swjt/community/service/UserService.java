@@ -30,8 +30,8 @@ public interface UserService extends IService<User> {
 
     List<User> userList();
 
-    Page<ExtendReUserDto> concernUserList(String id, Page page);
+    Page<ExtendReUserDto> concernUserList(String id,String myId, Page page);
 
-    Page<ExtendReUserDto> fansUserList(String id, Page page);
+    Page<ExtendReUserDto> fansUserList(String id, String myId,Page page);
 
 }
