@@ -438,4 +438,58 @@ public class ArticleController extends BaseController {
         return Result.succ("删除帖子成功");
     }
 
+    @GetMapping("/findArticleByLike")
+    @ApiImplicitParams(
+            @ApiImplicitParam(name = "content",value = "搜索的内容",required = true)
+    )
+    @ApiOperation(value="模糊查询（帖子内容或者作者名）")
+    public Result findArticleByLike(String content,Principal principal){
+        User userByAccount = userService.getUserByAccount(principal.getName());
+        List<Article> articleList=new ArrayList<>();
+        List<Article> list = articleService.list(new QueryWrapper<Article>().like("article_content",content));
+        List<User> userList = userService.list(new QueryWrapper<User>().like("user_name", content));
+        for (User user:userList){
+            List<Article> articleList1 = articleService.listMySelf(user.getId());
+            articleList.addAll(articleList1);
+        }
+        for (Article article:list){
+            if(articleList.contains(article)){
+                continue;
+            }
+            else articleList.add(article);
+        }
+        ArrayList<ReAritcleDto> reArticleDtos = new ArrayList<>();
+        for (Article article:articleList) {
+            ReAritcleDto reArticleDto=articleService.ArticleInfoById(article.getId());
+            if(userByAccount!=null){
+                Love one = likeService.getOne(new QueryWrapper<Love>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(one!=null){
+                    reArticleDto.setLike(true);
+                }else{
+                    reArticleDto.setLike(false);
+                }
+                Collection collection=collectionService.getOne(new QueryWrapper<Collection>().eq("user_id", userByAccount.getId()).eq("article_id", article.getId()));
+                if(collection!=null){
+                    reArticleDto.setCollection(true);
+                }else{
+                    reArticleDto.setCollection(false);
+                }
+                Concern concern=concernService.getOne(new QueryWrapper<Concern>().eq("user_id", userByAccount.getId()).eq("usered_id", reArticleDto.getReUserDto().getId()));
+                if(concern!=null){
+                    reArticleDto.setConcern(true);
+                }else{
+                    reArticleDto.setConcern(false);
+                }
+                if(userByAccount.getId().equals(article.getUserId())){
+                    reArticleDto.setMyself(true);
+                }
+                else{
+                    reArticleDto.setMyself(false);
+                }
+            }
+            reArticleDtos.add(reArticleDto);
+        }
+        return Result.succ(reArticleDtos);
+    }
+
 }
