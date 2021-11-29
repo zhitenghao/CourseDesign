@@ -14,16 +14,16 @@
         </div>
         <follows-list :follows="follows1"></follows-list>
       </el-tab-pane>
-      <el-tab-pane label="特别关注" name="second">
-        <div style="height: 30px;text-align: left;margin: 10px;line-height: 30px;">
-          特别关注
-        </div>
-      </el-tab-pane>
-      <el-tab-pane label="默认分组" name="third">
-        <div style="height: 30px;text-align: left;margin: 10px;line-height: 30px;">
-          默认分组
-        </div>
-      </el-tab-pane>
+<!--      <el-tab-pane label="特别关注" name="second">-->
+<!--        <div style="height: 30px;text-align: left;margin: 10px;line-height: 30px;">-->
+<!--          特别关注-->
+<!--        </div>-->
+<!--      </el-tab-pane>-->
+<!--      <el-tab-pane label="默认分组" name="third">-->
+<!--        <div style="height: 30px;text-align: left;margin: 10px;line-height: 30px;">-->
+<!--          默认分组-->
+<!--        </div>-->
+<!--      </el-tab-pane>-->
       <el-tab-pane label="我的粉丝" disabled="disabled">
         <span slot="label">
           <i class="el-icon-caret-bottom">
@@ -47,22 +47,14 @@ import FollowsList from "@/components/Personal/FollowList";
 export default {
   name: "myConcerns",
   components: { FollowsList },
-  props:[ 'id' ],
   data() {
     return {
       activeName:'first',
       disabled: true,
-      follows1: '/concernUserList?userId='+this.id,
-      follows2: '/fansUserList?userId='+this.id,
+      follows1: '/concernUserList?userId='+this.$route.query.id,
+      follows2: '/fansUserList?userId='+this.$route.query.id,
     }
-  },
-  created(){
-    this.$emit('getUserId')
-  },
-  // mounted() {
-  //   console.log(this.id)
-  //   console.log(this.follows1)
-  // },
+  }
 }
 </script>
 

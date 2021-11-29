@@ -2,11 +2,11 @@
   <div>
     <ul class="relation-list" style="overflow: auto;">
       <li class="list-item" v-for="item in allConcerns">
-        <div class="follow-avatar" style="cursor:pointer" @click="toUserPage(item.id)">
+        <div class="follow-avatar" style="cursor:pointer" @click="toUserPage(item.myself,item.id)">
           <el-avatar :src="item.userAvatar" :size="70"></el-avatar>
         </div>
         <div class="follow-content">
-          <div class="follow-title" style="cursor:pointer" @click="toUserPage(item.id)">
+          <div class="follow-title" style="cursor:pointer" @click="toUserPage(item.myself,item.id)">
             {{ item.userName }}
           </div>
           <div class="follow-introduce">
@@ -85,18 +85,25 @@ export default {
         for (let i = 0; i < this.allConcerns.length; i++) {
           this.allConcerns[i].userAvatar = "http://localhost:8081/downloadPhoto/" + this.allConcerns[i].userAvatar
         }
-        console.log('res',this.allConcerns)
+        console.log('关注列表',this.allConcerns)
       })
     },
 
     //跳转个人页面
-    toUserPage(userId){
+    toUserPage(isMyself,userId){
       //如果是自己跳转到我的主页，不是自己跳个人页面
-      let routeUrl = this.$router.resolve({
-        path: "/visitor",
-        query: { id:userId }
-      })
-      window.open(routeUrl.href, '_blank')
+      if(!isMyself){
+        let routeUrl = this.$router.resolve({
+          path: "/visitor",
+          query: { id:userId }
+        })
+        window.open(routeUrl.href, '_blank')
+      }else{
+        let routeUrl = this.$router.resolve({
+          path: "/personal",
+        })
+        window.open(routeUrl.href, '_blank')
+      }
     },
     //关注
     addConcern(item){

@@ -64,7 +64,7 @@
       </el-aside>
 
       <el-main class="main">
-        <router-view v-if="isRouterAlive" :id="userId" @getUserId=""></router-view>
+        <router-view v-if="isRouterAlive"></router-view>
       </el-main>
     </el-container>
 
@@ -249,9 +249,8 @@ export default {
     },
     //刷新帖子组件
     reload () {
-      // console.log('reload')
-      // this.isRouterAlive = false
-      // this.$nextTick(() => (this.isRouterAlive = true))
+      this.isRouterAlive = false
+      this.$nextTick(() => (this.isRouterAlive = true))
     },
     //修改学院事件
     changeCollege(){
@@ -278,7 +277,10 @@ export default {
       this.$router.replace('/personal/index')
     },
     toFans(){
-      this.$router.replace('/personal/fans')
+      this.$router.push({
+        name:"fans",
+        query:{id:this.userId}
+      })
     },
     toMessages(){
       this.$router.replace('/personal/messages')
