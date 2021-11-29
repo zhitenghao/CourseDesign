@@ -20,7 +20,6 @@
           <img :src="captchaUrl" @click="updateCaptcha">  <!--连到验证码图片路径-->
         </div>
       </el-form-item>
-
       <el-form-item>
         <el-checkbox v-model="rememberMe">记住账号</el-checkbox>
         <el-button type="text" style="margin-left: 190px">忘记密码？</el-button>
@@ -68,7 +67,6 @@
 import qs from 'qs'
 import Cookies from 'js-cookie'
 import { encrypt } from '@/utils/rsaEncrypt'
-import {decrypt} from "../utils/rsaEncrypt";
 
 export default {
   name: 'Login',
@@ -130,6 +128,7 @@ export default {
         this.loginForm.token = res.data.data.token
       })
     },
+    //切换登录/注册
     toRegister () {
       this.registerFlag = !this.registerFlag
     },
@@ -170,7 +169,7 @@ export default {
               // const tokenStr = resp.obj.tokenHead + resp.obj.token
               window.localStorage.setItem('tokenStr', jwt)
               // 跳转首页
-              this.$router.push('/index')
+              this.$router.push('/')
             } else{
               this.$message.error("登陆失败，请重新登录！")
               this.loading = false
@@ -194,7 +193,7 @@ export default {
           this.postRequest('/auth/user/addUser',this.registerForm).then(res => {
             if(res.data.code === 200){
               this.$message.success("注册成功！请登录")
-              this.$router.push('/')
+              this.toRegister()
             }
             else{
               this.$message.error("用户名已存在，请重新注册！")

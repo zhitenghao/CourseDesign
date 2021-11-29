@@ -7,9 +7,7 @@ import Articles from '@/components/Articles/index.vue'
 
 export default {
   name: "shouye",
-  components: {
-    Articles
-  },
+  components: { Articles },
   data(){
     return {
       categoryId: '/listByDate'

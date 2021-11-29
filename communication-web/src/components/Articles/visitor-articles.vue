@@ -9,9 +9,7 @@ import Articles from '@/components/Articles/index.vue'
 
 export default {
   name: "visitor-articles",
-  components: {
-    Articles
-  },
+  components: { Articles },
   mounted() {
     console.log(this.categoryId)
   },

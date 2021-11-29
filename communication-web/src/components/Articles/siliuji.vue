@@ -9,9 +9,7 @@ import Articles from '@/components/Articles/index.vue'
 
 export default {
   name: "siliuji",
-  components: {
-    Articles
-  },
+  components: { Articles },
   data(){
     return {
       categoryId: '/listByCategory/1cc762969af87c11be75284bcd205a1d'

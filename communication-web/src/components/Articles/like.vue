@@ -9,9 +9,7 @@ import Articles from '@/components/Articles/index.vue'
 
 export default {
   name: "like",
-  components: {
-    Articles
-  },
+  components: { Articles },
   data(){
     return {
       categoryId: '/listLikeByUserId'

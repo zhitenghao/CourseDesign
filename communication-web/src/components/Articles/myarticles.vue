@@ -9,9 +9,7 @@ import Articles from '@/components/Articles/index.vue'
 
 export default {
   name: "myarticles",
-  components: {
-    Articles
-  },
+  components: { Articles },
   data(){
     return {
       categoryId: '/listMyself'
