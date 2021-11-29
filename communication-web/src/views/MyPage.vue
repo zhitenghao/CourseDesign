@@ -64,7 +64,7 @@
       </el-aside>
 
       <el-main class="main">
-        <router-view v-if="isRouterAlive"></router-view>
+        <router-view v-if="isRouterAlive" :id="userId"></router-view>
       </el-main>
     </el-container>
 
@@ -140,6 +140,7 @@ export default {
         userSex: 0,
         userAvatar:''
       },
+      userId: '',
       editAvatarDialogForm: false,
       name: "file",//头像上传name
       updateAvatarApi: 'http://localhost:8081/upload',
@@ -219,7 +220,8 @@ export default {
           this.collegeData = this.form.userCollege
           this.avatarOriginUrl = res.data.data.userAvatar
           this.form.userAvatar = "http://localhost:8081/downloadPhoto/" + this.avatarOriginUrl
-          //console.log('userInfo',this.form)
+          this.userId = res.data.data.id
+          console.log('userInfo',res.data.data)
         }else{
           this.$message.error("加载失败")
         }

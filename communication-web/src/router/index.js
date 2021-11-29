@@ -48,7 +48,7 @@ const routes = [
         component: () => import('../components/Articles/jiaozi.vue')
       },
       {
-        path: 'else',
+        path: 'qita',
         name: 'Qita',
         component: () => import('../components/Articles/qita.vue')
       },

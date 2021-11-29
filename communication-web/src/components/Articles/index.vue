@@ -35,7 +35,6 @@
               <el-image class="images" v-if="item.isVideo === 0" v-for="oneImage in item.urls.slice(0, 9)" :key="oneImage" :src="oneImage"></el-image>
               <video class="video" v-else :src="item.urls[0]" controls="controls"></video>
             </div>
-
             <div class="commentAndLike">
               <el-badge :value="item.collectionNum" class="activity"> <!-- 设置收藏该帖子的数量 -->
                 <el-button type="text" v-if="item.collection" style="margin-left: 125px" @click="cancelCollect(item)">已收藏</el-button>
@@ -475,19 +474,18 @@ ul{
   margin-top: 10px;
 }
 .showArea{
-  border: 1px solid #e52121;
   width: 81%;
   margin-left: 61px;
   margin-top: 2px;
 }
 .showPerComment{
-  border-bottom: 1px solid #99a2aa;
+
 }
 .replyContainer{
   width: 91%;
-  /*border: 1px solid #e52121;*/
   border-left: #cac6c6 solid 2px;
-  margin-left: 47px;
+  margin-left: 41px;
+  padding-left: 10px;
 }
 .unfoldComments{
   border: 1px solid #e52121;

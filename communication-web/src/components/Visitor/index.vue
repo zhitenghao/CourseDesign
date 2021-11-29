@@ -23,7 +23,7 @@
         </div>
         <div class="menu-aside">
           <el-menu class="menu" default-active="none">
-            <el-menu-item index="1" @click="toMyIndex">
+            <el-menu-item index="1" @click="toPersonalIndex">
               <i class="el-icon-user"></i>
               <span slot="title">ta的主页</span>
             </el-menu-item>
@@ -45,11 +45,11 @@
 
       <el-main class="main">
         <el-tabs class="tabs" v-if="isTabsAlive" v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="ta的帖子" name="first"><visitor-articles :id="userId"/></el-tab-pane>
-          <el-tab-pane label="ta的关注" name="second"></el-tab-pane>
-          <el-tab-pane label="ta的点赞" name="third"></el-tab-pane>
-          <el-tab-pane label="ta的收藏夹" name="fourth"></el-tab-pane>
+          <el-tab-pane label="ta的帖子" name="first"><visitor-articles :type="''" :id="userId"/></el-tab-pane>
+          <el-tab-pane label="ta的点赞" name="second"><visitor-articles :type="'Like'" :id="userId"/></el-tab-pane>
+          <el-tab-pane label="ta的收藏夹" name="third"><visitor-articles :type="'Concern'" :id="userId"/></el-tab-pane>
         </el-tabs>
+        <concerns v-if="!isTabsAlive" :id="userId"/>
       </el-main>
     </el-container>
 
@@ -58,10 +58,11 @@
 
 <script>
 import VisitorArticles from "@/components/Articles/visitor-articles";
+import Concerns from "@/components/Personal/MyConcerns";
 
 export default {
   name:"index",
-  components: { VisitorArticles },
+  components: { VisitorArticles,Concerns },
   provide(){
     return {
       reload:this.reload
@@ -94,11 +95,11 @@ export default {
       })
     },
 
-    toMyIndex(){
-      this.$router.replace('/personal')
+    toPersonalIndex(){
+      this.isTabsAlive = true
     },
     toFans(){
-      // this.$router.replace('/personal/fans')
+      this.isTabsAlive = false
     },
     toIndex(){
       this.$router.replace('/')
@@ -107,12 +108,12 @@ export default {
       window.localStorage.removeItem('tokenStr')
       this.$router.replace('/login')
     },
+
     //刷新帖子组件
     reload () {
       this.isRouterAlive = false
       this.$nextTick(() => (this.isRouterAlive = true))
     },
-
     handleClick(tab, event) {
       // console.log(tab,event);
     }

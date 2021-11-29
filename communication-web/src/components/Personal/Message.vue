@@ -47,27 +47,10 @@ export default {
       activeName:'first',
       disabled: true,
 
-      replyCount: 5,
-      atMyCount: 5, // @我的 数
-      likeCount: 5, // 收到的点赞数
-      attentionCount: 5, // 新的关注消息数
     }
   },
   methods: {
 
-
-    loadReply() { // 设置 回复我的 数
-      this.replyCount = 5;
-    },
-    loadAtMy() { // 设置 @我的 数
-      this.atMyCount = 5;
-    },
-    loadLike() { // 设置 收到的赞 的 数
-      this.likeCount = 5;
-    },
-    loadAttention() { // 设置 新的关注 消息数
-      this.attentionCount = 5
-    },
 
   }
 }

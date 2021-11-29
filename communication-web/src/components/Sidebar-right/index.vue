@@ -27,7 +27,7 @@
               <span>全部内容</span>
             </template>
           </el-menu-item>
-          <el-menu-item :index="item.id" v-for="(item,key) in menuList" :key="key" @click="selectCategory(item.path)">
+          <el-menu-item :index="item.id" v-for="(item,key) in menuList" :key="key" @click="selectCategory(item.path,item.id)">
             <template slot="title">
               <!--                  <svg-icon slot="prefix" icon-class="system"/>-->
               {{ item.categoryName }}
@@ -66,7 +66,8 @@ export default {
       this.$router.push('/')
     },
     //根据分类跳转子路由
-    selectCategory(path){
+    selectCategory(path,id){
+      this.$emit('category',id)
       this.$router.replace('/'+path).catch(err=>err)
     }
   }

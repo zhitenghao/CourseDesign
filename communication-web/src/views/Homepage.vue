@@ -1,5 +1,4 @@
 <template>
-<!--  可改名为Layout-->
   <div class="homepage" style="width:100%">
     <el-container>
       <el-aside class="aside-left" width=15%>
@@ -11,12 +10,12 @@
           <div style="text-align: center">Header</div>
         </el-header>
         <el-main>
-          <router-view/>
+          <router-view :id="categoryId"/>
         </el-main>
       </el-container>
 
       <el-aside class="aside-right" width=15%>
-        <right-sidebar/>
+        <right-sidebar @category="getCategoryId"/>
       </el-aside>
     </el-container>
   </div>
@@ -28,15 +27,16 @@ import RightSidebar from '@/components/Sidebar-right'
 
 export default {
   name: 'home',
-  components: {
-    LeftSidebar,
-    RightSidebar,
-  },
+  components: { LeftSidebar, RightSidebar },
   data () {
     return {
+      categoryId: ''
     }
   },
   methods: {
+    getCategoryId(e){
+      this.categoryId = e
+    }
   }
 }
 </script>

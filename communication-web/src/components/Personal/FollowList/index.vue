@@ -12,7 +12,7 @@
           <div class="follow-introduce">
             {{ item.userDescription }}
           </div>
-          <div class="fans-action">
+          <div class="fans-action" v-if="!item.myself">
             <el-dropdown>
               <el-button
                   v-if="item.isConcerned === 1" @click="cancelConcerned(item)"
@@ -60,14 +60,12 @@ export default {
       pagerFlag: false
     }
   },
-  props:[
-    'follows'
-  ],
+  props:[ 'follows' ],
   created() {
     this.getConcerns()
   },
   watch: {
-    'allMessages': {
+    'allConcerns': {
       handler(newVal,oldVal){
         if(newVal.length === 0){
           this.dataFlag = true

@@ -47,13 +47,18 @@ import FollowsList from "@/components/Personal/FollowList";
 export default {
   name: "myConcerns",
   components: { FollowsList },
+  props:[ 'id' ],
   data() {
     return {
       activeName:'first',
       disabled: true,
-      follows1: '/myConcernUserList',
-      follows2: '/myFansUserList',
+      follows1: '/concernUserList?userId='+this.id,
+      follows2: '/fansUserList?userId='+this.id,
     }
+  },
+  mounted() {
+    console.log(this.id)
+    console.log(this.follows1)
   },
 }
 </script>

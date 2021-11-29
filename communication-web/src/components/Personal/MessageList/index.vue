@@ -120,19 +120,6 @@ export default {
 
     },
 
-
-    //关注
-    // addConcern(item){
-    //   this.getRequest('/auth/message/love').then(res => {
-    //     console.log(res)
-    //     if(res.data.code === 200){
-    //       item.isConcerned = res.data.data.isConcerned
-    //     }else{
-    //       this.message.error('关注失败')
-    //     }
-    //   })
-    // },
-
   }
 }
 </script>

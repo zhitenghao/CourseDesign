@@ -15,13 +15,11 @@ export default {
   },
   data(){
     return {
-      categoryId: '/listByUserId?userId=' + this.id
+      categoryId: '/list'+this.type+'ByUserId?userId=' + this.id
     }
   },
   //静态props
-  props: [
-    'id'
-  ],
+  props: [ 'id','type' ],
 }
 </script>
 
