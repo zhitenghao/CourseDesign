@@ -81,6 +81,8 @@ public class UserController extends BaseController {
         user.setUserStatus(Const.STATUS_ON);
         BeanUtils.copyPropertiesBean(userDto,user);
         user.setAddTime(LocalDateTime.now());
+        user.setUserConcern(0);
+        user.setUserConcerned(0);
         if(user.getUserBirthday()!=null){
             int age=user.getAddTime().getYear()-user.getUserBirthday().getYear();
             if(user.getUserBirthday().getMonthValue()>user.getAddTime().getMonthValue()){
