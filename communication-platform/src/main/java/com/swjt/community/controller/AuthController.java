@@ -39,8 +39,8 @@ public class AuthController extends BaseController {
     public Result captcha() throws IOException {
         String key= UUID.randomUUID().toString();
         String code=producer.createText();
-        key="123";
-        code="123";
+//        key="123";
+//        code="123";
 
         BufferedImage bufferedImage=producer.createImage(code);
         ByteArrayOutputStream outputStream=new ByteArrayOutputStream();

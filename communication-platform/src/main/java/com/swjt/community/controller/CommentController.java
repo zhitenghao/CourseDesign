@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 
 /**
@@ -68,11 +69,11 @@ public class CommentController extends BaseController {
         commentService.updateById(comment);
         return Result.succ(
                 MapUtil.builder()
-                .put("id",comment.getId())
+                .put("commentId",comment.getId())
                         .put("commentContent",comment.getCommentContent())
                         .put("commentTime",comment.getAddTime())
                         .put("commentUser",reUserDto)
-                        .put("replyList",null)
+                        .put("replyList",new ArrayList<>())
                         .map()
         );
     }
