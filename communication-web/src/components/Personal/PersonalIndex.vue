@@ -2,10 +2,10 @@
   <div>
     <post-panel @refresh="reload"></post-panel>
     <el-tabs class="tabs" v-if="isTabsAlive" v-model="activeName" @tab-click="handleClick">
-      <el-tab-pane label="我的帖子" name="first"><my-articles/></el-tab-pane>
-      <el-tab-pane label="我的关注" name="second"><concern/></el-tab-pane>
-      <el-tab-pane label="点赞" name="third"><like/></el-tab-pane>
-      <el-tab-pane label="收藏夹" name="fourth"><collection/></el-tab-pane>
+      <el-tab-pane label="我的帖子" name="first"><my-articles v-if="isFirst"/></el-tab-pane>
+      <el-tab-pane label="我的关注" name="second"><concern v-if="isSecond"/></el-tab-pane>
+      <el-tab-pane label="点赞" name="third"><like v-if="isThird"/></el-tab-pane>
+      <el-tab-pane label="收藏夹" name="fourth"><collection v-if="isFourth"/></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -23,7 +23,11 @@ export default {
   data() {
     return {
       isTabsAlive: true,
-      activeName: 'first'//刷新后默认选中的tab
+      activeName: 'first',//刷新后默认选中的tab
+      isFirst: true,
+      isSecond: false,
+      isThird: false,
+      isFourth: false,
     };
   },
   provide(){
@@ -37,8 +41,28 @@ export default {
       this.isTabsAlive = false
       this.$nextTick(() => (this.isTabsAlive = true))
     },
-    handleClick(tab, event) {
-      // console.log(tab,event);
+    handleClick(tab) {
+      if (tab.name === 'first') {
+        this.isFirst = true
+        this.isSecond = false
+        this.isThird = false
+        this.isFourth = false
+      } else if (tab.name === 'second') {
+        this.isFirst = false
+        this.isSecond = true
+        this.isThird = false
+        this.isFourth = false
+      } else if (tab.name === 'third') {
+        this.isFirst = false
+        this.isSecond = false
+        this.isThird = true
+        this.isFourth = false
+      } else if (tab.name === 'fourth') {
+        this.isFirst = false
+        this.isSecond = false
+        this.isThird = false
+        this.isFourth = true
+      }
     }
   }
 }

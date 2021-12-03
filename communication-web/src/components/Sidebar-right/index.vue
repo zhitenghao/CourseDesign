@@ -15,11 +15,11 @@
               <span>学校院网</span>
             </template>
             <el-menu-item-group>
-              <el-menu-item index="1-1" class="academy">土木工程学院</el-menu-item>
-              <el-menu-item index="1-2" class="academy">机械工程学院</el-menu-item>
-              <el-menu-item index="1-3" class="academy">电气工程学院</el-menu-item>
-              <el-menu-item index="1-4" class="academy">信息科学与技术学院</el-menu-item>
-              <el-menu-item index="1-5" class="academy">计算机与人工智能学院</el-menu-item>
+              <el-menu-item index="1-1" class="academy" @click="toAcademy(0)">土木工程学院</el-menu-item>
+              <el-menu-item index="1-2" class="academy" @click="toAcademy(1)">机械工程学院</el-menu-item>
+              <el-menu-item index="1-3" class="academy" @click="toAcademy(2)">电气工程学院</el-menu-item>
+              <el-menu-item index="1-4" class="academy" @click="toAcademy(3)">信息科学与技术学院</el-menu-item>
+              <el-menu-item index="1-5" class="academy" @click="toAcademy(4)">计算机与人工智能学院</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
           <el-menu-item index="allArticles" @click="allArticles">
@@ -67,6 +67,15 @@ export default {
     //根据分类跳转子路由
     selectCategory(path){
       this.$router.replace('/'+path).catch(err=>err)
+    },
+    toAcademy(index){
+      switch (index){
+        case 0:window.open('https://civil.swjtu.edu.cn/main/index.html', '_blank');break;
+        case 1:window.open('https://sme.swjtu.edu.cn/', '_blank');break;
+        case 2:window.open('https://dqxy.swjtu.edu.cn/', '_blank');break;
+        case 3:window.open('http://sist.swjtu.edu.cn/index.do?action=index', '_blank');break;
+        case 4:window.open('https://scai.swjtu.edu.cn/index.html', '_blank');break;
+      }
     }
   }
 }

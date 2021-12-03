@@ -82,18 +82,10 @@ const routes = [
     component: () => import('../components/Visitor/index'),
   },
 
-
-
-
   {
     path: '/test',
     name: 'Test',
-    component: () => import('../components/Personal/Message.vue')
-  },
-  {
-    path: '/testb',
-    name: 'Test2',
-    component: () => import('../views/testA.vue')
+    component: () => import('../views/testA'),
   },
 ]
 

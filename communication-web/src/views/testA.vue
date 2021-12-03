@@ -1,15 +1,32 @@
 <template>
   <div>
-    <el-button @click="fun" ref="aa">{{data}}</el-button>
-    {{text}}
-
-    <p></p>
-    {{textB}}
+    <el-button @click="fun1">{{data}}</el-button>
+    <el-tabs :tab-position="'left'" v-model="activeName">
+      <el-tab-pane label="全部关注" name="first">
+        <div class="follow-head">
+          全部关注
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="特别关注" name="second">
+        <div style="height: 30px;text-align: left;margin: 10px;line-height: 30px;">
+          特别关注
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="默认分组" name="third">
+        <div style="height: 30px;text-align: left;margin: 10px;line-height: 30px;">
+          默认分组
+        </div>
+      </el-tab-pane>
+      <el-tab-pane label="全部粉丝" name="fourth">
+        <div class="follow-head">
+          粉丝列表
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
 <script>
-import { encrypt,decrypt } from '@/utils/rsaEncrypt'
 
 export default {
   name: "test",
@@ -18,25 +35,21 @@ export default {
   data(){
     return {
       data: 'ab',
-      text:'',
-      textB:''
+      activeName: 'first'
     }
   },
   created() {
     //this.getConcerns()
-    this.fun1()
+    //this.fun1()
   },
   methods:{
     fun1(){
-      this.text = encrypt("123")
-      console.log(this.text)
-      this.textB= decrypt(this.text)
+      this.activeName = 'third'
+      // this.$router.push({
+      //   name:"Test",
+      // })
     },
-    fun(){
-      let that=this;
-      that.data="修改后的值";
-      console.log(that.$refs.aa.innerText);
-    },
+
     getConcerns(){
       this.getRequest('/auth/user/myConcernUserList').then(res => {
         this.concerns = res.data.data.records

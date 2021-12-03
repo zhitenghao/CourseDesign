@@ -111,6 +111,7 @@ export default {
         if(res.data.code === 200){
           item.isConcerned = res.data.data.isConcerned
           //增加关注，关注框应+1
+          this.$emit('changeConcern',1)
         }else{
           this.message.error('关注失败')
         }
@@ -122,6 +123,7 @@ export default {
         if(res.data.code === 200){
           item.isConcerned = 0
           //取消关注，关注框应-1
+          this.$emit('changeConcern',-1)
         }else{
           this.message.error('取消关注失败')
         }

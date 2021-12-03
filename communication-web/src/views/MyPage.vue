@@ -20,11 +20,11 @@
           </div>
         </div>
         <div class="middle-aside">
-          <div class="concern" style="border-right: 3px solid #f5f6f7;cursor:pointer" @click="toFans">
+          <div class="concern" style="border-right: 3px solid #f5f6f7;cursor:pointer" @click="toFans(1)">
             <div style="padding-bottom: 10px">关注</div>
             <strong style="font-size: 22px;color: #121212">{{ form.userConcern }}</strong>
           </div>
-          <div class="concern" style="cursor:pointer" @click="toFans">
+          <div class="concern" style="cursor:pointer" @click="toFans(2)">
             <div style="padding-bottom: 10px">粉丝</div>
             <strong style="font-size: 22px;color: #121212">{{ form.userConcerned }}</strong>
           </div>
@@ -35,7 +35,7 @@
               <i class="el-icon-user"></i>
               <span slot="title">我的主页</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="toFans">
+            <el-menu-item index="2" @click="toFans(1)">
               <i class="el-icon-connection"></i>
               <span slot="title">关注/粉丝</span>
             </el-menu-item>
@@ -64,7 +64,7 @@
       </el-aside>
 
       <el-main class="main">
-        <router-view v-if="isRouterAlive"></router-view>
+        <router-view v-if="isRouterAlive" @changeConcern="changeConcern"></router-view>
       </el-main>
     </el-container>
 
@@ -198,6 +198,7 @@ export default {
         }
       ],
       isRouterAlive: true,
+      key: 'abc'
     }
   },
   created() {
@@ -276,10 +277,10 @@ export default {
     toPost(){
       this.$router.replace('/personal/index')
     },
-    toFans(){
+    toFans(index){
       this.$router.push({
         name:"fans",
-        query:{id:this.userId}
+        query:{id:this.userId,order:index===1?'first':'fourth'}
       })
     },
     toMessages(){
@@ -291,6 +292,10 @@ export default {
     logout(){
       window.localStorage.removeItem('tokenStr')
       this.$router.replace('/login')
+    },
+
+    changeConcern(e){
+      this.form.userConcern = this.form.userConcern + e
     },
 
   }
