@@ -2,12 +2,12 @@
   <div>
     <ul class="message-list" style="overflow: auto;">
       <li class="list-item" v-for="item in allMessages">
-        <div class="message-avatar" style="cursor:pointer" @click="toUserPage(false,item.reUserDto.id)">
+        <div class="message-avatar" style="cursor:pointer" @click="toUserPage(item.myself,item.reUserDto.id)">
           <el-avatar :src="item.reUserDto.userAvatar" :size="50"></el-avatar>
         </div>
         <div class="center-content">
           <div class="line-1">
-            <span class="name-field" style="cursor:pointer" @click="toUserPage(item.reUserDto.id)">{{ item.reUserDto.userName }}</span>
+            <span class="name-field" style="cursor:pointer" @click="toUserPage(item.myself,item.reUserDto.id)">{{ item.reUserDto.userName }}</span>
             <span class="desc-field" v-if="type==='replies'">回复了你</span>
             <span class="desc-field" v-if="type==='loves'">赞了你</span>
             <span class="desc-field" v-if="type==='concerns'">关注了你</span>

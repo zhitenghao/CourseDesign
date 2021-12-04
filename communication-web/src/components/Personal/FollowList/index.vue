@@ -60,13 +60,15 @@ export default {
       pagerFlag: false
     }
   },
-  props:[ 'follows' ],
   created() {
     this.getConcerns()
   },
+  mounted() {
+    console.log('index-follows',this.$route.query.follows)
+  },
   watch: {
     'allConcerns': {
-      handler(newVal,oldVal){
+      handler(newVal){
         if(newVal.length === 0){
           this.dataFlag = true
         }
@@ -79,7 +81,7 @@ export default {
   methods: {
     //获取所有关注列表
     getConcerns() {
-      this.getRequest('/auth/user' + this.follows).then(res => {
+      this.getRequest('/auth/user' + this.$route.query.follows).then(res => {
         this.allConcerns = res.data.data.records
         //将userAvatar加上前缀后可展示出图片
         for (let i = 0; i < this.allConcerns.length; i++) {
@@ -143,7 +145,7 @@ ul {
   position: relative;
   float: left;
   height: 70px;
-  width: 800px;
+  width: 740px;
   border-bottom: 1px solid #eee;
   padding: 15px 0;
   text-align: left;
@@ -164,10 +166,10 @@ ul {
   float: left;
   position: relative;
   height: 70px;
-  width: 500px;
+  width: 480px;
   margin-top: 6px;
   margin-left: 105px;
-  padding-right: 200px;
+  padding-right: 160px;
   text-align: left;
   line-height: 50px;
 }

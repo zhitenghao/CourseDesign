@@ -45,11 +45,11 @@
 
       <el-main class="main">
         <el-tabs class="tabs" v-if="isTabsAlive" v-model="activeName" @tab-click="handleClick">
-          <el-tab-pane label="ta的帖子" name="first"><visitor-articles :type="''" :id="userId"/></el-tab-pane>
-          <el-tab-pane label="ta的点赞" name="second"><visitor-articles :type="'Like'" :id="userId"/></el-tab-pane>
-          <el-tab-pane label="ta的收藏夹" name="third"><visitor-articles :type="'Concern'" :id="userId"/></el-tab-pane>
+          <el-tab-pane label="ta的帖子" name="first" lazy><visitor-articles :type="''"/></el-tab-pane>
+          <el-tab-pane label="ta的点赞" name="second" lazy><visitor-articles :type="'Like'"/></el-tab-pane>
+          <el-tab-pane label="ta的收藏夹" name="third" lazy><visitor-articles :type="'Concern'"/></el-tab-pane>
         </el-tabs>
-        <concerns v-if="!isTabsAlive" :id="userId"/>
+        <concerns v-if="!isTabsAlive"/>
       </el-main>
     </el-container>
 
@@ -63,11 +63,6 @@ import Concerns from "@/components/Personal/MyConcerns";
 export default {
   name:"index",
   components: { VisitorArticles,Concerns },
-  provide(){
-    return {
-      reload:this.reload
-    }
-  },
   data(){
     return {
       userInfo: {},
@@ -109,11 +104,6 @@ export default {
       this.$router.replace('/login')
     },
 
-    //刷新帖子组件
-    reload () {
-      this.isRouterAlive = false
-      this.$nextTick(() => (this.isRouterAlive = true))
-    },
     handleClick(tab, event) {
       // console.log(tab,event);
     }

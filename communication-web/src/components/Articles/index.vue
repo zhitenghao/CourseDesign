@@ -20,14 +20,14 @@
                   <el-button type="warning" v-else @click="addAttention(item.reUserDto.id)" style="margin-left: 420px" size="small" round plain>+ 关注</el-button>
                 </div>
                 <div v-else>
-                  <el-button type="warning" @click="deleteArticle(item)" style="margin-left: 420px" size="small" round plain>删除该帖</el-button>
+                  <el-button type="warning" @click="confirmDelete(item)" style="margin-left: 420px" size="small" round plain>删除该帖</el-button>
                 </div>
               </div>
             </div>
           </div>
           <div class="postContent">
-            <!-- 设置可自适应文本高度的文本域：从后端获取帖子内容以后，把内容放在<span>标签里，textContentFlag可以设置是否展示文字内容 -->
-            <div style="width: 83%; margin: 0 57px">
+            <!-- 设置可自适应文本高度的文本域：从后端获取帖子内容以后，把内容放在<span>标签里 -->
+            <div style="width: 83%; margin: 0 65px">
               <span class="textContent">{{item.articleContent}}</span>
             </div>
             <!-- 设置图片或者视频展示区域 -->
@@ -35,17 +35,16 @@
               <el-image class="images" v-if="item.isVideo === 0" v-for="oneImage in item.urls.slice(0, 9)" :key="oneImage" :src="oneImage"></el-image>
               <video class="video" v-else :src="item.urls[0]" controls="controls"></video>
             </div>
-            <div class="commentAndLike" style="margin-bottom: 2px">
+            <div class="commentAndLike">
               <el-badge :value="item.collectionNum" class="activity"> <!-- 设置收藏该帖子的数量 -->
-                <el-button type="text" v-if="item.collection" style="margin-left: 125px" @click="cancelCollect(item)" class="el-icon-star-on"></el-button>
-                <el-button type="text" v-else style="margin-left: 125px" @click="addCollect(item)" class="el-icon-star-off"></el-button>
+                <el-button type="text" v-if="item.collection" style="margin-left: 100px" @click="cancelCollect(item)" class="el-icon-star-on"></el-button>
+                <el-button type="text" v-else style="margin-left: 100px" @click="addCollect(item)" class="el-icon-star-off"></el-button>
               </el-badge>
               <el-badge :value="item.commentNum" class="activity"> <!-- 设置该帖子的评论数量 -->
-                <el-button type="text" style="margin-left: 130px" v-if="!item.commentsShow" @click="item.commentsShow = !item.commentsShow" class="el-icon-comment-off"></el-button> <!-- 点击评论按钮，该按钮设置了commentAndShowFlag的值，该值用来控制是否展开用户评论div和该帖子的评论内容， -->
-                <el-button type="text" style="margin-left: 130px" v-else @click="item.commentsShow = !item.commentsShow" class="el-icon-comment-on"></el-button>
+                <el-button type="text" style="margin-left: 125px" v-if="!item.commentsShow" @click="item.commentsShow = !item.commentsShow" class="el-icon-comment-off"></el-button> <!-- 点击评论按钮，该按钮设置了commentAndShowFlag的值，该值用来控制是否展开用户评论div和该帖子的评论内容， -->
+                <el-button type="text" style="margin-left: 125px" v-else @click="item.commentsShow = !item.commentsShow" class="el-icon-comment-on"></el-button>
               </el-badge>
               <el-badge :value="item.likeNum" class="activity"> <!-- 设置该帖子的点赞数量 -->
-<!--                <img :src="likeOff" width="20" height="20" alt="" >-->
                 <el-button type="text" v-if="item.like" style="margin-left: 125px" @click="unlike(item)" class="el-icon-like-on"></el-button>
                 <el-button type="text" v-else style="margin-left: 125px" @click="like(item)" class="el-icon-like-off"></el-button>
               </el-badge>
@@ -202,6 +201,16 @@ export default {
         })
         window.open(routeUrl.href, '_blank')
       }
+    },
+    //删除帖子提示框
+    confirmDelete(item) {
+      this.$confirm('此操作将永久删除该贴, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.deleteArticle(item)
+      }).catch();
     },
     //删除帖子
     deleteArticle(item){
@@ -377,14 +386,14 @@ ul{
 }
 .activity {
   margin-top: 13px;
-  margin-right: 30px;  /*border: 1px solid #e52121;*/
+  margin-right: 30px;
 }
 .onePostContainer{
   width: 690px;
   margin: 7px auto;
   border: 1px solid #eaeaea;
   border-radius: 15px;
-  padding: 10px;
+  padding: 10px 10px 5px 10px;
   box-shadow: 0 0 25px #cac6c6;
   background: rgba(255,255,255,0.9);
   background-clip: padding-box;
@@ -437,7 +446,7 @@ ul{
 .action {
   position: absolute;
   right: 50px;
-  top: 0;
+  top: -5px;
 }
 
 .postContent{
@@ -446,7 +455,6 @@ ul{
 .textContent{
   font-size: 14px;
   line-height: 1.7em;
-  margin-left: 7px;
 }
 
 .images{
@@ -467,16 +475,13 @@ ul{
 .commentAndLike{
   width: 100%;
   height: 40px;
-  /*border: 1px solid #e52121;*/
-  margin: 2px;
+  margin-top: 5px;
   padding-bottom: 4px;
 }
 .commentAndShow{
   width: 100%;
-  /*border: 1px solid #e52121;*/
 }
 .commentArea{
-  /*border: 1px solid #e52121;*/
   margin-bottom: 10px;
   margin-top: 10px;
 }

@@ -61,8 +61,22 @@ const routes = [
       },
       {
         path: 'fans',
-        name: 'fans',
-         component: () => import('../components/Personal/MyConcerns.vue')
+        name: 'MyConcerns',
+        redirect: 'fans/follows',
+        component: () => import('../components/Personal/MyConcerns.vue'),
+        // component: () => import('../views/test'),
+        children: [
+            {
+              path: 'follows',
+              name: 'follows',
+              component: () => import('../components/Personal/FollowList/index.vue')
+            },
+            {
+              path: 'fans',
+              name: 'fans',
+              component: () => import('../components/Personal/FollowList/index.vue')
+            }
+        ]
       },
       {
         path: 'messages',
@@ -85,6 +99,11 @@ const routes = [
   {
     path: '/test',
     name: 'Test',
+    component: () => import('../views/test'),
+  },
+  {
+    path: '/testA',
+    name: 'TestA',
     component: () => import('../views/testA'),
   },
 ]

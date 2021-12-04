@@ -20,11 +20,11 @@
           </div>
         </div>
         <div class="middle-aside">
-          <div class="concern" style="border-right: 3px solid #f5f6f7;cursor:pointer" @click="toFans(1)">
+          <div class="concern" style="border-right: 3px solid #f5f6f7;cursor:pointer" @click="toFollows">
             <div style="padding-bottom: 10px">关注</div>
             <strong style="font-size: 22px;color: #121212">{{ form.userConcern }}</strong>
           </div>
-          <div class="concern" style="cursor:pointer" @click="toFans(2)">
+          <div class="concern" style="cursor:pointer" @click="toFans">
             <div style="padding-bottom: 10px">粉丝</div>
             <strong style="font-size: 22px;color: #121212">{{ form.userConcerned }}</strong>
           </div>
@@ -35,9 +35,13 @@
               <i class="el-icon-user"></i>
               <span slot="title">我的主页</span>
             </el-menu-item>
-            <el-menu-item index="2" @click="toFans(1)">
+            <el-menu-item index="2" @click="toFollows">
               <i class="el-icon-connection"></i>
-              <span slot="title">关注/粉丝</span>
+              <span slot="title">关注</span>
+            </el-menu-item>
+            <el-menu-item index="8" @click="toFans">
+              <i class="el-icon-connection"></i>
+              <span slot="title">粉丝</span>
             </el-menu-item>
             <el-menu-item index="3" @click="toMessages">
               <i class="el-icon-chat-dot-square"></i>
@@ -277,10 +281,17 @@ export default {
     toPost(){
       this.$router.replace('/personal/index')
     },
-    toFans(index){
+    toFollows(){
       this.$router.push({
-        name:"fans",
-        query:{id:this.userId,order:index===1?'first':'fourth'}
+        path: "/personal/fans",
+        // query:{ follows: '/concernUserList?userId='+this.userId }
+        query:{ id: this.userId }
+      })
+    },
+    toFans(){
+      this.$router.push({
+        path: "/personal/fans/fans",
+        query:{ follows: '/fansUserList?userId='+this.userId }
       })
     },
     toMessages(){

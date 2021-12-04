@@ -8,25 +8,25 @@
           </i>
         </span>
       </el-tab-pane>
-      <el-tab-pane label="回复我的" name="first">
+      <el-tab-pane label="回复我的" name="first" lazy>
         <div class="message-head">
           <span>回复我的</span>
         </div>
         <message-list :type="'replies'"></message-list>
       </el-tab-pane>
-      <el-tab-pane label="收到的赞" name="second">
+      <el-tab-pane label="收到的赞" name="second" lazy>
         <div class="message-head">
           <span>收到的赞</span>
         </div>
         <message-list :type="'loves'"></message-list>
       </el-tab-pane>
-      <el-tab-pane label="新的关注" name="third">
+      <el-tab-pane label="新的关注" name="third" lazy>
         <div class="message-head">
           <span>新的关注</span>
         </div>
         <message-list :type="'concerns'"></message-list>
       </el-tab-pane>
-      <el-tab-pane label="新的收藏" name="fourth">
+      <el-tab-pane label="新的收藏" name="fourth" lazy>
         <div class="message-head">
           <span>新的收藏</span>
         </div>
@@ -46,11 +46,9 @@ export default {
     return {
       activeName:'first',
       disabled: true,
-
     }
   },
   methods: {
-
 
   }
 }
